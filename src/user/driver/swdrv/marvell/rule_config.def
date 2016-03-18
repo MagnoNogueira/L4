@@ -1,0 +1,33 @@
+//
+//  rule_config.def
+//  l4_mgr
+//
+//  Created by yehjunying on 12/10/18.
+//
+//
+#ifndef TRUNK_PORT_RULE
+#define TRUNK_PORT_RULE(X)
+#endif
+
+#ifndef CPU_PORT_RULE
+#define CPU_PORT_RULE(X)
+#endif
+
+#ifndef ALL_PORTS_RULE
+#define ALL_PORTS_RULE(X)
+#endif
+
+TRUNK_PORT_RULE(ACL)
+TRUNK_PORT_RULE(ACL_MATCH_ANY_ANY)
+TRUNK_PORT_RULE(QOS)
+
+CPU_PORT_RULE(EGRESS_ACL)
+CPU_PORT_RULE(EGRESS_ACL_MATCH_ANY_ANY)
+CPU_PORT_RULE(EGRESS_QOS)
+
+ALL_PORTS_RULE(ACL)
+ALL_PORTS_RULE(ACL_MATCH_ANY_ANY)
+
+#undef TRUNK_PORT_RULE
+#undef CPU_PORT_RULE
+#undef ALL_PORTS_RULE

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "L4", "l4\l4.vcproj", "{42656973-04E0-4BAD-987D-CD5C6021475F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_ES3510MA|Win32 = Debug_ES3510MA|Win32
+		Debug_ES4624H|Win32 = Debug_ES4624H|Win32
+		Debug_ES4626F|Win32 = Debug_ES4626F|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Debug_ES3510MA|Win32.ActiveCfg = Debug_ES3510MA|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Debug_ES3510MA|Win32.Build.0 = Debug_ES3510MA|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Debug_ES4624H|Win32.ActiveCfg = Debug_ES4624H|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Debug_ES4624H|Win32.Build.0 = Debug_ES4624H|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Debug_ES4626F|Win32.ActiveCfg = Debug_ES4626F|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Debug_ES4626F|Win32.Build.0 = Debug_ES4626F|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Release|Win32.ActiveCfg = Release|Win32
+		{42656973-04E0-4BAD-987D-CD5C6021475F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

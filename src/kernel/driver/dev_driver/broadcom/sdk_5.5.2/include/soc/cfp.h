@@ -1,0 +1,669 @@
+/*
+ * $Id: cfp.h,v 1.17.2.5 Broadcom SDK $
+ * $Copyright: Copyright 2008 Broadcom Corporation.
+ * This program is the proprietary software of Broadcom Corporation
+ * and/or its licensors, and may only be used, duplicated, modified
+ * or distributed pursuant to the terms and conditions of a separate,
+ * written license agreement executed between you and Broadcom
+ * (an "Authorized License").  Except as set forth in an Authorized
+ * License, Broadcom grants no license (express or implied), right
+ * to use, or waiver of any kind with respect to the Software, and
+ * Broadcom expressly reserves all rights in and to the Software
+ * and all intellectual property rights therein.  IF YOU HAVE
+ * NO AUTHORIZED LICENSE, THEN YOU HAVE NO RIGHT TO USE THIS SOFTWARE
+ * IN ANY WAY, AND SHOULD IMMEDIATELY NOTIFY BROADCOM AND DISCONTINUE
+ * ALL USE OF THE SOFTWARE.  
+ *  
+ * Except as expressly set forth in the Authorized License,
+ *  
+ * 1.     This program, including its structure, sequence and organization,
+ * constitutes the valuable trade secrets of Broadcom, and you shall use
+ * all reasonable efforts to protect the confidentiality thereof,
+ * and to use this information only in connection with your use of
+ * Broadcom integrated circuit products.
+ *  
+ * 2.     TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE SOFTWARE IS
+ * PROVIDED "AS IS" AND WITH ALL FAULTS AND BROADCOM MAKES NO PROMISES,
+ * REPRESENTATIONS OR WARRANTIES, EITHER EXPRESS, IMPLIED, STATUTORY,
+ * OR OTHERWISE, WITH RESPECT TO THE SOFTWARE.  BROADCOM SPECIFICALLY
+ * DISCLAIMS ANY AND ALL IMPLIED WARRANTIES OF TITLE, MERCHANTABILITY,
+ * NONINFRINGEMENT, FITNESS FOR A PARTICULAR PURPOSE, LACK OF VIRUSES,
+ * ACCURACY OR COMPLETENESS, QUIET ENJOYMENT, QUIET POSSESSION OR
+ * CORRESPONDENCE TO DESCRIPTION. YOU ASSUME THE ENTIRE RISK ARISING
+ * OUT OF USE OR PERFORMANCE OF THE SOFTWARE.
+ * 
+ * 3.     TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL
+ * BROADCOM OR ITS LICENSORS BE LIABLE FOR (i) CONSEQUENTIAL,
+ * INCIDENTAL, SPECIAL, INDIRECT, OR EXEMPLARY DAMAGES WHATSOEVER
+ * ARISING OUT OF OR IN ANY WAY RELATING TO YOUR USE OF OR INABILITY
+ * TO USE THE SOFTWARE EVEN IF BROADCOM HAS BEEN ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGES; OR (ii) ANY AMOUNT IN EXCESS OF
+ * THE AMOUNT ACTUALLY PAID FOR THE SOFTWARE ITSELF OR U.S. $1,
+ * WHICHEVER IS GREATER. THESE LIMITATIONS SHALL APPLY NOTWITHSTANDING
+ * ANY FAILURE OF ESSENTIAL PURPOSE OF ANY LIMITED REMEDY.$
+ */
+#ifndef _SOC_CFP_H
+#define _SOC_CFP_H
+
+#include <shared/bitop.h>
+
+/* ram type */
+typedef enum drv_cfp_ram_e {
+    DRV_CFP_RAM_TCAM = 1,
+    DRV_CFP_RAM_TCAM_MASK,
+    DRV_CFP_RAM_ACT,
+    DRV_CFP_RAM_METER,
+    DRV_CFP_RAM_STAT_IB,
+    DRV_CFP_RAM_STAT_OB,
+    DRV_CFP_RAM_ALL
+}drv_cfp_ram_t;
+
+/* control type */
+typedef enum drv_cfp_control_e {
+    DRV_CFP_ENABLE,
+    DRV_CFP_FLOOD_VLAN,
+    DRV_CFP_FLOOD_TRUNK,
+    DRV_CFP_ISPVLAN_DELIMITER,
+    DRV_CFP_LLC_ENCAP,
+    DRV_CFP_SLICE_SELECT,
+    DRV_CFP_TCAM_RESET,
+    DRV_CFP_OTHER_RAM_CLEAR, /* Action, Meter, Statistic */
+    DRV_CFP_CTRL_COUNT
+}drv_cfp_control_t;
+
+/* action type */
+typedef enum drv_cfp_action_e {
+    DRV_CFP_ACT_IB_NONE = 1,
+    DRV_CFP_ACT_IB_APPEND,
+    DRV_CFP_ACT_IB_MOD_INT_PRI,
+    DRV_CFP_ACT_IB_MOD_INT_PRI_CANCEL,
+    DRV_CFP_ACT_IB_DROP,
+    DRV_CFP_ACT_IB_FLOOD,
+    DRV_CFP_ACT_IB_REDIRECT,
+    DRV_CFP_ACT_IB_MOD_PRI,
+    DRV_CFP_ACT_IB_MOD_PRI_CANCEL,
+    DRV_CFP_ACT_IB_MOD_TOS,
+    DRV_CFP_ACT_IB_MOD_TOS_CANCEL,
+    DRV_CFP_ACT_IB_DSCP_NEW,
+    DRV_CFP_ACT_IB_DSCP_CANCEL,
+    DRV_CFP_ACT_OB_NONE,
+    DRV_CFP_ACT_OB_APPEND,
+    DRV_CFP_ACT_OB_MOD_INT_PRI,
+    DRV_CFP_ACT_OB_MOD_INT_PRI_CANCEL,
+    DRV_CFP_ACT_OB_DROP,
+    DRV_CFP_ACT_OB_FLOOD,
+    DRV_CFP_ACT_OB_REDIRECT,
+    DRV_CFP_ACT_OB_MOD_PRI,
+    DRV_CFP_ACT_OB_MOD_PRI_CANCEL,
+    DRV_CFP_ACT_OB_MOD_TOS,
+    DRV_CFP_ACT_OB_MOD_TOS_CANCEL,
+    DRV_CFP_ACT_OB_DSCP_NEW,
+    DRV_CFP_ACT_OB_DSCP_CANCEL,
+    DRV_CFP_ACT_PCP_NEW,
+    DRV_CFP_ACT_PCP_CANCEL,
+    DRV_CFP_ACT_CHANGE_CVID,
+    DRV_CFP_ACT_CHANGE_CVID_CANCEL,
+    DRV_CFP_ACT_CHANGE_SPVID,
+    DRV_CFP_ACT_CHANGE_SPVID_CANCEL,
+    DRV_CFP_ACT_CHANGE_CVID_SPVID,
+    DRV_CFP_ACT_CHANGE_CVID_SPVID_CANCEL,
+    DRV_CFP_ACT_IB_COSQ_NEW,
+    DRV_CFP_ACT_IB_COSQ_CANCEL,
+    DRV_CFP_ACT_OB_COSQ_NEW,
+    DRV_CFP_ACT_OB_COSQ_CANCEL,
+    DRV_CFP_ACT_COSQ_CPU_NEW,
+    DRV_CFP_ACT_COSQ_CPU_CANCEL,
+    /* add for BCM53115 */
+    DRV_CFP_ACT_CHAIN_ID,
+    DRV_CFP_ACT_CLASSFICATION_ID,
+    DRV_CFP_ACT_CHANGE_TC,
+    DRV_CFP_ACT_CHANGE_TC_CANCEL,
+    DRV_CFP_ACT_LOOPBACK,
+    DRV_CFP_ACT_REASON_CODE,
+    DRV_CFP_ACT_STP_BYPASS,
+    DRV_CFP_ACT_EAP_BYPASS,
+    DRV_CFP_ACT_VLAN_BYPASS
+}drv_cfp_action_t;
+
+/* search flags */
+typedef enum drv_cfp_search_flag_e {
+    DRV_CFP_SEARCH_START = 0x1,
+    DRV_CFP_SEARCH_GET = 0x2,
+    DRV_CFP_SEARCH_DONE = 0x4,
+    DRV_CFP_SEARCH_BY_PORT = 0x8
+}drv_cfp_search_flasg_t;
+
+/* meter type */
+typedef enum drv_cfp_meter_type_e {
+    DRV_CFP_METER_QUOTA,
+    DRV_CFP_METER_START,
+    DRV_CFP_METER_BUCKET_SIZE,
+    DRV_CFP_METER_RATE
+}drv_cfp_meter_type_t;
+
+/* counter type */
+typedef enum drv_cfp_stat_type_e {
+    DRV_CFP_STAT_INBAND,
+    DRV_CFP_STAT_OUTBAND,
+    DRV_CFP_STAT_ALL,
+    DRV_CFP_STAT_COUNT
+}drv_cfp_stat_type_t;
+
+/* qualify set */
+typedef enum drv_cfp_qualify_e {
+    DRV_CFP_QUAL_SRC_PORT = 0,
+    DRV_CFP_QUAL_1QTAG,
+    DRV_CFP_QUAL_SPTAG,
+    DRV_CFP_QUAL_8023_OR_EII,
+    DRV_CFP_QUAL_8022_LLC,
+    DRV_CFP_QUAL_8022_SNAP,
+    DRV_CFP_QUAL_MAC_DA,
+    DRV_CFP_QUAL_MAC_SA,
+    DRV_CFP_QUAL_USRVID,
+    DRV_CFP_QUAL_USR_PRI,
+    DRV_CFP_QUAL_USR_CFI,
+    DRV_CFP_QUAL_SPVID,
+    DRV_CFP_QUAL_ETYPE,
+    DRV_CFP_QUAL_IP_DA,
+    DRV_CFP_QUAL_IP_SA,
+    DRV_CFP_QUAL_IPV4,
+    DRV_CFP_QUAL_IP_SAME,
+    DRV_CFP_QUAL_TCPUDP,
+    DRV_CFP_QUAL_UDP,
+    DRV_CFP_QUAL_L4_DST,
+    DRV_CFP_QUAL_L4_SRC,
+    DRV_CFP_QUAL_L4_SAME,
+    DRV_CFP_QUAL_L4SRC_LESS1024,
+    DRV_CFP_QUAL_TCP,
+    DRV_CFP_QUAL_TCP_SEQ_ZERO,
+    DRV_CFP_QUAL_TCP_HDR_LEN,
+    DRV_CFP_QUAL_TCP_FLAG,
+    DRV_CFP_QUAL_IP_PROTO,
+    DRV_CFP_QUAL_IP_VER,
+    DRV_CFP_QUAL_IP_TOS,
+    DRV_CFP_QUAL_IP_TTL,
+    DRV_CFP_QUAL_UDF0,
+    DRV_CFP_QUAL_UDF2,
+    DRV_CFP_QUAL_UDF3A,
+    DRV_CFP_QUAL_UDF3B,
+    DRV_CFP_QUAL_UDF3C,
+    DRV_CFP_QUAL_UDF4A,
+    DRV_CFP_QUAL_UDF4B,
+    DRV_CFP_QUAL_UDF4C,
+    DRV_CFP_QUAL_UDF4D,
+    DRV_CFP_QUAL_UDF4E,
+    /* New TCAM qualify of BCM53242 */
+    DRV_CFP_QUAL_SRC_PBMP,
+    DRV_CFP_QUAL_L2_FRM_FORMAT,
+    DRV_CFP_QUAL_L3_FRM_FORMAT,
+    DRV_CFP_QUAL_L4_FRM_FORMAT,
+    DRV_CFP_QUAL_VLAN_RANGE,
+    DRV_CFP_QUAL_L4_PORT_RANGE,
+    DRV_CFP_QUAL_IP6_FLOW_ID,
+    DRV_CFP_QUAL_IP6_SA,
+    DRV_CFP_QUAL_IP6_TRAFFIC_CLASS,
+    DRV_CFP_QUAL_IP6_NEXT_HEADER,
+    DRV_CFP_QUAL_IP6_HOP_LIMIT,
+    DRV_CFP_QUAL_ICMPIGMP_TYPECODE,
+    DRV_CFP_QUAL_BIG_ICMP_CHECK,
+    DRV_CFP_QUAL_UDFA0,
+    DRV_CFP_QUAL_UDFA1,
+    DRV_CFP_QUAL_UDFA2,
+    DRV_CFP_QUAL_UDFA3,
+    DRV_CFP_QUAL_UDFA4,
+    DRV_CFP_QUAL_UDFA5,
+    DRV_CFP_QUAL_UDFA6,
+    DRV_CFP_QUAL_UDFA7,
+    DRV_CFP_QUAL_UDFA8,
+    DRV_CFP_QUAL_UDFA9,
+    DRV_CFP_QUAL_UDFA10,
+    DRV_CFP_QUAL_UDFA11,
+    DRV_CFP_QUAL_UDFA12,
+    DRV_CFP_QUAL_UDFA13,
+    DRV_CFP_QUAL_UDFA14,
+    DRV_CFP_QUAL_UDFA15,
+    DRV_CFP_QUAL_UDFA16,
+    DRV_CFP_QUAL_UDFA17,
+    DRV_CFP_QUAL_UDFA18,
+    DRV_CFP_QUAL_UDFA19,
+    DRV_CFP_QUAL_UDFA20,
+    DRV_CFP_QUAL_UDFA21,
+    DRV_CFP_QUAL_UDFA22,
+    DRV_CFP_QUAL_UDFA23,
+    DRV_CFP_QUAL_UDFA24,
+    DRV_CFP_QUAL_UDFA25,
+    DRV_CFP_QUAL_UDFA26,
+    DRV_CFP_QUAL_UDFB0,
+    DRV_CFP_QUAL_UDFB1,
+    DRV_CFP_QUAL_UDFB2,
+    DRV_CFP_QUAL_UDFB3,
+    DRV_CFP_QUAL_UDFB4,
+    DRV_CFP_QUAL_UDFB5,
+    DRV_CFP_QUAL_UDFB6,
+    DRV_CFP_QUAL_UDFB7,
+    DRV_CFP_QUAL_UDFB8,
+    DRV_CFP_QUAL_UDFB9,
+    DRV_CFP_QUAL_UDFB10,
+    DRV_CFP_QUAL_UDFB11,
+    DRV_CFP_QUAL_UDFB12,
+    DRV_CFP_QUAL_UDFB13,
+    DRV_CFP_QUAL_UDFB14,
+    DRV_CFP_QUAL_UDFB15,
+    DRV_CFP_QUAL_UDFB16,
+    DRV_CFP_QUAL_UDFB17,
+    DRV_CFP_QUAL_UDFB18,
+    DRV_CFP_QUAL_UDFB19,
+    DRV_CFP_QUAL_UDFB20,
+    DRV_CFP_QUAL_UDFB21,
+    DRV_CFP_QUAL_UDFB22,
+    DRV_CFP_QUAL_UDFB23,
+    DRV_CFP_QUAL_UDFB24,
+    DRV_CFP_QUAL_UDFB25,
+    DRV_CFP_QUAL_UDFB26,
+    DRV_CFP_QUAL_UDFC0,
+    DRV_CFP_QUAL_UDFC1,
+    DRV_CFP_QUAL_UDFC2,
+    DRV_CFP_QUAL_UDFC3,
+    DRV_CFP_QUAL_UDFC4,
+    DRV_CFP_QUAL_UDFC5,
+    DRV_CFP_QUAL_UDFC6,
+    DRV_CFP_QUAL_UDFC7,
+    DRV_CFP_QUAL_UDFC8,
+    DRV_CFP_QUAL_UDFC9,
+    DRV_CFP_QUAL_UDFC10,
+    DRV_CFP_QUAL_UDFC11,
+    DRV_CFP_QUAL_UDFC12,
+    DRV_CFP_QUAL_UDFC13,
+    DRV_CFP_QUAL_UDFC14,
+    DRV_CFP_QUAL_UDFC15,
+    DRV_CFP_QUAL_UDFC16,
+    DRV_CFP_QUAL_UDFC17,
+    DRV_CFP_QUAL_UDFC18,
+    DRV_CFP_QUAL_UDFC19,
+    DRV_CFP_QUAL_UDFC20,
+    DRV_CFP_QUAL_UDFC21,
+    DRV_CFP_QUAL_UDFC22,
+    DRV_CFP_QUAL_UDFC23,
+    DRV_CFP_QUAL_UDFC24,
+    DRV_CFP_QUAL_UDFC25,
+    DRV_CFP_QUAL_UDFC26,
+    DRV_CFP_QUAL_UDFD0,
+    DRV_CFP_QUAL_UDFD1,
+    DRV_CFP_QUAL_UDFD2,
+    DRV_CFP_QUAL_UDFD3,
+    DRV_CFP_QUAL_UDFD4,
+    DRV_CFP_QUAL_UDFD5,
+    DRV_CFP_QUAL_UDFD6,
+    DRV_CFP_QUAL_UDFD7,
+    DRV_CFP_QUAL_UDFD8,
+    DRV_CFP_QUAL_UDFD9,
+    DRV_CFP_QUAL_UDFD10,
+    DRV_CFP_QUAL_UDFD11,
+    /* Add for BCM5395 */
+    DRV_CFP_QUAL_UDF5A,
+    DRV_CFP_QUAL_UDF5B,
+    DRV_CFP_QUAL_UDF5C,
+    DRV_CFP_QUAL_UDF5D,
+    DRV_CFP_QUAL_UDF5E,
+    /* add for BCM53115 */
+    DRV_CFP_QUAL_IP_FRGA,
+    DRV_CFP_QUAL_IP_NON_FIRST_FRGA,
+    DRV_CFP_QUAL_IP_AUTH,
+    DRV_CFP_QUAL_CHAIN_ID,
+    DRV_CFP_QUAL_IP6_DA,
+    DRV_CFP_QUAL_SNAP_HEADER,
+    DRV_CFP_QUAL_LLC_HEADER,
+    DRV_CFP_QUAL_CLASS_ID, /* To indicate slice can set the class ID action */
+
+    DRV_CFP_QUAL_INVALID,
+    DRV_CFP_QUAL_COUNT
+}drv_cfp_qual_t;
+
+/* field set */
+typedef enum drv_cfp_field_e {
+    /* TCAM */
+    DRV_CFP_FIELD_VALID,
+    DRV_CFP_FIELD_SLICE_ID,
+    DRV_CFP_FIELD_SRC_PORT,
+    DRV_CFP_FIELD_1QTAGGED,
+    DRV_CFP_FIELD_SPTAGGED,
+    DRV_CFP_FIELD_EII_OR_8023,
+    DRV_CFP_FIELD_BRCM_TAGGED,
+    DRV_CFP_FIELD_IEEE_LLC,
+    DRV_CFP_FIELD_IEEE_SNAP,
+    DRV_CFP_FIELD_MAC_DA,
+    DRV_CFP_FIELD_MAC_SA,
+    DRV_CFP_FIELD_SPVID,
+    DRV_CFP_FIELD_USRVID,
+    DRV_CFP_FIELD_USR_PRI,
+    DRV_CFP_FIELD_USR_CFI,
+    DRV_CFP_FIELD_ETYPE,
+    DRV_CFP_FIELD_UDF0_VALID,
+    DRV_CFP_FIELD_UDF0,
+    DRV_CFP_FIELD_IPV4_VALID,
+    DRV_CFP_FIELD_IP_DA,
+    DRV_CFP_FIELD_IP_SA,
+    DRV_CFP_FIELD_SAME_IP,
+    DRV_CFP_FIELD_TCPUDP_VALID,
+    DRV_CFP_FIELD_UDP_VALID,
+    DRV_CFP_FIELD_TCP_VALID,
+    DRV_CFP_FIELD_L4DST,
+    DRV_CFP_FIELD_L4SRC,
+    DRV_CFP_FIELD_SAME_L4PORT,
+    DRV_CFP_FIELD_L4SRC_LESS1024,
+    DRV_CFP_FIELD_TCP_FRAME,
+    DRV_CFP_FIELD_TCP_SEQ_ZERO,
+    DRV_CFP_FIELD_TCP_HDR_LEN,
+    DRV_CFP_FIELD_TCP_FLAG,
+    DRV_CFP_FIELD_UDF2_VALID,
+    DRV_CFP_FIELD_UDF2,
+    DRV_CFP_FIELD_IP_PROTO,
+    DRV_CFP_FIELD_IP_VER,
+    DRV_CFP_FIELD_IP_TOS,
+    DRV_CFP_FIELD_IP_TTL,
+    DRV_CFP_FIELD_UDF3A_VALID,
+    DRV_CFP_FIELD_UDF3A,
+    DRV_CFP_FIELD_UDF3B_VALID,
+    DRV_CFP_FIELD_UDF3B,
+    DRV_CFP_FIELD_UDF3C_VALID,
+    DRV_CFP_FIELD_UDF3C,
+    DRV_CFP_FIELD_UDF4A_VALID,
+    DRV_CFP_FIELD_UDF4A,
+    DRV_CFP_FIELD_UDF4B_VALID,
+    DRV_CFP_FIELD_UDF4B,
+    DRV_CFP_FIELD_UDF4C_VALID,
+    DRV_CFP_FIELD_UDF4C,
+    DRV_CFP_FIELD_UDF4D_VALID,
+    DRV_CFP_FIELD_UDF4D,
+    DRV_CFP_FIELD_UDF4E_VALID,
+    DRV_CFP_FIELD_UDF4E,
+    /* New TCAM fields of BCM53242 */
+    DRV_CFP_FIELD_IN_PBMP,
+    DRV_CFP_FIELD_L2_FRM_FORMAT,
+    DRV_CFP_FIELD_L3_FRM_FORMAT,
+    DRV_CFP_FIELD_L4_FRM_FORMAT,
+    DRV_CFP_FIELD_VLAN_RANGE,
+    DRV_CFP_FIELD_L4_PORT_RANGE,
+    DRV_CFP_FIELD_IP6_FLOW_ID,
+    DRV_CFP_FIELD_IP6_SA,
+    DRV_CFP_FIELD_IP6_TRAFFIC_CLASS,
+    DRV_CFP_FIELD_IP6_NEXT_HEADER,
+    DRV_CFP_FIELD_IP6_HOP_LIMIT,
+    DRV_CFP_FIELD_ICMPIGMP_TYPECODE,
+    DRV_CFP_FIELD_BIG_ICMP_CHECK,
+    DRV_CFP_FIELD_UDFA0,
+    DRV_CFP_FIELD_UDFA1,
+    DRV_CFP_FIELD_UDFA2,
+    DRV_CFP_FIELD_UDFA3,
+    DRV_CFP_FIELD_UDFA4,
+    DRV_CFP_FIELD_UDFA5,
+    DRV_CFP_FIELD_UDFA6,
+    DRV_CFP_FIELD_UDFA7,
+    DRV_CFP_FIELD_UDFA8,
+    DRV_CFP_FIELD_UDFA0_VALID,
+    DRV_CFP_FIELD_UDFA1_VALID,
+    DRV_CFP_FIELD_UDFA2_VALID,
+    DRV_CFP_FIELD_UDFA3_VALID,
+    DRV_CFP_FIELD_UDFA4_VALID,
+    DRV_CFP_FIELD_UDFA5_VALID,
+    DRV_CFP_FIELD_UDFA6_VALID,
+    DRV_CFP_FIELD_UDFA7_VALID,
+    DRV_CFP_FIELD_UDFA8_VALID,
+    DRV_CFP_FIELD_UDFB0,
+    DRV_CFP_FIELD_UDFB1,
+    DRV_CFP_FIELD_UDFB2,
+    DRV_CFP_FIELD_UDFB3,
+    DRV_CFP_FIELD_UDFB4,
+    DRV_CFP_FIELD_UDFB5,
+    DRV_CFP_FIELD_UDFB6,
+    DRV_CFP_FIELD_UDFB7,
+    DRV_CFP_FIELD_UDFB8,
+    DRV_CFP_FIELD_UDFB9,
+    DRV_CFP_FIELD_UDFB10,
+    DRV_CFP_FIELD_UDFB0_VALID,
+    DRV_CFP_FIELD_UDFB1_VALID,
+    DRV_CFP_FIELD_UDFB2_VALID,
+    DRV_CFP_FIELD_UDFB3_VALID,
+    DRV_CFP_FIELD_UDFB4_VALID,
+    DRV_CFP_FIELD_UDFB5_VALID,
+    DRV_CFP_FIELD_UDFB6_VALID,
+    DRV_CFP_FIELD_UDFB7_VALID,
+    DRV_CFP_FIELD_UDFB8_VALID,
+    DRV_CFP_FIELD_UDFB9_VALID,
+    DRV_CFP_FIELD_UDFB10_VALID,
+    DRV_CFP_FIELD_UDFC0,
+    DRV_CFP_FIELD_UDFC1,
+    DRV_CFP_FIELD_UDFC2,
+    DRV_CFP_FIELD_UDFC3,
+    DRV_CFP_FIELD_UDFC4,
+    DRV_CFP_FIELD_UDFC5,
+    DRV_CFP_FIELD_UDFC6,
+    DRV_CFP_FIELD_UDFC7,
+    DRV_CFP_FIELD_UDFC8,
+    DRV_CFP_FIELD_UDFC0_VALID,
+    DRV_CFP_FIELD_UDFC1_VALID,
+    DRV_CFP_FIELD_UDFC2_VALID,
+    DRV_CFP_FIELD_UDFC3_VALID,
+    DRV_CFP_FIELD_UDFC4_VALID,
+    DRV_CFP_FIELD_UDFC5_VALID,
+    DRV_CFP_FIELD_UDFC6_VALID,
+    DRV_CFP_FIELD_UDFC7_VALID,
+    DRV_CFP_FIELD_UDFC8_VALID,
+    DRV_CFP_FIELD_UDFD0,
+    DRV_CFP_FIELD_UDFD1,
+    DRV_CFP_FIELD_UDFD2,
+    DRV_CFP_FIELD_UDFD3,
+    DRV_CFP_FIELD_UDFD4,
+    DRV_CFP_FIELD_UDFD5,
+    DRV_CFP_FIELD_UDFD6,
+    DRV_CFP_FIELD_UDFD7,
+    DRV_CFP_FIELD_UDFD8,
+    DRV_CFP_FIELD_UDFD9,
+    DRV_CFP_FIELD_UDFD10,
+    DRV_CFP_FIELD_UDFD11,
+    DRV_CFP_FIELD_UDFD0_VALID,
+    DRV_CFP_FIELD_UDFD1_VALID,
+    DRV_CFP_FIELD_UDFD2_VALID,
+    DRV_CFP_FIELD_UDFD3_VALID,
+    DRV_CFP_FIELD_UDFD4_VALID,
+    DRV_CFP_FIELD_UDFD5_VALID,
+    DRV_CFP_FIELD_UDFD6_VALID,
+    DRV_CFP_FIELD_UDFD7_VALID,
+    DRV_CFP_FIELD_UDFD8_VALID,
+    DRV_CFP_FIELD_UDFD9_VALID,
+    DRV_CFP_FIELD_UDFD10_VALID,
+    DRV_CFP_FIELD_UDFD11_VALID,
+    /* Add for BCM5395 */
+    DRV_CFP_FIELD_UDF5A_VALID,
+    DRV_CFP_FIELD_UDF5A,
+    DRV_CFP_FIELD_UDF5B_VALID,
+    DRV_CFP_FIELD_UDF5B,
+    DRV_CFP_FIELD_UDF5C_VALID,
+    DRV_CFP_FIELD_UDF5C,
+    DRV_CFP_FIELD_UDF5D_VALID,
+    DRV_CFP_FIELD_UDF5D,
+    DRV_CFP_FIELD_UDF5E_VALID,
+    DRV_CFP_FIELD_UDF5E,
+    /* Add for BCM53115 */
+    DRV_CFP_FIELD_IP_FRAG,
+    DRV_CFP_FIELD_IP_NON_FIRST_FRAG,
+    DRV_CFP_FIELD_IP_AUTH,
+    DRV_CFP_FIELD_TTL_RANGE,
+    DRV_CFP_FIELD_CHAIN_ID,
+    DRV_CFP_FIELD_IP6_DA,
+    DRV_CFP_FIELD_SNAP_HEADER,
+    DRV_CFP_FIELD_LLC_HEADER,
+    
+    /* ACTION RAM */
+    DRV_CFP_FIELD_MOD_PRI_EN_IB,
+    DRV_CFP_FIELD_MOD_PRI_MAP_IB,
+    DRV_CFP_FIELD_MOD_TOS_EN_IB,
+    DRV_CFP_FIELD_MOD_TOS_IB,
+    DRV_CFP_FIELD_REDIRECT_EN_IB,
+    DRV_CFP_FIELD_ADD_CHANGE_DEST_IB,
+    DRV_CFP_FIELD_NEW_DEST_IB,
+    DRV_CFP_FIELD_MOD_PRI_EN_OB,
+    DRV_CFP_FIELD_MOD_PRI_MAP_OB,
+    DRV_CFP_FIELD_MOD_TOS_EN_OB,
+    DRV_CFP_FIELD_MOD_TOS_OB,
+    DRV_CFP_FIELD_REDIRECT_EN_OB,
+    DRV_CFP_FIELD_ADD_CHANGE_DEST_OB,
+    DRV_CFP_FIELD_NEW_DEST_OB,
+    /* ACTION RAM of BCM53242*/
+    DRV_CFP_FIELD_CHANGE_DSCP_OB_EN,
+    DRV_CFP_FIELD_NEW_DSCP_OB,
+    DRV_CFP_FIELD_CHANGE_FWD_OB_EN,
+    DRV_CFP_FIELD_NEW_FWD_OB,
+    DRV_CFP_FIELD_CHANGE_FLOW_EN,
+    DRV_CFP_FIELD_NEW_FLOW_INDEX,
+    DRV_CFP_FIELD_CHANGE_DSCP_IB_EN,
+    DRV_CFP_FIELD_NEW_DSCP_IB,
+    DRV_CFP_FIELD_CHANGE_PCP_EN,
+    DRV_CFP_FIELD_NEW_PCP,
+    DRV_CFP_FIELD_CHANGE_COS_EN,
+    DRV_CFP_FIELD_NEW_COS,
+    DRV_CFP_FIELD_CHANGE_COS_IMP_EN,
+    DRV_CFP_FIELD_NEW_COS_IMP,
+    DRV_CFP_FIELD_CHANGE_FWD_IB_EN,
+    DRV_CFP_FIELD_NEW_FWD_IB,
+    /* Add for BCM53115 */
+    DRV_CFP_FIELD_CHANGE_TC,
+    DRV_CFP_FIELD_NEW_TC,
+    DRV_CFP_FIELD_ACTION_CHAIN,
+    DRV_CFP_FIELD_ACTION_LOOPBACK_EN,
+    DRV_CFP_FIELD_ACTION_REASON,
+    DRV_CFP_FIELD_ACTION_STP_BYPASS,
+    DRV_CFP_FIELD_ACTION_EAP_BYPASS,
+    DRV_CFP_FIELD_ACTION_VLAN_BYPASS,
+
+    /* METER RAM */
+    DRV_CFP_FIELD_CURR_QUOTA,
+    DRV_CFP_FIELD_RATE_REFRESH_EN,
+    DRV_CFP_FIELD_REF_CAP,
+    DRV_CFP_FIELD_RATE,
+    /* METER RAM of BCM53242 */
+    DRV_CFP_FIELD_BUCKET_SIZE,
+    DRV_CFP_FIELD_REF_UNIT,
+    DRV_CFP_FIELD_REF_CNT,
+
+    /* IN BAND COUNTER */
+    DRV_CFP_FIELD_IB_CNT,
+    /* OUT BAND COUNTER */
+    DRV_CFP_FIELD_OB_CNT,
+    DRV_CFP_FIELD_COUNT
+}drv_cfp_field_t;
+
+typedef enum drv_cfp_range_e {
+    DRV_CFP_RANGE_SRCPORT,
+    DRV_CFP_RANGE_DSTPORT,
+    DRV_CFP_RANGE_VLAN,
+    DRV_CFP_RANGE_TCP_HEADER_LEN,
+    DRV_CFP_RANGE_BIG_ICMP,
+    
+    DRV_CFP_RANGE_COUNT
+} drv_cfp_range_t;
+
+typedef enum drv_cfp_udf_offset_e {
+    DRV_CFP_UDF_OFFSET_BASE_END_OF_TAG,
+    DRV_CFP_UDF_OFFSET_BASE_END_OF_L2_HDR, /* also "End of Ether Type". */
+    DRV_CFP_UDF_OFFSET_BASE_END_OF_L3_HDR, /* also "End of IP Header". */
+    DRV_CFP_UDF_OFFSET_BASE_START_OF_FRAME,
+
+    DRV_CFP_UDF_OFFSET_BASE_COUNT
+} drv_cfp_udf_offset_t;
+
+#define DRV_FIELD_RANGE_SRCPORT                 0x00000001
+#define DRV_FIELD_RANGE_DSTPORT                 0x00000002
+#define DRV_FIELD_RANGE_TCP                     0x00000004
+#define DRV_FIELD_RANGE_UDP                     0x00000008
+#define DRV_FIELD_RANGE_INVERT                  0x00000010
+#define DRV_FIELD_RANGE_EXTERNAL                0x00000020
+#define DRV_FIELD_RANGE_VLAN                    0x00000040
+
+/* driver cfp entry format */
+typedef struct drv_cfp_entry_s {
+    uint32  id;
+    uint32  prio;
+    uint32  tcam_data[12];
+    uint32  tcam_mask[12];
+    uint32  act_data[2];
+    uint32  meter_data[2];
+    uint32  slice_bmp;
+    SHR_BITDCL  w[_SHR_BITDCLSIZE(DRV_CFP_QUAL_COUNT)];
+
+    int flow2vlan_sw_idx;
+}drv_cfp_entry_t;
+
+
+#define DRV_CFP_QUAL_REPLACE_BY_UDF 0x1
+
+typedef struct drv_cfp_qual_udf_info_s {
+    int valid;
+    int qual;
+    int udf_num;
+    int udf_index[8];
+    int udf_base;
+    int udf_off[8];
+} drv_cfp_qual_udf_info_t;
+
+int drv_cfp_init(int unit);
+
+int drv_cfp_action_get(int unit, uint32* action, drv_cfp_entry_t* entry, 
+            uint32* act_param);
+
+int drv_cfp_action_set(int unit, uint32 action, drv_cfp_entry_t* entry, 
+            uint32 act_param1, uint32 act_param2);
+
+int drv_cfp_control_get(int unit, uint32 control_type, uint32 param1, 
+            uint32 *param2);
+
+int drv_cfp_control_set(int unit, uint32 control_type, uint32 param1, 
+            uint32 param2);
+
+int drv_cfp_entry_read(int unit, uint32 index, uint32 ram_type, 
+            drv_cfp_entry_t *entry);
+
+int drv_cfp_entry_search(int unit, uint32 flags, uint32 *index, 
+            drv_cfp_entry_t *entry);
+
+int drv_cfp_entry_write(int unit, uint32 index, uint32 ram_type, 
+            drv_cfp_entry_t *entry);
+
+int drv_cfp_field_get(int unit, uint32 mem_type, uint32 field_type, 
+            drv_cfp_entry_t* entry, uint32* fld_val);
+
+int drv_cfp_field_set(int unit, uint32 mem_type, uint32 field_type, 
+            drv_cfp_entry_t* entry, uint32* fld_val);
+
+int drv_cfp_meter_get(int unit, drv_cfp_entry_t* entry, uint32 *kbits_sec, 
+            uint32 *kbits_burst)    ;
+
+int drv_cfp_meter_set(int unit, drv_cfp_entry_t* entry, uint32 kbits_sec, 
+            uint32 kbits_burst);
+
+int drv_cfp_qset_get(int unit, uint32 qual, drv_cfp_entry_t *entry,
+            uint32 *val);
+
+int drv_cfp_qset_set(int unit, uint32 qual, drv_cfp_entry_t *entry, uint32 val);
+
+int drv_cfp_slice_id_select(int unit, drv_cfp_entry_t *entry, uint32 *slice_id, uint32 flags);
+
+int drv_cfp_slice_to_qset(int unit, uint32 slice_id, drv_cfp_entry_t *entry);
+
+int drv_cfp_stat_get(int unit, uint32 stat_type, uint32 index, uint32* counter);
+
+int drv_cfp_stat_set(int unit, uint32 stat_type, uint32 index, uint32 counter);
+
+int drv_cfp_udf_get(int unit, uint32 port, uint32 udf_index, uint32 *offset, uint32 *base);
+
+int drv_cfp_udf_set(int unit, uint32 port, uint32 udf_index, uint32 offset, uint32 base);
+
+int drv_cfp_ranger(int unit, uint32 flags, uint32 min, uint32 max);
+
+int drv_cfp_range_set(int unit, uint32 type, uint32 id, uint32 param1, uint32 param2);
+
+int drv_cfp_sub_qual_by_udf(int unit, int enable, int slice_id, uint32 sub_qual, 
+    drv_cfp_qual_udf_info_t *qual_udf_info);
+
+
+#endif /* _SOC_CFP_H */

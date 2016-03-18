@@ -1,0 +1,8 @@
+BCM.0> fp group get 14
+qset={SrcIp6, IpType, StageEgress}
+BCM.0> fp group get 15
+qset={DstIp6, IpType, StageEgress}
+BCM.0> fp group get 16
+qset={SrcIp, DstIp, L4SrcPort, L4DstPort, DSCP, TcpControl, StageEgress, OutPort}
+BCM.0> fp group get 17
+qset={SrcMac, DstMac, OuterVlan, OuterVlanId, OuterVlanPri, OuterVlanCfi, StageEgress, OutPort}

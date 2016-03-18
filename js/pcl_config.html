@@ -1,0 +1,1530 @@
+<html>
+ <head>
+  <script type="application/x-javascript">
+
+var MYAPP = {};
+
+MYAPP.utility = (function () {
+    var assert = function assert(exp, message) {
+        if (!exp) {
+            if (console && console.trace) {
+                console.trace();
+            }
+            throw new AssertException(message);
+        }
+    };
+
+    function AssertException(message) {
+        this.message = message;
+    }
+
+    AssertException.prototype.toString = function () {
+        return 'AssertException: ' + this.message;
+    }
+
+    return {
+        assert: assert
+    };
+}());
+
+MYAPP.CPSS = function (spec) {
+    var CPSS_PCL_DIRECTION_INGRESS_E = 0,
+        CPSS_PCL_DIRECTION_EGRESS_E = 1,
+
+        CPSS_PCL_LOOKUP_0_E = 0,
+        CPSS_PCL_LOOKUP_1_E = 1,
+        CPSS_PCL_LOOKUP_0_0_E = 2,
+        CPSS_PCL_LOOKUP_0_1_E = 3,
+
+        CPSS_INTERFACE_PORT_E = 0,
+        CPSS_INTERFACE_TRUNK_E = 1,
+        CPSS_INTERFACE_VIDX_E = 2,
+        CPSS_INTERFACE_VID_E = 3,
+        CPSS_INTERFACE_DEVICE_E = 4,
+        CPSS_INTERFACE_FABRIC_VIDX_E = 5,
+        CPSS_INTERFACE_INDEX_E = 6,
+
+        pclCfgTbl_ingress_lkup0 = [],
+        pclCfgTbl_ingress_lkup1 = [],
+        pclCfgTbl_egress_lkup0 = [],
+        i,
+
+        privPclCfgTblGet = function (devNum, direction, lookupNum) {
+            if (direction === CPSS_PCL_DIRECTION_INGRESS_E &&
+                    lookupNum === CPSS_PCL_LOOKUP_0_E) {
+                return pclCfgTbl_ingress_lkup0;
+            }
+            else if (direction === CPSS_PCL_DIRECTION_INGRESS_E &&
+                     lookupNum === CPSS_PCL_LOOKUP_1_E) {
+                return pclCfgTbl_ingress_lkup1;
+            }
+            else if (direction === CPSS_PCL_DIRECTION_EGRESS_E &&
+                     lookupNum === CPSS_PCL_LOOKUP_0_E) {
+                return pclCfgTbl_egress_lkup0;
+            }
+
+            return undefined;
+        },
+        privInterfaceToIndex = function (interfaceInfo) {
+            var trunkIndexBase = spec.maxNumOfPort,
+                index;
+
+            if (interfaceInfo.type === CPSS_INTERFACE_PORT_E) {
+
+                //
+                // CPU port
+                //
+                if (interfaceInfo.portNum === 63)
+                {
+                    index = interfaceInfo.portNum;
+                }
+                //
+                // Craft port
+                //
+                else if (interfaceInfo.portNum === 62)
+                {
+                    index = interfaceInfo.portNum;
+                }
+                else
+                {
+                    index = interfaceInfo.portNum;
+
+                    MYAPP.utility.assert(0 <= index && index < spec.maxNumOfPort);
+                }
+
+                MYAPP.utility.assert(0 <= index && index <= 63);
+
+                return index;
+            }
+            else if (interfaceInfo.type === CPSS_INTERFACE_TRUNK_E) {
+
+                index = trunkIndexBase + (interfaceInfo.portNum - 66)/2;
+
+                MYAPP.utility.assert(spec.maxNumOfPort <= index && index < spec.maxNumOfPort + spec.maxNumTrunk);
+
+                MYAPP.utility.assert(0 <= index && index <= 63);
+
+                return index;
+            }
+
+            return undefined;
+        }
+        cpssDxChPclCfgTblSet = function (devNum, interfaceInfo, direction, lookupNum, lookupCfg) {
+            var pclCfgTbl = privPclCfgTblGet(devNum, direction, lookupNum),
+                index = privInterfaceToIndex(interfaceInfo);
+
+            if (typeof pclCfgTbl === 'undefined' || typeof index === 'undefined') {
+                return 0;
+            }
+
+            pclCfgTbl[index].enable = lookupCfg.enable;
+            pclCfgTbl[index].pcl_id = lookupCfg.pcl_id;
+        },
+        cpssDxChPclCfgTblGet = function (devNum, interfaceInfo, direction, lookupNum) {
+            var pclCfgTbl = privPclCfgTblGet(devNum, direction, lookupNum),
+                index = privInterfaceToIndex(interfaceInfo),
+                lookupCfg;
+
+            if (typeof pclCfgTbl === 'undefined' || typeof index === 'undefined') {
+                return 0;
+            }
+
+            lookupCfg = {};
+            lookupCfg.enable = pclCfgTbl[index].enable;
+            lookupCfg.pcl_id = pclCfgTbl[index].pcl_id;
+            return lookupCfg;
+        },
+        cpssDxChPclCfgTblGetAtIndex = function (devNum, index, direction, lookupNum) {
+            var pclCfgTbl = privPclCfgTblGet(devNum, direction, lookupNum),
+                lookupCfg;
+
+            MYAPP.utility.assert(0 <= index && index <= 63);
+
+            if (typeof pclCfgTbl === 'undefined') {
+                return 0;
+            }
+
+            lookupCfg = {};
+            lookupCfg.enable = pclCfgTbl[index].enable;
+            lookupCfg.pcl_id = pclCfgTbl[index].pcl_id;
+            return lookupCfg;
+        };
+
+    for (i = 0; i <= 63; i += 1) {
+        pclCfgTbl_ingress_lkup0[i] = {};
+        pclCfgTbl_ingress_lkup0[i].pcl_id = 0;
+
+        pclCfgTbl_ingress_lkup1[i] = {};
+        pclCfgTbl_ingress_lkup1[i].pcl_id = 0;
+
+        pclCfgTbl_egress_lkup0[i]  = {};
+        pclCfgTbl_egress_lkup0[i].pcl_id = 0;
+    }
+
+    return {
+        // public constants
+        CPSS_PCL_DIRECTION_INGRESS_E: CPSS_PCL_DIRECTION_INGRESS_E,
+        CPSS_PCL_DIRECTION_EGRESS_E: CPSS_PCL_DIRECTION_EGRESS_E,
+        CPSS_INTERFACE_TRUNK_E: CPSS_INTERFACE_TRUNK_E,
+        CPSS_INTERFACE_PORT_E: CPSS_INTERFACE_PORT_E,
+        CPSS_PCL_LOOKUP_0_E: CPSS_PCL_LOOKUP_0_E,
+        CPSS_PCL_LOOKUP_0_1_E: CPSS_PCL_LOOKUP_0_1_E,
+
+        // private functions
+        privInterfaceToIndex: privInterfaceToIndex,
+
+        // public functions
+        cpssDxChPclCfgTblSet: cpssDxChPclCfgTblSet,
+        cpssDxChPclCfgTblGet: cpssDxChPclCfgTblGet,
+        cpssDxChPclCfgTblGetAtIndex: cpssDxChPclCfgTblGetAtIndex,
+    };
+};
+
+(function trunkIdA2C() {
+    var SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP = 28,
+        SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM = 32;
+
+    var spec = {
+            maxNumOfPort: SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP,
+            maxNumTrunk: SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM
+    };
+
+    var cpss = MYAPP.CPSS(spec),
+        assert = MYAPP.utility.assert,
+        CPSS_INTERFACE_PORT_E = cpss.CPSS_INTERFACE_PORT_E,
+        CPSS_INTERFACE_TRUNK_E = cpss.CPSS_INTERFACE_TRUNK_E;
+
+    var result, devNum = 0,
+        portNum, direction, lookupNum, lookupCfg = {},
+        trunkId,
+        newTrunkId;
+
+    var TrunkIdA2C = function (devNum, trunkId) {
+        assert(1 <= trunkId && trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM);
+        return ((0x20 + trunkId) << 1);
+    };
+
+    trunkId = 1;
+    newTrunkId = TrunkIdA2C(devNum, trunkId);
+    assert(newTrunkId === 66);
+
+    trunkId = 2;
+    newTrunkId = TrunkIdA2C(devNum, trunkId);
+    assert(newTrunkId === 68);
+
+    trunkId = 3;
+    newTrunkId = TrunkIdA2C(devNum, trunkId);
+    assert(newTrunkId === 70);
+
+    trunkId = 4;
+    newTrunkId = TrunkIdA2C(devNum, trunkId);
+    assert(newTrunkId === 72);
+
+
+    newTrunkId = cpss.privInterfaceToIndex({type: CPSS_INTERFACE_TRUNK_E,
+                                            portNum: TrunkIdA2C(devNum, 1)});
+    assert(newTrunkId == 28);
+
+    newTrunkId = cpss.privInterfaceToIndex({type: CPSS_INTERFACE_TRUNK_E,
+                                            portNum: TrunkIdA2C(devNum, SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM)});
+    assert(newTrunkId == 28 + SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM - 1);
+
+}());
+
+(function PortIdA2C() {
+    var SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP = 28,
+        SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM = 32;
+
+    var spec = {
+            maxNumOfPort: SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP,
+            maxNumTrunk: SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM
+    };
+
+    var cpss = MYAPP.CPSS(spec),
+        assert = MYAPP.utility.assert,
+        CPSS_INTERFACE_PORT_E = cpss.CPSS_INTERFACE_PORT_E;
+
+    var result, devNum = 0,
+        portNum, direction, lookupNum, lookupCfg = {},
+        port,
+        newPort;
+
+    var PortIdA2C = function (devNum, port) {
+        assert(1 <= port && port <= SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP);
+        return port - 1;
+    };
+
+    port = 1;
+    newPort = PortIdA2C(devNum, port);
+    assert(newPort === 0);
+
+    port = 2;
+    newPort = PortIdA2C(devNum, port);
+    assert(newPort === 1);
+
+    port = 3;
+    newPort = PortIdA2C(devNum, port);
+    assert(newPort === 2);
+
+    port = 4;
+    newPort = PortIdA2C(devNum, port);
+    assert(newPort === 3);
+
+    port = 5;
+    newPort = PortIdA2C(devNum, port);
+    assert(newPort === 4);
+
+    newPort = cpss.privInterfaceToIndex({type: CPSS_INTERFACE_PORT_E,
+                                         portNum: PortIdA2C(devNum, 1)});
+    assert(newPort == 0);
+
+    newPort = cpss.privInterfaceToIndex({type: CPSS_INTERFACE_PORT_E,
+                                         portNum: PortIdA2C(devNum, SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP)});
+    assert(newPort == SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP-1);
+
+}());
+
+
+(function initPclCfgTbl() {
+    var SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP = 28,
+        SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM = 32;
+
+    var spec = {
+            maxNumOfPort: SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP,
+            maxNumTrunk: SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM
+    };
+
+    var cpss = MYAPP.CPSS(spec),
+        assert = MYAPP.utility.assert,
+        CPSS_INTERFACE_PORT_E = cpss.CPSS_INTERFACE_PORT_E,
+        CPSS_INTERFACE_TRUNK_E = cpss.CPSS_INTERFACE_TRUNK_E;
+
+    (function initPclCfgTblPerPort() {
+        var result, devNum = 0,
+            portNum, direction, lookupNum, lookupCfg = {};
+
+        var PortIdA2C = function (devNum, port) {
+            assert(1 <= port && port <= SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP);
+            return port - 1;
+        };
+
+        for (portNum = 1; portNum <= SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP; portNum += 1) {
+            for (direction = 0; direction < 2; direction += 1) {
+                for (lookupNum = 0; lookupNum < 2; lookupNum += 1) {
+                    if (direction === 1 && lookupNum === 1) {
+                        continue;
+                    }
+
+                    lookupCfg = cpss.cpssDxChPclCfgTblGet(devNum,
+                        {type: CPSS_INTERFACE_PORT_E, portNum: PortIdA2C(devNum, portNum)},
+                        direction,
+                        lookupNum);
+
+                    assert(lookupCfg.pcl_id === 0);
+                }
+            }
+        }
+
+        for (portNum = 1; portNum <= SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP; portNum += 1) {
+            for (direction = 0; direction < 2; direction += 1) {
+                for (lookupNum = 0; lookupNum < 2; lookupNum += 1) {
+                    if (direction === 1 && lookupNum === 1) {
+                        continue;
+                    }
+
+                    cpss.cpssDxChPclCfgTblSet(devNum,
+                        {type: CPSS_INTERFACE_PORT_E, portNum: PortIdA2C(devNum, portNum)},
+                        direction,
+                        lookupNum,
+                        {pcl_id: portNum});
+                }
+            }
+        }
+
+        for (portNum = 1; portNum <= SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP; portNum += 1) {
+            for (direction = 0; direction < 2; direction += 1) {
+                for (lookupNum = 0; lookupNum < 2; lookupNum += 1) {
+                    if (direction === 1 && lookupNum === 1) {
+                        continue;
+                    }
+
+                    lookupCfg = cpss.cpssDxChPclCfgTblGet(devNum,
+                        {type: CPSS_INTERFACE_PORT_E, portNum: PortIdA2C(devNum, portNum)},
+                        direction,
+                        lookupNum);
+
+                    assert(lookupCfg.pcl_id === portNum);
+                }
+            }
+        }
+    }());
+
+    (function initPclCfgTblPerTrunk() {
+        var result, devNum = 0,
+            direction, lookupNum, lookupCfg = {},
+            trunkId;
+
+        var TrunkIdA2C = function (devNum, trunkId) {
+            assert(1 <= trunkId && trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM);
+            return ((0x20 + trunkId) << 1);
+        };
+
+        for (trunkId = 1; trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; trunkId += 1) {
+            for (direction = 0; direction < 2; direction += 1) {
+                for (lookupNum = 0; lookupNum < 2; lookupNum += 1) {
+                    if (direction === 1 && lookupNum === 1) {
+                        continue;
+                    }
+
+                    lookupCfg = cpss.cpssDxChPclCfgTblGet(devNum,
+                        {type: CPSS_INTERFACE_TRUNK_E, portNum: TrunkIdA2C(devNum, trunkId)},
+                        direction,
+                        lookupNum);
+
+                    assert(lookupCfg.pcl_id === 0);
+
+                }
+            }
+        }
+
+        for (trunkId = 1; trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; trunkId += 1) {
+            for (direction = 0; direction < 2; direction += 1) {
+                for (lookupNum = 0; lookupNum < 2; lookupNum += 1) {
+                    if (direction === 1 && lookupNum === 1) {
+                        continue;
+                    }
+
+                    cpss.cpssDxChPclCfgTblSet(devNum,
+                        {type: CPSS_INTERFACE_TRUNK_E, portNum: TrunkIdA2C(devNum, trunkId)},
+                        direction,
+                        lookupNum,
+                        {pcl_id: trunkId});
+
+                }
+            }
+        }
+
+        for (trunkId = 1; trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; trunkId += 1) {
+            for (direction = 0; direction < 2; direction += 1) {
+                for (lookupNum = 0; lookupNum < 2; lookupNum += 1) {
+                    if (direction === 1 && lookupNum === 1) {
+                        continue;
+                    }
+
+                    lookupCfg = cpss.cpssDxChPclCfgTblGet(devNum,
+                        {type: CPSS_INTERFACE_TRUNK_E, portNum: TrunkIdA2C(devNum, trunkId)},
+                        direction,
+                        lookupNum);
+
+                    assert(lookupCfg.pcl_id === trunkId);
+
+                }
+            }
+        }
+
+    }());
+
+    (function initPclCfgTblPerCPUPort() {
+        var result, devNum = 0,
+            cpuPortNum = 63,
+            direction = 1,
+            lookupNum = 0,
+            lookupCfg = {};
+
+            cpss.cpssDxChPclCfgTblSet(devNum,
+                {type: CPSS_INTERFACE_PORT_E, portNum: cpuPortNum},
+                direction,
+                lookupNum,
+                {pcl_id: cpuPortNum});
+
+            lookupCfg = cpss.cpssDxChPclCfgTblGet(devNum,
+                {type: CPSS_INTERFACE_PORT_E, portNum: cpuPortNum},
+                direction,
+                lookupNum);
+
+            assert(lookupCfg.pcl_id === cpuPortNum);
+
+    }());
+
+}());
+
+(function ruleCtrlInitPclCfgTbl() {
+    var SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP = 28,
+        SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM = 32,
+        SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD = SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP*2,
+        SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK = 8,
+        RULE_CTRL_CRAFT_PORT = 62,
+        RULE_CTRL_CPU_PORT   = 63;
+
+    var spec = {
+            maxNumOfPort: SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP,
+            maxNumTrunk: SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM
+    };
+
+    var cpss = MYAPP.CPSS(spec),
+        ASSERT = MYAPP.utility.assert,
+        CPSS_INTERFACE_PORT_E = cpss.CPSS_INTERFACE_PORT_E,
+        CPSS_INTERFACE_TRUNK_E = cpss.CPSS_INTERFACE_TRUNK_E,
+        CPSS_PCL_DIRECTION_INGRESS_E = cpss.CPSS_PCL_DIRECTION_INGRESS_E,
+        CPSS_PCL_DIRECTION_EGRESS_E = cpss.CPSS_PCL_DIRECTION_EGRESS_E,
+        CPSS_PCL_LOOKUP_0_E = cpss.CPSS_PCL_LOOKUP_0_E,
+        CPSS_PCL_LOOKUP_0_1_E = cpss.CPSS_PCL_LOOKUP_0_1_E;
+
+    var devrm_all_unit_data = [],
+        devrm_data = {};
+
+    var rule_ctrl_data = {dev_rule_id: 0};
+
+    var pclTbl = [], pclCount = 0;
+
+    var TRUE = true,
+        FALSE = false;
+
+    var RULE_TYPE_INTERFACE_UPORT = 0,
+        RULE_TYPE_INTERFACE_LPORT = 1,
+        RULE_TYPE_INTERFACE_TRUNK = 2,
+        RULE_TYPE_INTERFACE_UNIT  = 3,      // exclude CPU, Craft port
+        RULE_TYPE_INTERFACE_ALL_UNIT = 4,   // exclude CPU, Craft port
+        RULE_TYPE_INTERFACE_CPU_PORT = 5,
+        RULE_TYPE_INTERFACE_CRAFT_PORT = 6;
+
+    var RULE_TYPE_INBOUND = 0,
+        RULE_TYPE_OUTBOUND = 1,
+        RULE_TYPE_BOTH_DIRECTION = 2;
+
+    var STKTPLG_OM_IFINDEX_TO_UNIT = function (ifindex) {
+        return ((ifindex-1) / SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT) + 1;
+    };
+
+    var STKTPLG_OM_IFINDEX_TO_PORT = function (ifindex) {
+        return ifindex - ((STKTPLG_OM_IFINDEX_TO_UNIT(ifindex)-1) * SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT);
+    };
+
+    var PORT_TO_DEVICE_ID = function (port) {
+        return parseInt((port-1) / SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP);
+    };
+
+    var RULE_CTRL_LocalBindAllPortsAndTrunks2GlobalAcl = function () {
+        var my_unit_id = 1,
+            unit, port, direction,
+            interfaceInfo = {};
+
+        for (unit = 1; unit <= SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK; unit += 1) {
+
+            pclTbl = [];
+            pclCount = 0;
+
+            for (direction = RULE_TYPE_INBOUND; direction <= RULE_TYPE_OUTBOUND; direction += 1) {
+                interfaceInfo.type = RULE_TYPE_INTERFACE_UNIT;
+                interfaceInfo.unit = unit;
+                interfaceInfo.direction = direction;
+
+                RULE_CTRL_CreateSlot0PclIdForPortOrTrunk(interfaceInfo);
+            }
+
+            // all user port
+            for (port = 1; port <= SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD; port += 1) {
+                for (direction = RULE_TYPE_INBOUND; direction <= RULE_TYPE_OUTBOUND; direction += 1) {
+                    interfaceInfo = {};
+
+                    interfaceInfo.type = RULE_TYPE_INTERFACE_UPORT;
+                    interfaceInfo.uport = {};
+                    interfaceInfo.uport.unit = unit;
+                    interfaceInfo.uport.port = port;
+                    interfaceInfo.direction = direction;
+
+//                    console.log(interfaceInfo);
+                    RULE_CTRL_CreateSlot0PclIdForPortOrTrunk(interfaceInfo);
+                }
+            }
+        }
+
+        // all trunk port
+        for (port = 1; port <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; port += 1) {
+            for (direction = RULE_TYPE_INBOUND; direction <= RULE_TYPE_OUTBOUND; direction += 1) {
+                interfaceInfo = {};
+
+                interfaceInfo.type = RULE_TYPE_INTERFACE_TRUNK;
+                interfaceInfo.trunk_id = port;
+                interfaceInfo.direction = direction;
+
+//                console.log(interfaceInfo);
+                RULE_CTRL_CreateSlot0PclIdForPortOrTrunk(interfaceInfo);
+            }
+        }
+
+        // cpu port
+        interfaceInfo = {};
+        interfaceInfo.type = RULE_TYPE_INTERFACE_CPU_PORT;
+        interfaceInfo.direction = RULE_TYPE_OUTBOUND;
+
+//        console.log(interfaceInfo);
+        RULE_CTRL_CreateSlot0PclIdForPortOrTrunk(interfaceInfo);
+
+        // craft port
+        for (direction = RULE_TYPE_INBOUND; direction <= RULE_TYPE_OUTBOUND; direction += 1) {
+            interfaceInfo = {};
+            interfaceInfo.type = RULE_TYPE_INTERFACE_CRAFT_PORT;
+            interfaceInfo.direction = direction;
+
+//        console.log(interfaceInfo);
+            RULE_CTRL_CreateSlot0PclIdForPortOrTrunk(interfaceInfo);
+        }
+    };
+
+    var RULE_CTRL_CreateSlot0PclIdForPortOrTrunk = function (interfaceInfo) {
+        var pclCfg = {},
+            lookup,
+            max_lookup = 1;
+
+        if (interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT ||
+            interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT ||
+            interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK)
+        {
+            for (lookup = 0; lookup <= max_lookup; lookup += 1)
+            {
+                if (interfaceInfo.direction === RULE_TYPE_OUTBOUND && lookup != 0) {
+                    continue;
+                }
+
+                pclCfg = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+//                console.log(pclCfg);
+
+                RULE_CTRL_LocalBindAclToPort(interfaceInfo, lookup, pclCfg.pcl_id);
+
+                //
+                // Validate data
+                //
+                if (interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT && interfaceInfo.unit === 1) {
+                    ASSERT(typeof devrm_data.device[0].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+                    ASSERT(typeof devrm_data.device[1].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+                }
+                else if (interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT && interfaceInfo.uport.unit === 1) {
+                    var device_id = PORT_TO_DEVICE_ID(interfaceInfo.uport.port);
+
+                    ASSERT(typeof devrm_data.device[ device_id ].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+                }
+                else if (interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK) {
+                    ASSERT(typeof devrm_data.device[0].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+                    ASSERT(typeof devrm_data.device[1].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+                }
+
+                if (interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT) {
+                    var device_id = PORT_TO_DEVICE_ID(interfaceInfo.uport.port);
+
+                    ASSERT(typeof pclTbl[device_id * 0x03ff + pclCfg.pcl_id] === 'undefined');
+                    pclTbl[device_id * 0x03ff + pclCfg.pcl_id] = pclCfg;
+                    pclCount += 1;
+                }
+                else {
+                    ASSERT(typeof pclTbl[pclCfg.pcl_id] === 'undefined');
+                    pclTbl[pclCfg.pcl_id] = pclCfg;
+                    pclCount += 1;
+                }
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CPU_PORT)
+        {
+            lookup = 0;
+            pclCfg = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+//            console.log(pclCfg);
+
+            RULE_CTRL_LocalBindAclToPort(interfaceInfo, lookup, pclCfg.pcl_id);
+
+            //
+            // Validate data
+            //
+            ASSERT(typeof devrm_data.device[0].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+            ASSERT(typeof devrm_data.device[1].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+
+            ASSERT(typeof pclTbl[pclCfg.pcl_id] === 'undefined');
+            pclTbl[pclCfg.pcl_id] = pclCfg;
+            pclCount += 1;
+
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CRAFT_PORT)
+        {
+//            lookup = 0;
+
+            for (lookup = 0; lookup <= max_lookup; lookup += 1)
+            {
+                if (interfaceInfo.direction === RULE_TYPE_OUTBOUND && lookup != 0) {
+                    continue;
+                }
+
+                pclCfg = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+//            console.log(pclCfg);
+
+                RULE_CTRL_LocalBindAclToPort(interfaceInfo, lookup, pclCfg.pcl_id);
+
+                //
+                // Validate data
+                //
+                ASSERT(typeof devrm_data.device[0].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+                ASSERT(typeof devrm_data.device[1].pcl_table[ pclCfg.pcl_id ] !== 'undefined');
+
+                ASSERT(typeof pclTbl[pclCfg.pcl_id] === 'undefined');
+                pclTbl[pclCfg.pcl_id] = pclCfg;
+                pclCount += 1;
+            }
+        }
+        else
+        {
+            ASSERT(false);
+        }
+    };
+
+    var RULE_CTRL_PclIdEncode = function (interfaceInfo, lookup) {
+        var pcl_id = 0,
+            pcl_id_mask = 0,
+            bit7_9 = 0, // direction + lookup
+            bit6 = 0,   // ether port or trunk port
+            bit0_5 = 0; // sn
+
+        if (interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT ||
+            interfaceInfo.type === RULE_TYPE_INTERFACE_LPORT ||
+            interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK ||
+            interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT)
+        {
+            if (interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT)
+            {
+                bit0_5 = ((interfaceInfo.uport.port-1) % SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP)+1;
+                pcl_id_mask   = 0x03ff;
+            }
+            else if (interfaceInfo.type === RULE_TYPE_INTERFACE_LPORT)
+            {
+                var port;
+
+                port = STKTPLG_OM_IFINDEX_TO_PORT(interfaceInfo.lport);
+
+                bit0_5 = ((port-1) % SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP)+1;
+                pcl_id_mask   = 0x03ff;
+            }
+            else if (interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK)
+            {
+                bit0_5 = interfaceInfo.trunk_id;
+                pcl_id_mask   = 0x03ff;
+            }
+            else if (interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT)
+            {
+                pcl_id_mask   = 0x0380;
+            }
+
+            ASSERT(bit0_5 <= 0x003f);
+
+            if (interfaceInfo.direction === RULE_TYPE_INBOUND)
+            {
+                if (lookup === 0) // 0-0
+                {
+                    bit7_9 = 0x0080;
+                }
+                else if (lookup === 1) // 0-1
+                {
+                    bit7_9 = 0x0100;
+                }
+                else if (lookup === 2) // 1
+                {
+                    bit7_9 = 0x0180;
+                }
+                else
+                {
+                    ASSERT(false);
+                }
+            }
+            else if (interfaceInfo.direction === RULE_TYPE_OUTBOUND)
+            {
+                bit7_9 = 0x0200;
+            }
+            else
+            {
+                ASSERT(false);
+            }
+
+            if (interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK)
+            {
+                bit6 = 0x0040;
+            }
+
+            pcl_id = (bit7_9 + bit6 + bit0_5) & pcl_id_mask;
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CRAFT_PORT)
+        {
+            if (interfaceInfo.direction === RULE_TYPE_INBOUND) {
+                if (lookup === 0) {
+                    pcl_id      = 0x0381;
+                    pcl_id_mask = 0x03ff;
+                }
+                else if (lookup === 1) {
+                    pcl_id      = 0x0382;
+                    pcl_id_mask = 0x03ff;
+                }
+                else if (lookup === 2) {
+                    pcl_id      = 0x0383;
+                    pcl_id_mask = 0x03ff;
+                }
+                else {
+                    ASSERT(false);
+                }
+            }
+            else if (interfaceInfo.direction === RULE_TYPE_OUTBOUND) {
+                pcl_id      = 0x0384;
+                pcl_id_mask = 0x03ff;
+            }
+            else {
+                ASSERT(false);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CPU_PORT)
+        {
+            pcl_id      = 0x0385;
+            pcl_id_mask = 0x3ff;
+        }
+
+        return {pcl_id: pcl_id, pcl_id_mask: pcl_id_mask};
+    };
+
+    var RULE_CTRL_LocalBindAclToPort = function (interfaceInfo, lookup, pcl_id) {
+
+        var DEVRM_PMGR_CreateAcl = function (device_id, direction, lookup, pcl_id) {
+            if (typeof devrm_data.device[device_id].pcl_table === 'undefined') {
+                devrm_data.device[device_id].pcl_table = [];
+            }
+
+            ASSERT(typeof devrm_data.device[device_id].pcl_table[ pcl_id ] === 'undefined');
+
+            devrm_data.device[device_id].pcl_table[ pcl_id ] = {
+                direction: direction,
+                lookup: lookup
+            };
+        };
+
+        var DEVRM_PMGR_BindAclToPort = function (device_id, phy_port, direction, lookup, pcl_id) {
+            cpss.cpssDxChPclCfgTblSet(device_id,
+                {type: CPSS_INTERFACE_PORT_E, portNum: phy_port},
+                direction,
+                lookup,
+                {enable: true, pcl_id: pcl_id});
+        };
+
+        var DEVRM_PMGR_BindAclToTrunk = function (device_id, trunk_id, direction, lookup, pcl_id) {
+            var TrunkIdA2C = function (devNum, trunkId) {
+                ASSERT(1 <= trunkId && trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM);
+                return ((0x20 + trunkId) << 1);
+            };
+
+            cpss.cpssDxChPclCfgTblSet(device_id,
+                {type: CPSS_INTERFACE_TRUNK_E, portNum: TrunkIdA2C(device_id, trunk_id)},
+                direction,
+                lookup,
+                {enable: true, pcl_id: pcl_id});
+        };
+
+        var device_id, phy_port,
+            num_device = SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD / SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP,
+            my_unit = 1;
+
+        //
+        // after ISC ...
+        //
+
+        if (typeof devrm_all_unit_data[my_unit] === 'undefined') {
+            devrm_all_unit_data[my_unit] = {};
+            devrm_all_unit_data[my_unit].device = [];
+            devrm_all_unit_data[my_unit].device[0] = {};
+            devrm_all_unit_data[my_unit].device[1] = {};
+        }
+
+        devrm_data = devrm_all_unit_data[my_unit];
+
+        if (interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT) {
+
+            ASSERT(typeof interfaceInfo.unit !== 'undefined');
+
+            if (interfaceInfo.unit != 1) {
+                return;
+            }
+
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+                DEVRM_PMGR_CreateAcl(device_id, interfaceInfo.direction, lookup, pcl_id);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT) {
+
+            ASSERT(typeof interfaceInfo.uport !== 'undefined');
+            ASSERT(typeof interfaceInfo.uport.unit !== 'undefined');
+            ASSERT(typeof interfaceInfo.uport.port !== 'undefined');
+
+            if (interfaceInfo.uport.unit != 1) {
+                return;
+            }
+
+            device_id = PORT_TO_DEVICE_ID(interfaceInfo.uport.port);
+            phy_port  = interfaceInfo.uport.port % SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP;
+
+            DEVRM_PMGR_CreateAcl(device_id, interfaceInfo.direction, lookup, pcl_id);
+            DEVRM_PMGR_BindAclToPort(device_id, phy_port,
+                                        interfaceInfo.direction, lookup, pcl_id);
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK) {
+
+            ASSERT(typeof interfaceInfo.trunk_id !== 'undefined');
+
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+                DEVRM_PMGR_CreateAcl(device_id, interfaceInfo.direction, lookup, pcl_id);
+                DEVRM_PMGR_BindAclToTrunk(device_id, interfaceInfo.trunk_id,
+                                        interfaceInfo.direction, lookup, pcl_id);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CPU_PORT) {
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+                DEVRM_PMGR_CreateAcl(device_id, interfaceInfo.direction, lookup, pcl_id);
+                DEVRM_PMGR_BindAclToPort(device_id, RULE_CTRL_CPU_PORT,
+                                        interfaceInfo.direction, lookup, pcl_id);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CRAFT_PORT) {
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+                DEVRM_PMGR_CreateAcl(device_id, interfaceInfo.direction, lookup, pcl_id);
+                DEVRM_PMGR_BindAclToPort(device_id, RULE_CTRL_CRAFT_PORT,
+                                        interfaceInfo.direction, lookup, pcl_id);
+            }
+        }
+        else {
+            ASSERT(false);
+        }
+    };
+
+    var RULE_CTRL_LocalSetRule = function (interfaceInfo, pcl_id, ace_entry, policer_entry, action_entry) {
+
+        var DEVRM_PMGR_AllocateRule = function (device_id, pcl_id, vir_group_id, rule_pri, dev_rule_id) {
+            var pce = {};
+
+            ASSERT(typeof devrm_data.device[device_id].pcl_table[ pcl_id ] !== 'undefined');
+
+            if (typeof devrm_data.device[device_id].pcl_table[ pcl_id ].rule_table === 'undefined') {
+                devrm_data.device[device_id].pcl_table[ pcl_id ].rule_table = [];
+            }
+
+            if (typeof devrm_data.device[device_id].rule_table === 'undefined') {
+                devrm_data.device[device_id].rule_table = [];
+            }
+
+            ASSERT(typeof devrm_data.device[device_id].pcl_table[ pcl_id ].rule_table[ dev_rule_id ] === 'undefined');
+            ASSERT(typeof devrm_data.device[device_id].rule_table[ dev_rule_id ] === 'undefined');
+
+            pce = {
+                pcl_id: pcl_id,
+                vir_group_id: vir_group_id,
+                rule_pri: rule_pri,
+                dev_rule_id: dev_rule_id,
+                hit_count: 0,
+            };
+
+            pce.pcl = devrm_data.device[device_id].pcl_table[ pcl_id ];
+
+            devrm_data.device[device_id].pcl_table[ pcl_id ].rule_table[ dev_rule_id ] = pce;
+            devrm_data.device[device_id].rule_table[ dev_rule_id ] = pce;
+        };
+
+        var DEVRM_PMGR_SetRule = function (device_id, dev_rule_id, ace_entry, policer_entry, action_entry) {
+            var pce;
+
+            ASSERT(typeof devrm_data.device[device_id].rule_table[ dev_rule_id ] !== 'undefined');
+
+            pce = devrm_data.device[device_id].rule_table[ dev_rule_id ];
+            pce.ace_entry = ace_entry;
+            pce.policer_entry = policer_entry;
+            pce.action_entry = action_entry;
+        };
+
+        var ValidateRule = function () {
+            var device_id, max_device_id = 1,
+                phy_port_num, max_phy_port_num = 63,
+                direction, max_direction = CPSS_PCL_DIRECTION_EGRESS_E,
+                lookup, max_lookup = CPSS_PCL_LOOKUP_0_1_E,
+                lookupCfg,
+                my_unit = 1,
+                rule_index,
+                pce_phy_port_num;
+
+            var isHitRule = function (device_id, phy_port_num, direction, lookup, pce) {
+
+                if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT) {
+
+                    pce_phy_port_num  = pce.ace_entry.interfaceInfo.uport.port % SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP;
+
+                    if (phy_port_num === pce_phy_port_num) {
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK) {
+
+                    var TrunkIdA2C = function (devNum, trunkId) {
+                        ASSERT(1 <= trunkId && trunkId <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM);
+                        return ((0x20 + trunkId) << 1);
+                    };
+
+                    pce_phy_port_num = TrunkIdA2C(my_unit, pce.ace_entry.interfaceInfo.trunk_id);
+
+                    pce_phy_port_num = SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP + (pce_phy_port_num - 66) / 2;
+
+                    if (phy_port_num === pce_phy_port_num) {
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT) {
+                    //
+                    // Not include phy_port_num 62 (Craft port) and 63 (CPU port)
+                    //
+                    if (phy_port_num < 62) {
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_CPU_PORT) {
+                    if (phy_port_num === 63) {
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_CRAFT_PORT) {
+                    if (phy_port_num === 62) {
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
+
+                if ((pce.ace_entry.interfaceInfo.direction === RULE_TYPE_INBOUND &&
+                     direction === CPSS_PCL_DIRECTION_INGRESS_E) ||
+                    (pce.ace_entry.interfaceInfo.direction === RULE_TYPE_OUTBOUND &&
+                     direction === CPSS_PCL_DIRECTION_EGRESS_E)) {
+                }
+                else {
+                    return false;
+                }
+
+                if (pce.pcl.lookup === lookup) {
+                }
+                else {
+                    return false;
+                }
+
+                return true;
+            };
+
+            for (device_id = 0; device_id <= max_device_id; device_id += 1) {
+                for (direction = CPSS_PCL_DIRECTION_INGRESS_E; direction <= max_direction; direction += 1) {
+                    for (lookup = CPSS_PCL_LOOKUP_0_E; lookup <= max_lookup; lookup += 1) {
+                        for (phy_port_num = 0; phy_port_num <= max_phy_port_num; phy_port_num += 1) {
+
+                            lookupCfg = cpssDxChPclCfgTblGetAtIndex(device_id, phy_port_num, direction, lookup);
+                            if (typeof lookupCfg === 'undefined' ||
+                                lookupCfg.enable !== true) {
+                                continue;
+                            }
+
+                            devrm_data = devrm_all_unit_data[my_unit];
+
+                            if (typeof devrm_data.device[ device_id ] === 'undefined' ||
+                                typeof devrm_data.device[ device_id ].rule_table === 'undefined') {
+                                continue;
+                            }
+
+                            for (rule_index = 0; rule_index < devrm_data.device[ device_id ].rule_table.length; rule_index += 1) {
+                                var pce = devrm_data.device[ device_id ].rule_table[ rule_index ],
+                                    hit = false;
+
+                                if (typeof pce === 'undefined') {
+                                    continue;
+                                }
+
+                                //
+                                // TCAM Hit Search
+                                //
+                                if ((pce.ace_entry.pcl_id & pce.ace_entry.pcl_id_mask) ===
+                                    (lookupCfg.pcl_id & pce.ace_entry.pcl_id_mask)) {
+                                    hit = true;
+                                }
+
+                                //
+                                // Validate
+                                //
+                                if (isHitRule(device_id, phy_port_num, direction, lookup, pce)) {
+                                    ASSERT(hit === true);
+                                    pce.hit_count += 1;
+                                }
+                                else {
+                                    ASSERT(hit === false);
+                                }
+
+                            } // for (rule_index = 0;
+                        }
+
+                        //
+                        // Validates Hit Count, and Reset it
+                        //
+                        for (rule_index = 0; rule_index < devrm_data.device[ device_id ].rule_table.length; rule_index += 1) {
+                            var pce = devrm_data.device[ device_id ].rule_table[ rule_index ],
+                                hit = false;
+
+                            if (typeof pce === 'undefined') {
+                                continue;
+                            }
+
+                            if (pce.hit_count !== 0) {
+                                if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT) {
+                                    ASSERT(pce.hit_count === 1);
+                                }
+                                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK) {
+                                    ASSERT(pce.hit_count === 1);
+                                }
+                                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT) {
+                                    ASSERT(pce.hit_count === SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP +
+                                                             SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM);
+                                }
+                                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_CPU_PORT) {
+                                    ASSERT(pce.hit_count === 1);
+                                }
+                                else if (pce.ace_entry.interfaceInfo.type === RULE_TYPE_INTERFACE_CRAFT_PORT) {
+                                    ASSERT(pce.hit_count === 1);
+                                }
+                                else {
+                                    ASSERT(false);
+                                }
+
+                                pce.hit_count = 0;
+                            }
+                        } // for (rule_index = 0;
+
+                    }
+                }
+            }
+        };
+
+        var device_id, phy_port,
+            num_device = SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD / SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP,
+            my_unit = 1,
+            vir_group_id = 1,
+            rule_pri = 1,
+            dev_rule_id;
+
+        //
+        // after ISC ...
+        //
+
+        if (typeof devrm_all_unit_data[my_unit] === 'undefined') {
+            devrm_all_unit_data[my_unit] = {};
+            devrm_all_unit_data[my_unit].device = [];
+            devrm_all_unit_data[my_unit].device[0] = {};
+            devrm_all_unit_data[my_unit].device[1] = {};
+        }
+
+        devrm_data = devrm_all_unit_data[my_unit];
+
+        if (interfaceInfo.type === RULE_TYPE_INTERFACE_UNIT) {
+
+            if (interfaceInfo.unit != 1) {
+                return;
+            }
+
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+
+                dev_rule_id = rule_ctrl_data.dev_rule_id ++;
+
+                DEVRM_PMGR_AllocateRule(device_id, pcl_id, vir_group_id, rule_pri, dev_rule_id);
+                DEVRM_PMGR_SetRule(device_id, dev_rule_id, ace_entry, policer_entry, action_entry);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_UPORT) {
+
+            if (interfaceInfo.uport.unit != 1) {
+                return;
+            }
+
+            device_id = PORT_TO_DEVICE_ID(interfaceInfo.uport.port);
+            phy_port  = interfaceInfo.uport.port % SYS_ADPT_MAX_NBR_OF_SWITCH_PORT_PER_CHIP;
+
+            dev_rule_id = rule_ctrl_data.dev_rule_id ++;
+
+            DEVRM_PMGR_AllocateRule(device_id, pcl_id, vir_group_id, rule_pri, dev_rule_id);
+            DEVRM_PMGR_SetRule(device_id, dev_rule_id, ace_entry, policer_entry, action_entry);
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_TRUNK) {
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+
+                dev_rule_id = rule_ctrl_data.dev_rule_id ++;
+
+                DEVRM_PMGR_AllocateRule(device_id, pcl_id, vir_group_id, rule_pri, dev_rule_id);
+                DEVRM_PMGR_SetRule(device_id, dev_rule_id, ace_entry, policer_entry, action_entry);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CPU_PORT) {
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+
+                dev_rule_id = rule_ctrl_data.dev_rule_id ++;
+
+                DEVRM_PMGR_AllocateRule(device_id, pcl_id, vir_group_id, rule_pri, dev_rule_id);
+                DEVRM_PMGR_SetRule(device_id, dev_rule_id, ace_entry, policer_entry, action_entry);
+            }
+        }
+        else if (interfaceInfo.type === RULE_TYPE_INTERFACE_CRAFT_PORT) {
+            for (device_id = 0; device_id < num_device; device_id += 1) {
+
+                dev_rule_id = rule_ctrl_data.dev_rule_id ++;
+
+                DEVRM_PMGR_AllocateRule(device_id, pcl_id, vir_group_id, rule_pri, dev_rule_id);
+                DEVRM_PMGR_SetRule(device_id, dev_rule_id, ace_entry, policer_entry, action_entry);
+            }
+        }
+        else {
+            ASSERT(false);
+        }
+
+        ValidateRule();
+    };
+
+    //
+    // Start
+    //
+
+    (function init () {
+        RULE_CTRL_LocalBindAllPortsAndTrunks2GlobalAcl();
+    }());
+
+    (function global_rule_ingress_lookup0 () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_UNIT,
+                unit: 1,
+                direction: RULE_TYPE_INBOUND
+            },
+            lookup = 0,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function global_rule_ingress_lookup1 () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_UNIT,
+                unit: 1,
+                direction: RULE_TYPE_INBOUND
+            },
+            lookup = 1,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function global_rule_egress_lookup0 () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_UNIT,
+                unit: 1,
+                direction: RULE_TYPE_OUTBOUND
+            },
+            lookup = 0,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function ctrl_plan_rule () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_CPU_PORT,
+                unit: 1,
+                direction: RULE_TYPE_OUTBOUND
+            },
+            lookup = 0,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function craft_port_rule_ingress_lookup0 () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_CRAFT_PORT,
+                unit: 1,
+                direction: RULE_TYPE_INBOUND
+            },
+            lookup = 0,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function craft_port_rule_ingress_lookup1 () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_CRAFT_PORT,
+                unit: 1,
+                direction: RULE_TYPE_INBOUND
+            },
+            lookup = 1,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function craft_port_rule_egress_lookup0 () {
+        var interfaceInfo = {
+                type: RULE_TYPE_INTERFACE_CRAFT_PORT,
+                unit: 1,
+                direction: RULE_TYPE_OUTBOUND
+            },
+            lookup = 0,
+            ace_entry = {},
+            policer_entry = {},
+            action_entry = {};
+
+        var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+        ace_entry.name = arguments.callee.name;
+        ace_entry.interfaceInfo = interfaceInfo;
+
+        ace_entry.pcl_id = pcl.pcl_id;
+        ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+        RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+    }());
+
+    (function normal_port_ingress_lookup0 () {
+        var unit = 1, port;
+
+        for (port = 1; port <= SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD; port += 1) {
+            var interfaceInfo = {
+                    type: RULE_TYPE_INTERFACE_UPORT,
+                    uport: {
+                        unit: unit,
+                        port: port,
+                    },
+                    direction: RULE_TYPE_INBOUND
+                },
+                lookup = 0,
+                ace_entry = {},
+                policer_entry = {},
+                action_entry = {};
+
+            var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+            ace_entry.name = arguments.callee.name;
+            ace_entry.interfaceInfo = interfaceInfo;
+
+            ace_entry.pcl_id = pcl.pcl_id;
+            ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+            RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+        }
+    }());
+
+    (function normal_port_ingress_lookup1 () {
+        var unit = 1, port;
+
+        for (port = 1; port <= SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD; port += 1) {
+            var interfaceInfo = {
+                    type: RULE_TYPE_INTERFACE_UPORT,
+                    uport: {
+                        unit: unit,
+                        port: port,
+                    },
+                    direction: RULE_TYPE_INBOUND
+                },
+                lookup = 1,
+                ace_entry = {},
+                policer_entry = {},
+                action_entry = {};
+
+            var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+            ace_entry.name = arguments.callee.name;
+            ace_entry.interfaceInfo = interfaceInfo;
+
+            ace_entry.pcl_id = pcl.pcl_id;
+            ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+            RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+        }
+    }());
+
+    (function normal_port_egress_lookup0 () {
+        var unit = 1, port;
+
+        for (port = 1; port <= SYS_ADPT_MAX_NBR_OF_PORT_PER_UNIT_ON_BOARD; port += 1) {
+            var interfaceInfo = {
+                    type: RULE_TYPE_INTERFACE_UPORT,
+                    uport: {
+                        unit: unit,
+                        port: port,
+                    },
+                    direction: RULE_TYPE_OUTBOUND
+                },
+                lookup = 0,
+                ace_entry = {},
+                policer_entry = {},
+                action_entry = {};
+
+            var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+            ace_entry.name = arguments.callee.name;
+            ace_entry.interfaceInfo = interfaceInfo;
+
+            ace_entry.pcl_id = pcl.pcl_id;
+            ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+            RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+        }
+    }());
+
+    (function trunk_port_ingress_lookup0 () {
+        var trunk_id;
+
+        for (trunk_id = 1; trunk_id <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; trunk_id += 1) {
+            var interfaceInfo = {
+                    type: RULE_TYPE_INTERFACE_TRUNK,
+                    trunk_id: trunk_id,
+                    direction: RULE_TYPE_INBOUND
+                },
+                lookup = 0,
+                ace_entry = {},
+                policer_entry = {},
+                action_entry = {};
+
+            var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+            ace_entry.name = arguments.callee.name;
+            ace_entry.interfaceInfo = interfaceInfo;
+
+            ace_entry.pcl_id = pcl.pcl_id;
+            ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+            RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+        }
+    }());
+
+    (function trunk_port_ingress_lookup1 () {
+        var trunk_id;
+
+        for (trunk_id = 1; trunk_id <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; trunk_id += 1) {
+            var interfaceInfo = {
+                    type: RULE_TYPE_INTERFACE_TRUNK,
+                    trunk_id: trunk_id,
+                    direction: RULE_TYPE_INBOUND
+                },
+                lookup = 1,
+                ace_entry = {},
+                policer_entry = {},
+                action_entry = {};
+
+            var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+            ace_entry.name = arguments.callee.name;
+            ace_entry.interfaceInfo = interfaceInfo;
+
+            ace_entry.pcl_id = pcl.pcl_id;
+            ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+            RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+        }
+    }());
+
+    (function trunk_port_egress_lookup0 () {
+        var trunk_id;
+
+        for (trunk_id = 1; trunk_id <= SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM; trunk_id += 1) {
+            var interfaceInfo = {
+                    type: RULE_TYPE_INTERFACE_TRUNK,
+                    trunk_id: trunk_id,
+                    direction: RULE_TYPE_OUTBOUND
+                },
+                lookup = 0,
+                ace_entry = {},
+                policer_entry = {},
+                action_entry = {};
+
+            var pcl = RULE_CTRL_PclIdEncode(interfaceInfo, lookup);
+
+            ace_entry.name = arguments.callee.name;
+            ace_entry.interfaceInfo = interfaceInfo;
+
+            ace_entry.pcl_id = pcl.pcl_id;
+            ace_entry.pcl_id_mask = pcl.pcl_id_mask;
+
+            RULE_CTRL_LocalSetRule(interfaceInfo, pcl.pcl_id, ace_entry, policer_entry, action_entry);
+        }
+    }());
+
+}());
+
+  </script>
+ </head>
+ <body>
+   <canvas id="canvas" width="600" height="300"></canvas>
+ </body>
+</html>

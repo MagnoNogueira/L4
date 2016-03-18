@@ -1,0 +1,27553 @@
+#include <sys_type.h>
+#include <sys_adpt.h>
+#include <sys_cpnt.h>
+#include "cli_def.h"
+#include "cli_arg.h"
+#include "cli_msg.h"
+#include "sys_cpnt.h"
+#if (SYS_CPNT_COS == TRUE)
+#include "cos_vm.h"
+#endif
+#if (SYS_CPNT_SNMP_VERSION == 3)
+#include "snmp_mgr.h"
+#include "leaf_3411.h"
+#endif
+#include "syslog_type.h"
+#include "sys_mgr.h"
+#include "leaf_1493.h"
+#include "leaf_2674p.h"
+#include "leaf_2674q.h"
+#include "leaf_1724.h"
+#if (SYS_CPNT_POE == TRUE)
+#include "leaf_3621.h"
+#endif
+#include "leaf_es3626a.h"
+#include "radius_mgr.h"
+#if (SYS_CPNT_PROTOCOL_VLAN == TRUE)
+#include "leaf_vbridge.h"
+#endif
+#if (SYS_CPNT_PFU == TRUE)
+#include "pfu_type.h"
+#endif
+#if (SYS_CPNT_TACACS == TRUE )
+#include "tacacs_type.h"
+#endif
+#if (SYS_CPNT_STP == SYS_CPNT_STP_TYPE_RSTP || SYS_CPNT_STP == SYS_CPNT_STP_TYPE_MSTP)
+#include "xstp_type.h"
+#include "xstp_mgr.h"
+#endif
+#if (SYS_CPNT_SSHD == TRUE || SYS_CPNT_SSH2 == TRUE)
+#include "sshd_type.h"
+#include "sshd_mgr.h"
+#if (SYS_CPNT_SSH2 == TRUE)
+#include "keygen_type.h"
+#include "keygen_mgr.h"
+#endif
+#endif
+#if (SYS_CPNT_SNTP == TRUE)
+#include "sys_time.h"
+#endif
+#if (SYS_CPNT_DOT1X == TRUE)
+#include "1x_mgr.h"
+#endif
+#if (SYS_CPNT_DOT1X_SUPPLICANT == TRUE)
+#include "dot1x_type_sup.h"
+#endif
+#if (SYS_CPNT_ACL == TRUE)
+#endif
+#if (SYS_CPNT_DNS == TRUE)
+#include "dns_type.h"
+#endif
+#if (SYS_CPNT_SMTP == TRUE)
+#endif
+#if (SYS_CPNT_LACP == TRUE)
+#include "leaf_ieee8023lag.h"
+#endif
+#if (SYS_CPNT_QOS == SYS_CPNT_QOS_MARKER)
+#include "marker_type.h"
+#endif
+#if (SYS_CPNT_VRRP == TRUE)
+#include "vrrp_type.h"
+#endif
+#if (SYS_CPNT_AAA == TRUE)
+#include "aaa_mgr.h"
+#endif /*#if (SYS_CPNT_AAA == TRUE)*/
+#include "leaf_ieeelldp.h"
+#include "temp.h"
+#include "cwmp_type.h"
+#include "add_mgr.h"
+#include "cli_banner.h"
+#if (SYS_CPNT_CFM == TRUE)
+#include "cfm_type.h"
+#endif
+#include "rule_type.h"
+#if (SYS_CPNT_DHCP_CLIENT_CLASSID == TRUE)
+#include "dhcp_type.h"
+#endif
+#if (SYS_CPNT_ERPS == TRUE)
+#include "erps_type.h"
+#endif
+#include "pppoe_ia_type.h"
+#if (SYS_CPNT_LBD == TRUE)
+#include "lbd_type.h"
+#endif
+
+
+                    /***********************************/
+                    /*  Argument structure definition  */
+                    /***********************************/
+ 
+/***************************************************************************/
+/*              Argument list definitions                                  */
+/***************************************************************************/
+
+ARGLIST ui_arg_lst[] =
+{
+   
+/*0*/
+   {
+      "BYPASS",
+      0,
+      BYPASS_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      0
+   },
+   
+/*1*/
+   {
+      "#mode#",
+      678,
+      MODE_DATA,
+      0,
+      0,
+      NULL_ARG,
+      828,
+      1
+   },
+   
+/*2*/
+   {
+      "#mode#",
+      678,
+      MODE_DATA,
+      0,
+      0,
+      NULL_ARG,
+      829,
+      1
+   },
+   
+/*3*/
+   {
+      "*",
+      1572,
+      NO_DATA,
+      0,
+      0,
+      713,
+      NULL_ARG,
+      1
+   },
+   
+/*4*/
+   {
+      "0",
+      356,
+      NO_DATA,
+      0,
+      0,
+      61,
+      681,
+      1
+   },
+   
+/*5*/
+   {
+      "0",
+      356,
+      NO_DATA,
+      0,
+      0,
+      62,
+      681,
+      1
+   },
+   
+/*6*/
+   {
+      "0",
+      356,
+      NO_DATA,
+      0,
+      0,
+      64,
+      761,
+      1
+   },
+   
+/*7*/
+   {
+      "0",
+      356,
+      NO_DATA,
+      0,
+      0,
+      63,
+      769,
+      1
+   },
+   
+/*8*/
+   {
+      "0",
+      589,
+      NO_DATA,
+      0,
+      0,
+      450,
+      NULL_ARG,
+      1
+   },
+   
+/*9*/
+   {
+      "0",
+      583,
+      NO_DATA,
+      0,
+      0,
+      187,
+      NULL_ARG,
+      1
+   },
+   
+/*10*/
+   {
+      "0",
+      1169,
+      NO_DATA,
+      0,
+      0,
+      19,
+      NULL_ARG,
+      1
+   },
+   
+/*11*/
+   {
+      "0-20",
+      1346,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_AUTO_LEARN_MAC,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*12*/
+   {
+      "0-ffff",
+      132,
+      HEX_DATA,
+      ACL_ETHER_TYPE_MAX_RANGE,
+      ACL_ETHER_TYPE_MIN_RANGE,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*13*/
+   {
+      "0-ffff",
+      132,
+      HEX_DATA,
+      ACL_ETHER_TYPE_MAX_RANGE,
+      ACL_ETHER_TYPE_MIN_RANGE,
+      0,
+      2016,
+      1
+   },
+   
+/*14*/
+   {
+      "0-ffff",
+      131,
+      HEX_DATA,
+      ACL_ETH2_ETHERTYPE_MAX_RANGE,
+      ACL_ETH2_ETHERTYPE_MIN_RANGE,
+      NULL_ARG,
+      12,
+      1
+   },
+   
+/*15*/
+   {
+      "0-ffff",
+      131,
+      HEX_DATA,
+      ACL_ETH2_ETHERTYPE_MAX_RANGE,
+      ACL_ETH2_ETHERTYPE_MIN_RANGE,
+      NULL_ARG,
+      2023,
+      1
+   },
+   
+/*16*/
+   {
+      "0-ffff",
+      131,
+      HEX_DATA,
+      ACL_ETHER_TYPE_MAX_RANGE,
+      ACL_ETHER_TYPE_MIN_RANGE,
+      NULL_ARG,
+      12,
+      1
+   },
+   
+/*17*/
+   {
+      "0-ffff",
+      131,
+      HEX_DATA,
+      ACL_ETHER_TYPE_MAX_RANGE,
+      ACL_ETHER_TYPE_MIN_RANGE,
+      NULL_ARG,
+      2023,
+      1
+   },
+   
+/*18*/
+   {
+      "1",
+      371,
+      NO_DATA,
+      0,
+      0,
+      60,
+      1575,
+      1
+   },
+   
+/*19*/
+   {
+      "1",
+      1170,
+      NO_DATA,
+      0,
+      0,
+      52,
+      NULL_ARG,
+      1
+   },
+   
+/*20*/
+   {
+      "1",
+      1487,
+      NO_DATA,
+      0,
+      0,
+      54,
+      NULL_ARG,
+      1
+   },
+   
+/*21*/
+   {
+      "1",
+      483,
+      NO_DATA,
+      0,
+      0,
+      53,
+      NULL_ARG,
+      1
+   },
+   
+/*22*/
+   {
+      "1",
+      742,
+      NO_DATA,
+      0,
+      0,
+      55,
+      2073,
+      1
+   },
+   
+/*23*/
+   {
+      "1000full",
+      1222,
+      NO_DATA,
+      0,
+      0,
+      29,
+      NULL_ARG,
+      1
+   },
+   
+/*24*/
+   {
+      "1000full",
+      1222,
+      NO_DATA,
+      0,
+      0,
+      30,
+      NULL_ARG,
+      1
+   },
+   
+/*25*/
+   {
+      "1000full",
+      1032,
+      NO_DATA,
+      0,
+      0,
+      31,
+      NULL_ARG,
+      1
+   },
+   
+/*26*/
+   {
+      "1000full",
+      1032,
+      NO_DATA,
+      0,
+      0,
+      32,
+      NULL_ARG,
+      1
+   },
+   
+/*27*/
+   {
+      "1000full",
+      1376,
+      NO_DATA,
+      0,
+      0,
+      33,
+      NULL_ARG,
+      1
+   },
+   
+/*28*/
+   {
+      "1000sfp",
+      1191,
+      NO_DATA,
+      0,
+      0,
+      34,
+      NULL_ARG,
+      1
+   },
+   
+/*29*/
+   {
+      "100full",
+      1223,
+      NO_DATA,
+      0,
+      0,
+      35,
+      NULL_ARG,
+      1
+   },
+   
+/*30*/
+   {
+      "100full",
+      1223,
+      NO_DATA,
+      0,
+      0,
+      36,
+      NULL_ARG,
+      1
+   },
+   
+/*31*/
+   {
+      "100full",
+      1033,
+      NO_DATA,
+      0,
+      0,
+      37,
+      NULL_ARG,
+      1
+   },
+   
+/*32*/
+   {
+      "100full",
+      1033,
+      NO_DATA,
+      0,
+      0,
+      38,
+      NULL_ARG,
+      1
+   },
+   
+/*33*/
+   {
+      "100full",
+      1377,
+      NO_DATA,
+      0,
+      0,
+      39,
+      NULL_ARG,
+      1
+   },
+   
+/*34*/
+   {
+      "100fx",
+      1192,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*35*/
+   {
+      "100half",
+      1224,
+      NO_DATA,
+      0,
+      0,
+      40,
+      NULL_ARG,
+      1
+   },
+   
+/*36*/
+   {
+      "100half",
+      1224,
+      NO_DATA,
+      0,
+      0,
+      41,
+      NULL_ARG,
+      1
+   },
+   
+/*37*/
+   {
+      "100half",
+      1034,
+      NO_DATA,
+      0,
+      0,
+      42,
+      NULL_ARG,
+      1
+   },
+   
+/*38*/
+   {
+      "100half",
+      1034,
+      NO_DATA,
+      0,
+      0,
+      43,
+      NULL_ARG,
+      1
+   },
+   
+/*39*/
+   {
+      "100half",
+      1378,
+      NO_DATA,
+      0,
+      0,
+      44,
+      NULL_ARG,
+      1
+   },
+   
+/*40*/
+   {
+      "10full",
+      1225,
+      NO_DATA,
+      0,
+      0,
+      46,
+      NULL_ARG,
+      1
+   },
+   
+/*41*/
+   {
+      "10full",
+      1225,
+      NO_DATA,
+      0,
+      0,
+      45,
+      NULL_ARG,
+      1
+   },
+   
+/*42*/
+   {
+      "10full",
+      1035,
+      NO_DATA,
+      0,
+      0,
+      47,
+      NULL_ARG,
+      1
+   },
+   
+/*43*/
+   {
+      "10full",
+      1035,
+      NO_DATA,
+      0,
+      0,
+      48,
+      NULL_ARG,
+      1
+   },
+   
+/*44*/
+   {
+      "10full",
+      1379,
+      NO_DATA,
+      0,
+      0,
+      49,
+      NULL_ARG,
+      1
+   },
+   
+/*45*/
+   {
+      "10half",
+      1418,
+      NO_DATA,
+      0,
+      0,
+      1255,
+      NULL_ARG,
+      1
+   },
+   
+/*46*/
+   {
+      "10half",
+      1226,
+      NO_DATA,
+      0,
+      0,
+      1255,
+      NULL_ARG,
+      1
+   },
+   
+/*47*/
+   {
+      "10half",
+      1036,
+      NO_DATA,
+      0,
+      0,
+      1254,
+      NULL_ARG,
+      1
+   },
+   
+/*48*/
+   {
+      "10half",
+      1036,
+      NO_DATA,
+      0,
+      0,
+      1256,
+      NULL_ARG,
+      1
+   },
+   
+/*49*/
+   {
+      "10half",
+      1380,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*50*/
+   {
+      "115200",
+      1482,
+      NO_DATA,
+      0,
+      0,
+      51,
+      NULL_ARG,
+      1
+   },
+   
+/*51*/
+   {
+      "19200",
+      1483,
+      NO_DATA,
+      0,
+      0,
+      58,
+      NULL_ARG,
+      1
+   },
+   
+/*52*/
+   {
+      "2",
+      1171,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*53*/
+   {
+      "2",
+      484,
+      NO_DATA,
+      0,
+      0,
+      57,
+      NULL_ARG,
+      1
+   },
+   
+/*54*/
+   {
+      "2",
+      1488,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*55*/
+   {
+      "2c",
+      743,
+      NO_DATA,
+      0,
+      0,
+      56,
+      2073,
+      1
+   },
+   
+/*56*/
+   {
+      "3",
+      744,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      909,
+      1
+   },
+   
+/*57*/
+   {
+      "3",
+      485,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*58*/
+   {
+      "38400",
+      1484,
+      NO_DATA,
+      0,
+      0,
+      59,
+      NULL_ARG,
+      1
+   },
+   
+/*59*/
+   {
+      "57600",
+      1485,
+      NO_DATA,
+      0,
+      0,
+      67,
+      NULL_ARG,
+      1
+   },
+   
+/*60*/
+   {
+      "60",
+      372,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1575,
+      1
+   },
+   
+/*61*/
+   {
+      "7",
+      358,
+      NO_DATA,
+      0,
+      0,
+      1481,
+      680,
+      1
+   },
+   
+/*62*/
+   {
+      "7",
+      358,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      680,
+      1
+   },
+   
+/*63*/
+   {
+      "7",
+      358,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      768,
+      1
+   },
+   
+/*64*/
+   {
+      "7",
+      1001,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      760,
+      1
+   },
+   
+/*65*/
+   {
+      "7",
+      1458,
+      NO_DATA,
+      0,
+      0,
+      66,
+      NULL_ARG,
+      1
+   },
+   
+/*66*/
+   {
+      "8",
+      1459,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*67*/
+   {
+      "9600",
+      1486,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*68*/
+   {
+      "<0- 3600000>",
+      1441,
+      WORD_DATA,
+      3600000,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*69*/
+   {
+      "<0-10000>",
+      197,
+      WORD_DATA,
+      SYS_ADPT_ERPS_MAX_TIMER_HOLDOFF,
+      SYS_ADPT_ERPS_MIN_TIMER_HOLDOFF,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*70*/
+   {
+      "<0-1024>",
+      412,
+      WORD_DATA,
+      SYS_ADPT_DAI_MAX_NBR_OF_LOG_ENTRY,
+      0,
+      NULL_ARG,
+      1413,
+      1
+   },
+   
+/*71*/
+   {
+      "<0-1024>",
+      1117,
+      WORD_DATA,
+      SYS_ADPT_IGMP_MAX_SUPPORT_GROUP,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*72*/
+   {
+      "<0-10>",
+      1461,
+      WORD_DATA,
+      SYS_ADPT_CONSOLE_INACTIVE_TIMEOUT_MAX,
+      SYS_ADPT_CONSOLE_INACTIVE_TIMEOUT_MIN,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*73*/
+   {
+      "<0-13>",
+      321,
+      WORD_DATA,
+      13,
+      0,
+      NULL_ARG,
+      1598,
+      1
+   },
+   
+/*74*/
+   {
+      "<0-15>",
+      360,
+      WORD_DATA,
+      SYS_ADPT_MAX_LOGIN_PRIVILEGE,
+      0,
+      NULL_ARG,
+      5,
+      1
+   },
+   
+/*75*/
+   {
+      "<0-15>",
+      813,
+      WORD_DATA,
+      15,
+      0,
+      NULL_ARG,
+      627,
+      1
+   },
+   
+/*76*/
+   {
+      "<0-15>",
+      360,
+      WORD_DATA,
+      SYS_ADPT_MAX_LOGIN_PRIVILEGE,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*77*/
+   {
+      "<0-15>",
+      998,
+      WORD_DATA,
+      SYS_ADPT_MAX_LOGIN_PRIVILEGE,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*78*/
+   {
+      "<0-15>",
+      998,
+      WORD_DATA,
+      SYS_ADPT_MAX_LOGIN_PRIVILEGE,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*79*/
+   {
+      "<0-160>",
+      971,
+      WORD_DATA,
+      XSTP_TYPE_MAX_HELLO_TIME,
+      XSTP_TYPE_MIN_HELLO_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*80*/
+   {
+      "<0-170>",
+      984,
+      WORD_DATA,
+      XSTP_TYPE_MAX_TX_HOLD_COUNT,
+      XSTP_TYPE_MIN_TX_HOLD_COUNT,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*81*/
+   {
+      "<0-1>",
+      834,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      82,
+      1
+   },
+   
+/*82*/
+   {
+      "<0-1>",
+      835,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      83,
+      1
+   },
+   
+/*83*/
+   {
+      "<0-1>",
+      836,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      84,
+      1
+   },
+   
+/*84*/
+   {
+      "<0-1>",
+      837,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*85*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*86*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      151,
+      1
+   },
+   
+/*87*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      152,
+      1
+   },
+   
+/*88*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      153,
+      1
+   },
+   
+/*89*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      154,
+      1
+   },
+   
+/*90*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      155,
+      1
+   },
+   
+/*91*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      156,
+      1
+   },
+   
+/*92*/
+   {
+      "<0-1>",
+      1262,
+      WORD_DATA,
+      1,
+      0,
+      NULL_ARG,
+      157,
+      1
+   },
+   
+/*93*/
+   {
+      "<0-2048>",
+      1109,
+      WORD_DATA,
+      SYS_ADPT_DAI_MAX_PORT_RATE_LIMIT,
+      SYS_ADPT_DAI_MIN_PORT_RATE_LIMIT,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*94*/
+   {
+      "<0-2147483647>",
+      892,
+      WORD_DATA,
+      SNMP_MGR_MAX_RMON_ALARM_RISING_THRESHOLD,
+      SNMP_MGR_MIN_RMON_ALARM_RISING_THRESHOLD,
+      NULL_ARG,
+      1228,
+      1
+   },
+   
+/*95*/
+   {
+      "<0-2147483647>",
+      894,
+      WORD_DATA,
+      SNMP_MGR_MAX_RMON_ALARM_FALLING_THRESHOLD,
+      SNMP_MGR_MIN_RMON_ALARM_FALLING_THRESHOLD,
+      NULL_ARG,
+      1669,
+      1
+   },
+   
+/*96*/
+   {
+      "<0-23>",
+      1532,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      119,
+      1
+   },
+   
+/*97*/
+   {
+      "<0-23>",
+      1532,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      120,
+      1
+   },
+   
+/*98*/
+   {
+      "<0-23>",
+      1532,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      121,
+      1
+   },
+   
+/*99*/
+   {
+      "<0-23>",
+      1532,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      122,
+      1
+   },
+   
+/*100*/
+   {
+      "<0-23>",
+      1532,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      125,
+      1
+   },
+   
+/*101*/
+   {
+      "<0-23>",
+      851,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      127,
+      1
+   },
+   
+/*102*/
+   {
+      "<0-23>",
+      851,
+      WORD_DATA,
+      23,
+      0,
+      NULL_ARG,
+      128,
+      1
+   },
+   
+/*103*/
+   {
+      "<0-255>",
+      1164,
+      WORD_DATA,
+      255,
+      0,
+      0,
+      620,
+      1
+   },
+   
+/*104*/
+   {
+      "<0-255>",
+      1164,
+      WORD_DATA,
+      255,
+      0,
+      0,
+      620,
+      1
+   },
+   
+/*105*/
+   {
+      "<0-255>",
+      1977,
+      WORD_DATA,
+      255,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*106*/
+   {
+      "<0-255>",
+      1164,
+      WORD_DATA,
+      255,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*107*/
+   {
+      "<0-255>",
+      1164,
+      WORD_DATA,
+      255,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*108*/
+   {
+      "<0-255>",
+      1117,
+      WORD_DATA,
+      SYS_ADPT_IGMP_MAX_SUPPORT_GROUP,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*109*/
+   {
+      "<0-255>",
+      8,
+      WORD_DATA,
+      PING_MGR_MAX_PING_SIZE,
+      PING_MGR_MIN_PING_SIZE,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*110*/
+   {
+      "<0-255>",
+      8,
+      WORD_DATA,
+      PING_MGR_MAX_PING_SIZE,
+      PING_MGR_MIN_PING_SIZE,
+      NULL_ARG,
+      995,
+      1
+   },
+   
+/*111*/
+   {
+      "<0-255>",
+      1690,
+      WORD_DATA,
+      PING_MGR_MAX_PING_SIZE,
+      PING_MGR_MIN_PING_SIZE,
+      NULL_ARG,
+      997,
+      1
+   },
+   
+/*112*/
+   {
+      "<0-300>",
+      1009,
+      WORD_DATA,
+      SYS_ADPT_MAX_CONSOLE_LOGIN_TIMEOUT,
+      SYS_ADPT_MIN_CONSOLE_LOGIN_TIMEOUT,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*113*/
+   {
+      "<0-34560>",
+      875,
+      WORD_DATA,
+      34560,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*114*/
+   {
+      "<0-3>",
+      1350,
+      WORD_DATA,
+      3,
+      0,
+      NULL_ARG,
+      1266,
+      1
+   },
+   
+/*115*/
+   {
+      "<0-3>",
+      1350,
+      WORD_DATA,
+      3,
+      0,
+      NULL_ARG,
+      1267,
+      1
+   },
+   
+/*116*/
+   {
+      "<0-3>",
+      1352,
+      WORD_DATA,
+      MAX_QUEUE_VAL,
+      MIN_QUEUE_VAL,
+      NULL_ARG,
+      1268,
+      1
+   },
+   
+/*117*/
+   {
+      "<0-40>",
+      972,
+      WORD_DATA,
+      XSTP_TYPE_MAX_MAXAGE,
+      XSTP_TYPE_MIN_MAXAGE,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*118*/
+   {
+      "<0-576>",
+      873,
+      WORD_DATA,
+      576,
+      0,
+      NULL_ARG,
+      1597,
+      1
+   },
+   
+/*119*/
+   {
+      "<0-59>",
+      1533,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      123,
+      1
+   },
+   
+/*120*/
+   {
+      "<0-59>",
+      1533,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      306,
+      1
+   },
+   
+/*121*/
+   {
+      "<0-59>",
+      1533,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      307,
+      1
+   },
+   
+/*122*/
+   {
+      "<0-59>",
+      1533,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      2037,
+      1
+   },
+   
+/*123*/
+   {
+      "<0-59>",
+      1550,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      887,
+      1
+   },
+   
+/*124*/
+   {
+      "<0-59>",
+      322,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      825,
+      1
+   },
+   
+/*125*/
+   {
+      "<0-59>",
+      1533,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*126*/
+   {
+      "<0-59>",
+      875,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*127*/
+   {
+      "<0-59>",
+      852,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      1685,
+      1
+   },
+   
+/*128*/
+   {
+      "<0-59>",
+      852,
+      WORD_DATA,
+      59,
+      0,
+      NULL_ARG,
+      886,
+      1
+   },
+   
+/*129*/
+   {
+      "<0-61440>",
+      980,
+      WORD_DATA,
+      XSTP_TYPE_MAX_BRIDGE_PRIORITY_RSTP_MSTP,
+      XSTP_TYPE_MIN_BRIDGE_PRIORITY,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*130*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*131*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      130,
+      1
+   },
+   
+/*132*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      131,
+      1
+   },
+   
+/*133*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      132,
+      1
+   },
+   
+/*134*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      133,
+      1
+   },
+   
+/*135*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      134,
+      1
+   },
+   
+/*136*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      0,
+      135,
+      1
+   },
+   
+/*137*/
+   {
+      "<0-63>",
+      1264,
+      WORD_DATA,
+      63,
+      0,
+      NULL_ARG,
+      136,
+      1
+   },
+   
+/*138*/
+   {
+      "<0-65535>",
+      898,
+      WORD_DATA,
+      MAX_alarmRisingEventIndex,
+      MIN_alarmRisingEventIndex,
+      NULL_ARG,
+      1229,
+      1
+   },
+   
+/*139*/
+   {
+      "<0-65535>",
+      1136,
+      WORD_DATA,
+      MAX_dot3adAggPortActorAdminKey,
+      MIN_dot3adAggPortActorAdminKey,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*140*/
+   {
+      "<0-65535>",
+      1136,
+      WORD_DATA,
+      MAX_dot3adAggPortPartnerAdminKey,
+      MIN_dot3adAggPortPartnerAdminKey,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*141*/
+   {
+      "<0-65535>",
+      1136,
+      WORD_DATA,
+      MAX_dot3adAggPortPartnerAdminPort,
+      MIN_dot3adAggPortPartnerAdminPort,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*142*/
+   {
+      "<0-65535>",
+      1138,
+      WORD_DATA,
+      MAX_dot3adAggPortActorPortPriority,
+      MIN_dot3adAggPortActorPortPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*143*/
+   {
+      "<0-65535>",
+      1138,
+      WORD_DATA,
+      MAX_dot3adAggPortPartnerAdminPortPriority,
+      MIN_dot3adAggPortPartnerAdminPortPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*144*/
+   {
+      "<0-65535>",
+      1481,
+      WORD_DATA,
+      SYS_ADPT_SILENT_TIME_MAX,
+      SYS_ADPT_SILENT_TIME_MIN,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*145*/
+   {
+      "<0-65535>",
+      897,
+      WORD_DATA,
+      MAX_alarmFallingEventIndex,
+      MIN_alarmFallingEventIndex,
+      0,
+      1670,
+      1
+   },
+   
+/*146*/
+   {
+      "<0-65535>",
+      1140,
+      WORD_DATA,
+      MAX_dot3adAggPortActorSystemPriority,
+      MIN_dot3adAggPortActorSystemPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*147*/
+   {
+      "<0-65535>",
+      1140,
+      WORD_DATA,
+      MAX_dot3adAggPortPartnerAdminSystemPriority,
+      MIN_dot3adAggPortPartnerAdminSystemPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*148*/
+   {
+      "<0-6>",
+      1408,
+      WORD_DATA,
+      MAX_voiceVlanPortPriority,
+      MIN_voiceVlanPortPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*149*/
+   {
+      "<0-6>",
+      188,
+      WORD_DATA,
+      6,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*150*/
+   {
+      "<0-7>",
+      367,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      1575,
+      1
+   },
+   
+/*151*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      85,
+      1
+   },
+   
+/*152*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      86,
+      1
+   },
+   
+/*153*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      87,
+      1
+   },
+   
+/*154*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      88,
+      1
+   },
+   
+/*155*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      89,
+      1
+   },
+   
+/*156*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      90,
+      1
+   },
+   
+/*157*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      91,
+      1
+   },
+   
+/*158*/
+   {
+      "<0-7>",
+      1261,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      92,
+      1
+   },
+   
+/*159*/
+   {
+      "<0-7>",
+      1349,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      114,
+      1
+   },
+   
+/*160*/
+   {
+      "<0-7>",
+      1349,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      115,
+      1
+   },
+   
+/*161*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*162*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      161,
+      1
+   },
+   
+/*163*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      162,
+      1
+   },
+   
+/*164*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      163,
+      1
+   },
+   
+/*165*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      164,
+      1
+   },
+   
+/*166*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      165,
+      1
+   },
+   
+/*167*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      0,
+      166,
+      1
+   },
+   
+/*168*/
+   {
+      "<0-7>",
+      1266,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      167,
+      1
+   },
+   
+/*169*/
+   {
+      "<0-7>",
+      1567,
+      WORD_DATA,
+      MAX_dot1agCfmMdMdLevel,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*170*/
+   {
+      "<0-7>",
+      1567,
+      WORD_DATA,
+      MAX_dot1agCfmMdMdLevel,
+      MIN_dot1agCfmMdMdLevel,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*171*/
+   {
+      "<0-7>",
+      1752,
+      WORD_DATA,
+      MAX_dot1agCfmMdMdLevel,
+      MIN_dot1agCfmMdMdLevel,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*172*/
+   {
+      "<0-7>",
+      562,
+      WORD_DATA,
+      SYSLOG_LEVEL_DEBUG,
+      SYSLOG_LEVEL_EMERG,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*173*/
+   {
+      "<0-7>",
+      577,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*174*/
+   {
+      "<0-7>",
+      1331,
+      WORD_DATA,
+      MAX_dot1dUserPriority,
+      MIN_dot1dUserPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*175*/
+   {
+      "<0-7>",
+      201,
+      WORD_DATA,
+      SYS_ADPT_ERPS_MAX_MEG_LEVEL,
+      SYS_ADPT_ERPS_MIN_MEG_LEVEL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*176*/
+   {
+      "<0-7>",
+      383,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      1600,
+      1
+   },
+   
+/*177*/
+   {
+      "<0-7>",
+      602,
+      WORD_DATA,
+      SYS_ADPT_MAX_MAC_VLAN_ENTRY_PRIORITY,
+      SYS_ADPT_MIN_MAC_VLAN_ENTRY_PRIORITY,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*178*/
+   {
+      "<0-7>",
+      572,
+      WORD_DATA,
+      7,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*179*/
+   {
+      "<0-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepDbRMepIdentifier,
+      MIN_dot1agCfmMepDbRMepIdentifier,
+      NULL_ARG,
+      1518,
+      1
+   },
+   
+/*180*/
+   {
+      "<0-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1575,
+      1
+   },
+   
+/*181*/
+   {
+      "<0-86400>",
+      414,
+      WORD_DATA,
+      SYS_ADPT_DAI_LOG_MSG_MAX_INTERVAL,
+      SYS_ADPT_DAI_LOG_MSG_MIN_INTERVAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*182*/
+   {
+      "<0-8>",
+      526,
+      WORD_DATA,
+      SYS_ADPT_MAX_TELNET_NUM,
+      MIN_vtyMaxSession,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*183*/
+   {
+      "<0-8>",
+      788,
+      WORD_DATA,
+      SYS_ADPT_MAX_TELNET_NUM,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*184*/
+   {
+      "<0>",
+      400,
+      WORD_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*185*/
+   {
+      "<1-1000000>",
+      597,
+      WORD_DATA,
+      1000000L,
+      120L,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*186*/
+   {
+      "<1-1000>",
+      1355,
+      WORD_DATA,
+      SYS_ADPT_MAX_RATE_LIMIT,
+      SYS_ADPT_MIN_RATE_LIMIT,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*187*/
+   {
+      "<1-1000>",
+      584,
+      WORD_DATA,
+      LBD_TYPE_MAX_RECOVER_TIME,
+      LBD_TYPE_MIN_RECOVER_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*188*/
+   {
+      "<1-1000>",
+      586,
+      WORD_DATA,
+      LBD_TYPE_MAX_TRANSMIT_INTERVAL,
+      LBD_TYPE_MIN_TRANSMIT_INTERVAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*189*/
+   {
+      "<1-1024>",
+      1187,
+      WORD_DATA,
+      MAX_macAuthPortMaxMacCount,
+      MIN_macAuthPortMaxMacCount,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*190*/
+   {
+      "<1-120>",
+      1480,
+      WORD_DATA,
+      SYS_ADPT_CONSOLE_THRESHOLD_MAX,
+      SYS_ADPT_CONSOLE_THRESHOLD_MIN,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*191*/
+   {
+      "<1-120>",
+      523,
+      WORD_DATA,
+      120,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*192*/
+   {
+      "<1-15>",
+      970,
+      WORD_DATA,
+      XSTP_TYPE_MAX_FORWARD_DELAY,
+      XSTP_TYPE_MIN_FORWARD_DELAY,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*193*/
+   {
+      "<1-16>",
+      1123,
+      WORD_DATA,
+      SYS_ADPT_DHCPSNP_MAX_NBR_OF_CLIENT_PER_PORT,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*194*/
+   {
+      "<1-180>",
+      1008,
+      WORD_DATA,
+      180,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*195*/
+   {
+      "<1-1>",
+      931,
+      WORD_DATA,
+      MAX_snmpTargetAddrRetryCount,
+      MIN_snmpTargetAddrRetryCount,
+      NULL_ARG,
+      642,
+      1
+   },
+   
+/*196*/
+   {
+      "<1-1>",
+      931,
+      WORD_DATA,
+      MAX_snmpTargetAddrRetryCount,
+      MIN_snmpTargetAddrRetryCount,
+      NULL_ARG,
+      2033,
+      1
+   },
+   
+/*197*/
+   {
+      "<1-1>",
+      106,
+      WORD_DATA,
+      ACL_PROTOCOL_MAX_VALID_RANGE,
+      ACL_PROTOCOL_MIN_RANGE,
+      544,
+      838,
+      1
+   },
+   
+/*198*/
+   {
+      "<1-1>",
+      106,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_PROTOCOL,
+      MIN_diffServIpAceProtocol,
+      537,
+      841,
+      1
+   },
+   
+/*199*/
+   {
+      "<1-1>",
+      933,
+      WORD_DATA,
+      MAX_snmpTargetAddrTimeout,
+      MIN_snmpTargetAddrTimeout,
+      NULL_ARG,
+      642,
+      1
+   },
+   
+/*200*/
+   {
+      "<1-1>",
+      933,
+      WORD_DATA,
+      MAX_snmpTargetAddrTimeout,
+      MIN_snmpTargetAddrTimeout,
+      NULL_ARG,
+      1822,
+      1
+   },
+   
+/*201*/
+   {
+      "<1-1>",
+      1364,
+      WORD_DATA,
+      XSTP_TYPE_MAX_PORT_PATH_COST_32,
+      XSTP_TYPE_MIN_PORT_PATH_COST,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*202*/
+   {
+      "<1-1>",
+      1373,
+      WORD_DATA,
+      XSTP_TYPE_MAX_PORT_PRIORITY_RSTP_MSTP,
+      XSTP_TYPE_MIN_PORT_PRIORITY,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*203*/
+   {
+      "<1-1>",
+      1374,
+      WORD_DATA,
+      XSTP_TYPE_MAX_PORT_PRIORITY_RSTP_MSTP,
+      XSTP_TYPE_MIN_PORT_PRIORITY,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*204*/
+   {
+      "<1-1>",
+      91,
+      WORD_DATA,
+      ACL_DSCP_MAX_VALID_RANGE,
+      ACL_DSCP_MIN_RANGE,
+      NULL_ARG,
+      1053,
+      1
+   },
+   
+/*205*/
+   {
+      "<1-1>",
+      91,
+      WORD_DATA,
+      ACL_DSCP_MAX_VALID_RANGE,
+      ACL_DSCP_MIN_RANGE,
+      NULL_ARG,
+      962,
+      1
+   },
+   
+/*206*/
+   {
+      "<1-1>",
+      91,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_DSCP,
+      MIN_diffServIpAceDscp,
+      NULL_ARG,
+      1064,
+      1
+   },
+   
+/*207*/
+   {
+      "<1-1>",
+      91,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_DSCP,
+      MIN_diffServIpAceDscp,
+      NULL_ARG,
+      972,
+      1
+   },
+   
+/*208*/
+   {
+      "<1-1>",
+      98,
+      WORD_DATA,
+      ACL_TOS_MAX_VALID_RANGE,
+      ACL_TOS_MIN_RANGE,
+      NULL_ARG,
+      1053,
+      1
+   },
+   
+/*209*/
+   {
+      "<1-1>",
+      98,
+      WORD_DATA,
+      ACL_TOS_MAX_VALID_RANGE,
+      ACL_TOS_MIN_RANGE,
+      NULL_ARG,
+      962,
+      1
+   },
+   
+/*210*/
+   {
+      "<1-1>",
+      98,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_TOS,
+      MIN_diffServIpAceTos,
+      NULL_ARG,
+      1064,
+      1
+   },
+   
+/*211*/
+   {
+      "<1-1>",
+      98,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_TOS,
+      MIN_diffServIpAceTos,
+      NULL_ARG,
+      972,
+      1
+   },
+   
+/*212*/
+   {
+      "<1-1>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*213*/
+   {
+      "<1-1>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      1204,
+      1
+   },
+   
+/*214*/
+   {
+      "<1-1>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      1210,
+      1
+   },
+   
+/*215*/
+   {
+      "<1-1>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      2016,
+      1
+   },
+   
+/*216*/
+   {
+      "<1-1>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      1207,
+      1
+   },
+   
+/*217*/
+   {
+      "<1-1>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      1213,
+      1
+   },
+   
+/*218*/
+   {
+      "<1-1>",
+      134,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      NULL_ARG,
+      212,
+      1
+   },
+   
+/*219*/
+   {
+      "<1-1>",
+      134,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      NULL_ARG,
+      1203,
+      1
+   },
+   
+/*220*/
+   {
+      "<1-1>",
+      134,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      NULL_ARG,
+      1209,
+      1
+   },
+   
+/*221*/
+   {
+      "<1-1>",
+      134,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      NULL_ARG,
+      2027,
+      1
+   },
+   
+/*222*/
+   {
+      "<1-1>",
+      134,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      NULL_ARG,
+      1206,
+      1
+   },
+   
+/*223*/
+   {
+      "<1-1>",
+      134,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      NULL_ARG,
+      1212,
+      1
+   },
+   
+/*224*/
+   {
+      "<1-1>",
+      108,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*225*/
+   {
+      "<1-1>",
+      108,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      961,
+      1
+   },
+   
+/*226*/
+   {
+      "<1-1>",
+      89,
+      WORD_DATA,
+      MAX_diffServIpAceDestPortBitmask,
+      MIN_diffServIpAceDestPortBitmask,
+      0,
+      968,
+      1
+   },
+   
+/*227*/
+   {
+      "<1-1>",
+      89,
+      WORD_DATA,
+      MAX_diffServIpAceDestPortBitmask,
+      MIN_diffServIpAceDestPortBitmask,
+      0,
+      2016,
+      1
+   },
+   
+/*228*/
+   {
+      "<1-1>",
+      89,
+      WORD_DATA,
+      MAX_diffServIpAceDestPortBitmask,
+      MIN_diffServIpAceDestPortBitmask,
+      0,
+      971,
+      1
+   },
+   
+/*229*/
+   {
+      "<1-1>",
+      86,
+      WORD_DATA,
+      ACL_PORT_MAX_VALID_RANGE,
+      ACL_PORT_MIN_RANGE,
+      NULL_ARG,
+      224,
+      1
+   },
+   
+/*230*/
+   {
+      "<1-1>",
+      86,
+      WORD_DATA,
+      ACL_PORT_MAX_VALID_RANGE,
+      ACL_PORT_MIN_RANGE,
+      NULL_ARG,
+      960,
+      1
+   },
+   
+/*231*/
+   {
+      "<1-1>",
+      86,
+      WORD_DATA,
+      MAX_diffServIpAceMinDestPort,
+      MIN_diffServIpAceMinDestPort,
+      NULL_ARG,
+      967,
+      1
+   },
+   
+/*232*/
+   {
+      "<1-1>",
+      86,
+      WORD_DATA,
+      MAX_diffServIpAceMinDestPort,
+      MIN_diffServIpAceMinDestPort,
+      NULL_ARG,
+      2015,
+      1
+   },
+   
+/*233*/
+   {
+      "<1-1>",
+      86,
+      WORD_DATA,
+      MAX_diffServIpAceMinDestPort,
+      MIN_diffServIpAceMinDestPort,
+      NULL_ARG,
+      970,
+      1
+   },
+   
+/*234*/
+   {
+      "<1-1>",
+      96,
+      WORD_DATA,
+      ACL_PRECEDENCE_MAX_VALID_RANGE,
+      ACL_PRECEDENCE_MIN_RANGE,
+      NULL_ARG,
+      1056,
+      1
+   },
+   
+/*235*/
+   {
+      "<1-1>",
+      96,
+      WORD_DATA,
+      ACL_PRECEDENCE_MAX_VALID_RANGE,
+      ACL_PRECEDENCE_MIN_RANGE,
+      NULL_ARG,
+      965,
+      1
+   },
+   
+/*236*/
+   {
+      "<1-1>",
+      96,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_PRECEDENCE,
+      MIN_diffServIpAcePrec,
+      NULL_ARG,
+      1067,
+      1
+   },
+   
+/*237*/
+   {
+      "<1-1>",
+      96,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_PRECEDENCE,
+      MIN_diffServIpAcePrec,
+      NULL_ARG,
+      974,
+      1
+   },
+   
+/*238*/
+   {
+      "<1-1>",
+      109,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      1055,
+      1
+   },
+   
+/*239*/
+   {
+      "<1-1>",
+      109,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      964,
+      1
+   },
+   
+/*240*/
+   {
+      "<1-1>",
+      94,
+      WORD_DATA,
+      MAX_diffServIpAceSourcePortBitmask,
+      MIN_diffServIpAceSourcePortBitmask,
+      0,
+      1066,
+      1
+   },
+   
+/*241*/
+   {
+      "<1-1>",
+      94,
+      WORD_DATA,
+      MAX_diffServIpAceSourcePortBitmask,
+      MIN_diffServIpAceSourcePortBitmask,
+      0,
+      973,
+      1
+   },
+   
+/*242*/
+   {
+      "<1-1>",
+      93,
+      WORD_DATA,
+      ACL_PORT_MAX_VALID_RANGE,
+      ACL_PORT_MIN_RANGE,
+      NULL_ARG,
+      1054,
+      1
+   },
+   
+/*243*/
+   {
+      "<1-1>",
+      93,
+      WORD_DATA,
+      ACL_PORT_MAX_VALID_RANGE,
+      ACL_PORT_MIN_RANGE,
+      NULL_ARG,
+      963,
+      1
+   },
+   
+/*244*/
+   {
+      "<1-1>",
+      93,
+      WORD_DATA,
+      MAX_diffServIpAceMinSourcePort,
+      MIN_diffServIpAceMinSourcePort,
+      NULL_ARG,
+      1065,
+      1
+   },
+   
+/*245*/
+   {
+      "<1-1>",
+      93,
+      WORD_DATA,
+      MAX_diffServIpAceMinSourcePort,
+      MIN_diffServIpAceMinSourcePort,
+      NULL_ARG,
+      966,
+      1
+   },
+   
+/*246*/
+   {
+      "<1-1>",
+      1363,
+      WORD_DATA,
+      XSTP_TYPE_MAX_PORT_BPDU_GUARD_AUTO_RECOVERY_INTERVAL,
+      XSTP_TYPE_MIN_PORT_BPDU_GUARD_AUTO_RECOVERY_INTERVAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*247*/
+   {
+      "<1-1>",
+      40,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*248*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      1368,
+      17
+   },
+   
+/*249*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      2152,
+      17
+   },
+   
+/*250*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      LIST_HAVE_UNIT_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*251*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      LIST_HAVE_UNIT_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*252*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      LIST_HAVE_UNIT_DATA,
+      0,
+      0,
+      0,
+      934,
+      1
+   },
+   
+/*253*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      LIST_HAVE_UNIT_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1703,
+      1
+   },
+   
+/*254*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      LIST_HAVE_UNIT_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1097,
+      1
+   },
+   
+/*255*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      LIST_HAVE_UNIT_DATA,
+      0,
+      0,
+      NULL_ARG,
+      931,
+      1
+   },
+   
+/*256*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      17
+   },
+   
+/*257*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      3,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      17
+   },
+   
+/*258*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      NULL_ARG,
+      17
+   },
+   
+/*259*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      576,
+      17
+   },
+   
+/*260*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      1862,
+      17
+   },
+   
+/*261*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      1903,
+      17
+   },
+   
+/*262*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      2286,
+      17
+   },
+   
+/*263*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      1900,
+      17
+   },
+   
+/*264*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      1989,
+      17
+   },
+   
+/*265*/
+   {
+      "<1-1>/<1-x>",
+      16,
+      PVC_DATA,
+      65536,
+      65537,
+      NULL_ARG,
+      932,
+      17
+   },
+   
+/*266*/
+   {
+      "<1-1>:",
+      40,
+      UNIT_COLON_DATA,
+      7,
+      1,
+      695,
+      694,
+      1
+   },
+   
+/*267*/
+   {
+      "<1-1>:",
+      40,
+      UNIT_COLON_DATA,
+      7,
+      1,
+      928,
+      928,
+      1
+   },
+   
+/*268*/
+   {
+      "<1-1>:",
+      40,
+      UNIT_COLON_DATA,
+      7,
+      1,
+      929,
+      929,
+      1
+   },
+   
+/*269*/
+   {
+      "<1-20>",
+      1053,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_AUTO_LEARN_MAC,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*270*/
+   {
+      "<1-2147483647>",
+      684,
+      WORD_DATA,
+      2147483647,
+      1,
+      NULL_ARG,
+      2155,
+      1
+   },
+   
+/*271*/
+   {
+      "<1-2147483647>",
+      684,
+      WORD_DATA,
+      2147483647,
+      1,
+      NULL_ARG,
+      2159,
+      1
+   },
+   
+/*272*/
+   {
+      "<1-2147483647>",
+      231,
+      WORD_DATA,
+      2147483647L,
+      1L,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*273*/
+   {
+      "<1-2147483647>",
+      684,
+      WORD_DATA,
+      2147483647,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*274*/
+   {
+      "<1-2147483647>",
+      684,
+      WORD_DATA,
+      2147483647,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*275*/
+   {
+      "<1-22>",
+      1497,
+      WORD_DATA,
+      65535,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*276*/
+   {
+      "<1-255>",
+      839,
+      WORD_DATA,
+      SYS_ADPT_MAX_RATIO_OF_WRR,
+      SYS_ADPT_MIN_RATIO_OF_WRR,
+      NULL_ARG,
+      277,
+      1
+   },
+   
+/*277*/
+   {
+      "<1-255>",
+      839,
+      WORD_DATA,
+      SYS_ADPT_MAX_RATIO_OF_WRR,
+      SYS_ADPT_MIN_RATIO_OF_WRR,
+      NULL_ARG,
+      278,
+      1
+   },
+   
+/*278*/
+   {
+      "<1-255>",
+      839,
+      WORD_DATA,
+      SYS_ADPT_MAX_RATIO_OF_WRR,
+      SYS_ADPT_MIN_RATIO_OF_WRR,
+      NULL_ARG,
+      283,
+      1
+   },
+   
+/*279*/
+   {
+      "<1-255>",
+      1689,
+      WORD_DATA,
+      PING_MGR_MAX_PING_NBR,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*280*/
+   {
+      "<1-255>",
+      1689,
+      WORD_DATA,
+      PING_MGR_MAX_PING_NBR,
+      1,
+      NULL_ARG,
+      1887,
+      1
+   },
+   
+/*281*/
+   {
+      "<1-255>",
+      7,
+      WORD_DATA,
+      PING_MGR_MAX_PING_NBR,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*282*/
+   {
+      "<1-255>",
+      7,
+      WORD_DATA,
+      PING_MGR_MAX_PING_NBR,
+      1,
+      NULL_ARG,
+      1887,
+      1
+   },
+   
+/*283*/
+   {
+      "<1-255>",
+      839,
+      WORD_DATA,
+      SYS_ADPT_MAX_RATIO_OF_WRR,
+      SYS_ADPT_MIN_RATIO_OF_WRR,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*284*/
+   {
+      "<1-255>",
+      1026,
+      WORD_DATA,
+      255,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*285*/
+   {
+      "<1-255>",
+      1028,
+      WORD_DATA,
+      255,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*286*/
+   {
+      "<1-255>",
+      540,
+      CHAR_DATA,
+      255,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*287*/
+   {
+      "<1-255>",
+      1657,
+      WORD_DATA,
+      SYS_ADPT_CFM_MAX_LINKTRACE_TTL,
+      SYS_ADPT_CFM_MIN_LINKTRACE_TTL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*288*/
+   {
+      "<1-255>",
+      618,
+      WORD_DATA,
+      SYS_ADPT_MVR_MAX_NBR_OF_GROUPS,
+      1,
+      577,
+      NULL_ARG,
+      1
+   },
+   
+/*289*/
+   {
+      "<1-29>",
+      854,
+      WORD_DATA,
+      29,
+      1,
+      NULL_ARG,
+      452,
+      1
+   },
+   
+/*290*/
+   {
+      "<1-2>",
+      702,
+      WORD_DATA,
+      2,
+      1,
+      NULL_ARG,
+      1048,
+      1
+   },
+   
+/*291*/
+   {
+      "<1-2>",
+      1408,
+      WORD_DATA,
+      MAX_xstInstanceCfgPriority,
+      MIN_xstInstanceCfgPriority,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*292*/
+   {
+      "<1-2>",
+      702,
+      WORD_DATA,
+      2,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*293*/
+   {
+      "<1-2>",
+      702,
+      WORD_DATA,
+      2,
+      1,
+      NULL_ARG,
+      1047,
+      1
+   },
+   
+/*294*/
+   {
+      "<1-300>",
+      266,
+      WORD_DATA,
+      300,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*295*/
+   {
+      "<1-30>",
+      987,
+      WORD_DATA,
+      MAX_tacacsPlusServerGlobalRetransmit,
+      MIN_tacacsPlusServerGlobalRetransmit,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*296*/
+   {
+      "<1-30>",
+      843,
+      WORD_DATA,
+      MAX_radiusServerGlobalRetransmit,
+      MIN_radiusServerGlobalRetransmit,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*297*/
+   {
+      "<1-30>",
+      843,
+      WORD_DATA,
+      MAX_radiusServerRetransmit,
+      MIN_radiusServerRetransmit,
+      NULL_ARG,
+      1459,
+      1
+   },
+   
+/*298*/
+   {
+      "<1-30>",
+      843,
+      WORD_DATA,
+      MAX_radiusServerRetransmit,
+      MIN_radiusServerRetransmit,
+      NULL_ARG,
+      1464,
+      1
+   },
+   
+/*299*/
+   {
+      "<1-30>",
+      843,
+      WORD_DATA,
+      MAX_radiusServerRetransmit,
+      MIN_radiusServerRetransmit,
+      NULL_ARG,
+      1465,
+      1
+   },
+   
+/*300*/
+   {
+      "<1-30>",
+      843,
+      WORD_DATA,
+      MAX_radiusServerRetransmit,
+      MIN_radiusServerRetransmit,
+      NULL_ARG,
+      1467,
+      1
+   },
+   
+/*301*/
+   {
+      "<1-30>",
+      843,
+      WORD_DATA,
+      MAX_tacacsPlusServerRetransmit,
+      MIN_tacacsPlusServerRetransmit,
+      NULL_ARG,
+      1454,
+      1
+   },
+   
+/*302*/
+   {
+      "<1-30>",
+      854,
+      WORD_DATA,
+      30,
+      1,
+      NULL_ARG,
+      452,
+      1
+   },
+   
+/*303*/
+   {
+      "<1-31622400>",
+      889,
+      WORD_DATA,
+      MAX_alarmInterval,
+      MIN_alarmInterval,
+      NULL_ARG,
+      799,
+      1
+   },
+   
+/*304*/
+   {
+      "<1-31>",
+      1551,
+      WORD_DATA,
+      31,
+      1,
+      NULL_ARG,
+      451,
+      1
+   },
+   
+/*305*/
+   {
+      "<1-31>",
+      1551,
+      WORD_DATA,
+      31,
+      1,
+      NULL_ARG,
+      888,
+      1
+   },
+   
+/*306*/
+   {
+      "<1-31>",
+      1534,
+      WORD_DATA,
+      31,
+      1,
+      NULL_ARG,
+      889,
+      1
+   },
+   
+/*307*/
+   {
+      "<1-31>",
+      1534,
+      WORD_DATA,
+      31,
+      1,
+      NULL_ARG,
+      890,
+      1
+   },
+   
+/*308*/
+   {
+      "<1-31>",
+      854,
+      WORD_DATA,
+      31,
+      1,
+      0,
+      891,
+      1
+   },
+   
+/*309*/
+   {
+      "<1-31>",
+      854,
+      WORD_DATA,
+      31,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*310*/
+   {
+      "<1-31>",
+      854,
+      WORD_DATA,
+      31,
+      1,
+      NULL_ARG,
+      452,
+      1
+   },
+   
+/*311*/
+   {
+      "<1-32>",
+      18,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*312*/
+   {
+      "<1-32>",
+      1217,
+      WORD_DATA,
+      SYS_ADPT_NETACCESS_MAX_NBR_OF_SECURE_ADDRESSES_PER_PORT,
+      SYS_ADPT_NETACCESS_MIN_NBR_OF_SECURE_ADDRESSES_PER_PORT,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*313*/
+   {
+      "<1-3600>",
+      1359,
+      WORD_DATA,
+      MAX_historyControlInterval,
+      MIN_historyControlInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*314*/
+   {
+      "<1-3>",
+      1007,
+      WORD_DATA,
+      3,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*315*/
+   {
+      "<1-3>",
+      506,
+      WORD_DATA,
+      MAX_igmpSnoopVersion,
+      MIN_igmpSnoopVersion,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*316*/
+   {
+      "<1-4092>",
+      133,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1737,
+      1
+   },
+   
+/*317*/
+   {
+      "<1-4093>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1280,
+      1
+   },
+   
+/*318*/
+   {
+      "<1-4093>",
+      1840,
+      WORD_DATA,
+      4093,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*319*/
+   {
+      "<1-4093>",
+      43,
+      LIST_NO_UNIT_DATA,
+      SYS_ADPT_MAX_VLAN_ID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*320*/
+   {
+      "<1-4093>",
+      43,
+      WORD_DATA,
+      4093,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*321*/
+   {
+      "<1-4093>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*322*/
+   {
+      "<1-4093>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1273,
+      1
+   },
+   
+/*323*/
+   {
+      "<1-4093>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1274,
+      1
+   },
+   
+/*324*/
+   {
+      "<1-4093>",
+      1828,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*325*/
+   {
+      "<1-4093>",
+      536,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*326*/
+   {
+      "<1-4093>",
+      1677,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*327*/
+   {
+      "<1-4093>",
+      1832,
+      WORD_DATA,
+      4093,
+      1,
+      NULL_ARG,
+      796,
+      1
+   },
+   
+/*328*/
+   {
+      "<1-4094>",
+      1314,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1560,
+      1
+   },
+   
+/*329*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      4094,
+      1,
+      NULL_ARG,
+      531,
+      1
+   },
+   
+/*330*/
+   {
+      "<1-4094>",
+      1317,
+      WORD_DATA,
+      4094,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*331*/
+   {
+      "<1-4094>",
+      1314,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      0,
+      1559,
+      1
+   },
+   
+/*332*/
+   {
+      "<1-4094>",
+      133,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1737,
+      1
+   },
+   
+/*333*/
+   {
+      "<1-4094>",
+      191,
+      WORD_DATA,
+      SYS_ADPT_MAX_VLAN_ID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*334*/
+   {
+      "<1-4094>",
+      1207,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*335*/
+   {
+      "<1-4094>",
+      1003,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      MIN_dot1qMaxVlanId,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*336*/
+   {
+      "<1-4094>",
+      1404,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*337*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      4094,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*338*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      SYS_ADPT_MAX_VLAN_ID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*339*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      SYS_ADPT_MAX_VLAN_ID,
+      1,
+      NULL_ARG,
+      2286,
+      1
+   },
+   
+/*340*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*341*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1586,
+      1
+   },
+   
+/*342*/
+   {
+      "<1-4094>",
+      43,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1990,
+      1
+   },
+   
+/*343*/
+   {
+      "<1-4094>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*344*/
+   {
+      "<1-4094>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*345*/
+   {
+      "<1-4094>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1625,
+      1
+   },
+   
+/*346*/
+   {
+      "<1-4094>",
+      1804,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1352,
+      1
+   },
+   
+/*347*/
+   {
+      "<1-4094>",
+      21,
+      WORD_DATA,
+      4094,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*348*/
+   {
+      "<1-4094>",
+      21,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*349*/
+   {
+      "<1-4094>",
+      408,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*350*/
+   {
+      "<1-4094>",
+      408,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1957,
+      1
+   },
+   
+/*351*/
+   {
+      "<1-4094>",
+      408,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*352*/
+   {
+      "<1-4094>",
+      1493,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*353*/
+   {
+      "<1-4095>",
+      169,
+      LIST_NO_UNIT_DATA,
+      SYS_ADPT_MAX_VLAN_ID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*354*/
+   {
+      "<1-4095>",
+      169,
+      LIST_NO_UNIT_DATA,
+      SYS_ADPT_MAX_VLAN_ID,
+      1,
+      NULL_ARG,
+      1600,
+      1
+   },
+   
+/*355*/
+   {
+      "<1-4095>",
+      392,
+      WORD_DATA,
+      CFM_TYPE_MAX_LINKTRACE_SIZE,
+      CFM_TYPE_MIN_LINKTRACE_SIZE,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*356*/
+   {
+      "<1-4096>",
+      43,
+      WORD_DATA,
+      4096,
+      1,
+      NULL_ARG,
+      1049,
+      1
+   },
+   
+/*357*/
+   {
+      "<1-4096>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*358*/
+   {
+      "<1-4096>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1901,
+      1
+   },
+   
+/*359*/
+   {
+      "<1-4096>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      1028,
+      1
+   },
+   
+/*360*/
+   {
+      "<1-4096>",
+      1493,
+      LIST_NO_UNIT_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*361*/
+   {
+      "<1-4294967295>",
+      469,
+      WORD_DATA,
+      MAX_igmpSnoopProfileNumber,
+      MIN_igmpSnoopProfileNumber,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*362*/
+   {
+      "<1-4294967295>",
+      469,
+      WORD_DATA,
+      MAX_igmpSnoopProfileNumber,
+      MIN_igmpSnoopProfileNumber,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*363*/
+   {
+      "<1-4>",
+      517,
+      WORD_DATA,
+      5,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*364*/
+   {
+      "<1-5>",
+      1129,
+      WORD_DATA,
+      SYS_ADPT_DHCPV6SNP_MAX_NBR_OF_CLIENT_PER_PORT,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*365*/
+   {
+      "<1-5>",
+      1645,
+      WORD_DATA,
+      CFM_TYPE_MAX_DMM_COUNT,
+      CFM_TYPE_MIN_DMM_COUNT,
+      NULL_ARG,
+      1412,
+      1
+   },
+   
+/*366*/
+   {
+      "<1-5>",
+      1647,
+      WORD_DATA,
+      CFM_TYPE_MAX_DMM_INTERVAL,
+      CFM_TYPE_MIN_DMM_INTERVAL,
+      NULL_ARG,
+      1891,
+      1
+   },
+   
+/*367*/
+   {
+      "<1-5>",
+      1647,
+      WORD_DATA,
+      CFM_TYPE_MAX_DMM_INTERVAL,
+      CFM_TYPE_MIN_DMM_INTERVAL,
+      NULL_ARG,
+      1892,
+      1
+   },
+   
+/*368*/
+   {
+      "<1-5>",
+      1660,
+      WORD_DATA,
+      CFM_TYPE_MAX_LBM_COUNT,
+      CFM_TYPE_MIN_LBM_COUNT,
+      NULL_ARG,
+      1893,
+      1
+   },
+   
+/*369*/
+   {
+      "<1-5>",
+      1651,
+      WORD_DATA,
+      CFM_TYPE_MAX_DMM_TIMEOUT,
+      CFM_TYPE_MIN_DMM_TIMEOUT,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*370*/
+   {
+      "<1-64>",
+      629,
+      WORD_DATA,
+      64,
+      1,
+      NULL_ARG,
+      1529,
+      1
+   },
+   
+/*371*/
+   {
+      "<1-64>",
+      629,
+      WORD_DATA,
+      64,
+      1,
+      NULL_ARG,
+      1530,
+      1
+   },
+   
+/*372*/
+   {
+      "<1-64>",
+      629,
+      WORD_DATA,
+      64,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*373*/
+   {
+      "<1-64>",
+      629,
+      WORD_DATA,
+      64,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*374*/
+   {
+      "<1-65535>",
+      165,
+      WORD_DATA,
+      MAX_dot1agCfmMaIndex,
+      MIN_dot1agCfmMaIndex,
+      NULL_ARG,
+      1619,
+      1
+   },
+   
+/*375*/
+   {
+      "<1-65535>",
+      381,
+      WORD_DATA,
+      MAX_dot1agCfmMdIndex,
+      MIN_dot1agCfmMdIndex,
+      NULL_ARG,
+      1479,
+      1
+   },
+   
+/*376*/
+   {
+      "<1-65535>",
+      697,
+      WORD_DATA,
+      MAX_alarmIndex,
+      MIN_alarmIndex,
+      NULL_ARG,
+      2111,
+      1
+   },
+   
+/*377*/
+   {
+      "<1-65535>",
+      463,
+      WORD_DATA,
+      65535,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*378*/
+   {
+      "<1-65535>",
+      481,
+      WORD_DATA,
+      MAX_igmpSnoopUnsolicitedReportInterval,
+      MIN_igmpSnoopUnsolicitedReportInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*379*/
+   {
+      "<1-65535>",
+      527,
+      WORD_DATA,
+      65535,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*380*/
+   {
+      "<1-65535>",
+      840,
+      WORD_DATA,
+      65535L,
+      1L,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*381*/
+   {
+      "<1-65535>",
+      840,
+      WORD_DATA,
+      65535L,
+      1L,
+      NULL_ARG,
+      1458,
+      1
+   },
+   
+/*382*/
+   {
+      "<1-65535>",
+      840,
+      WORD_DATA,
+      TACACS_MAX_SERVER_PORT,
+      TACACS_MIN_SERVER_PORT,
+      NULL_ARG,
+      1456,
+      1
+   },
+   
+/*383*/
+   {
+      "<1-65535>",
+      788,
+      WORD_DATA,
+      SYS_ADPT_PORT_TRAFFIC_SEGMENTATION_MAX_NBR_OF_SESSIONS,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*384*/
+   {
+      "<1-65535>",
+      788,
+      WORD_DATA,
+      SYS_ADPT_PORT_TRAFFIC_SEGMENTATION_MAX_NBR_OF_SESSIONS,
+      1,
+      NULL_ARG,
+      1096,
+      1
+   },
+   
+/*385*/
+   {
+      "<1-65535>",
+      1099,
+      WORD_DATA,
+      SYS_ADPT_GARP_MAX_JOIN_TIME,
+      SYS_ADPT_GARP_MIN_JOIN_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*386*/
+   {
+      "<1-65535>",
+      1099,
+      WORD_DATA,
+      SYS_ADPT_GARP_MAX_LEAVEALL_TIME,
+      SYS_ADPT_GARP_MIN_LEAVEALL_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*387*/
+   {
+      "<1-65535>",
+      1099,
+      WORD_DATA,
+      SYS_ADPT_GARP_MAX_LEAVE_TIME,
+      SYS_ADPT_GARP_MIN_LEAVE_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*388*/
+   {
+      "<1-65535>",
+      165,
+      WORD_DATA,
+      MAX_dot1agCfmMaIndex,
+      MIN_dot1agCfmMaIndex,
+      NULL_ARG,
+      1627,
+      1
+   },
+   
+/*389*/
+   {
+      "<1-65535>",
+      986,
+      WORD_DATA,
+      MAX_tacacsPlusServerGlobalPortNumber,
+      MIN_tacacsPlusServerGlobalPortNumber,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*390*/
+   {
+      "<1-65535>",
+      461,
+      WORD_DATA,
+      65535,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*391*/
+   {
+      "<1-65535>",
+      381,
+      WORD_DATA,
+      MAX_dot1agCfmMdIndex,
+      MIN_dot1agCfmMdIndex,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*392*/
+   {
+      "<1-65535>",
+      390,
+      WORD_DATA,
+      CFM_TYPE_MAX_LINKTRACE_HOLD_TIME,
+      CFM_TYPE_MIN_LINKTRACE_HOLD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*393*/
+   {
+      "<1-65535>",
+      179,
+      WORD_DATA,
+      CFM_TYPE_MAX_ARCHIVE_HOLD_TIME,
+      CFM_TYPE_MIN_ARCHIVE_HOLD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*394*/
+   {
+      "<1-65535>",
+      394,
+      WORD_DATA,
+      CFM_TYPE_MAX_CROSSCHECK_START_DELAY,
+      CFM_TYPE_MIN_CROSSCHECK_START_DELAY,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*395*/
+   {
+      "<1-65535>",
+      697,
+      WORD_DATA,
+      MAX_alarmIndex,
+      MIN_alarmIndex,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*396*/
+   {
+      "<1-65535>",
+      699,
+      WORD_DATA,
+      MAX_eventIndex,
+      MIN_eventIndex,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*397*/
+   {
+      "<1-65535>",
+      699,
+      WORD_DATA,
+      MAX_eventIndex,
+      MIN_eventIndex,
+      NULL_ARG,
+      1036,
+      1
+   },
+   
+/*398*/
+   {
+      "<1-65535>",
+      1274,
+      WORD_DATA,
+      MAX_historyControlIndex,
+      MIN_historyControlIndex,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*399*/
+   {
+      "<1-65535>",
+      1274,
+      WORD_DATA,
+      MAX_historyControlIndex,
+      MIN_historyControlIndex,
+      NULL_ARG,
+      938,
+      1
+   },
+   
+/*400*/
+   {
+      "<1-65535>",
+      1277,
+      WORD_DATA,
+      MAX_etherStatsIndex,
+      MIN_etherStatsIndex,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*401*/
+   {
+      "<1-65535>",
+      1277,
+      WORD_DATA,
+      MAX_etherStatsIndex,
+      MIN_etherStatsIndex,
+      NULL_ARG,
+      1671,
+      1
+   },
+   
+/*402*/
+   {
+      "<1-65535>",
+      1357,
+      WORD_DATA,
+      MAX_historyControlBucketsRequested,
+      MIN_historyControlBucketsRequested,
+      NULL_ARG,
+      1409,
+      1
+   },
+   
+/*403*/
+   {
+      "<1-65535>",
+      1048,
+      WORD_DATA,
+      65535,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*404*/
+   {
+      "<1-65535>",
+      993,
+      WORD_DATA,
+      MAX_tacacsPlusServerGlobalTimeout,
+      MIN_tacacsPlusServerGlobalTimeout,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*405*/
+   {
+      "<1-65535>",
+      1086,
+      WORD_DATA,
+      65535,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*406*/
+   {
+      "<1-65535>",
+      476,
+      WORD_DATA,
+      MAX_igmpSnoopRouterPortExpireTime,
+      MIN_igmpSnoopRouterPortExpireTime,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*407*/
+   {
+      "<1-65535>",
+      847,
+      WORD_DATA,
+      MAX_radiusServerGlobalTimeout,
+      MIN_radiusServerGlobalTimeout,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*408*/
+   {
+      "<1-65535>",
+      847,
+      WORD_DATA,
+      MAX_radiusServerTimeout,
+      MIN_radiusServerTimeout,
+      NULL_ARG,
+      1460,
+      1
+   },
+   
+/*409*/
+   {
+      "<1-65535>",
+      847,
+      WORD_DATA,
+      MAX_radiusServerTimeout,
+      MIN_radiusServerTimeout,
+      NULL_ARG,
+      1462,
+      1
+   },
+   
+/*410*/
+   {
+      "<1-65535>",
+      847,
+      WORD_DATA,
+      MAX_radiusServerTimeout,
+      MIN_radiusServerTimeout,
+      NULL_ARG,
+      1466,
+      1
+   },
+   
+/*411*/
+   {
+      "<1-65535>",
+      847,
+      WORD_DATA,
+      MAX_tacacsPlusServerTimeout,
+      MIN_tacacsPlusServerTimeout,
+      NULL_ARG,
+      1455,
+      1
+   },
+   
+/*412*/
+   {
+      "<1-65535>",
+      841,
+      WORD_DATA,
+      65535L,
+      1L,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*413*/
+   {
+      "<1-65535>",
+      841,
+      WORD_DATA,
+      65535L,
+      1L,
+      NULL_ARG,
+      807,
+      1
+   },
+   
+/*414*/
+   {
+      "<1-65535>",
+      1088,
+      WORD_DATA,
+      65535,
+      10,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*415*/
+   {
+      "<1-65535>",
+      1975,
+      WORD_DATA,
+      65535,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*416*/
+   {
+      "<1-6>",
+      25,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      1005,
+      1
+   },
+   
+/*417*/
+   {
+      "<1-6>",
+      18,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      2152,
+      1
+   },
+   
+/*418*/
+   {
+      "<1-6>",
+      1715,
+      WORD_DATA,
+      32,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*419*/
+   {
+      "<1-6>",
+      1715,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*420*/
+   {
+      "<1-6>",
+      1969,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*421*/
+   {
+      "<1-6>",
+      18,
+      WORD_DATA,
+      32,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*422*/
+   {
+      "<1-6>",
+      18,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*423*/
+   {
+      "<1-6>",
+      18,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      1862,
+      1
+   },
+   
+/*424*/
+   {
+      "<1-6>",
+      18,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      1900,
+      1
+   },
+   
+/*425*/
+   {
+      "<1-6>",
+      648,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*426*/
+   {
+      "<1-6>",
+      188,
+      WORD_DATA,
+      CFM_TYPE_FNG_LOWEST_ALARM_NO_DEF,
+      CFM_TYPE_FNG_LOWEST_ALARM_ALL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*427*/
+   {
+      "<1-6>",
+      1779,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*428*/
+   {
+      "<1-7>",
+      1491,
+      WORD_DATA,
+      MAX_mstMaxHops,
+      MIN_mstMaxHops,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*429*/
+   {
+      "<1-8191>",
+      1643,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1576,
+      1
+   },
+   
+/*430*/
+   {
+      "<1-8191>",
+      1643,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1578,
+      1
+   },
+   
+/*431*/
+   {
+      "<1-8191>",
+      1643,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1579,
+      1
+   },
+   
+/*432*/
+   {
+      "<1-8191>",
+      182,
+      WORD_DATA,
+      8191,
+      1,
+      NULL_ARG,
+      1575,
+      1
+   },
+   
+/*433*/
+   {
+      "<1-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepDbRMepIdentifier,
+      MIN_dot1agCfmMepDbRMepIdentifier,
+      NULL_ARG,
+      1518,
+      1
+   },
+   
+/*434*/
+   {
+      "<1-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1575,
+      1
+   },
+   
+/*435*/
+   {
+      "<1-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1577,
+      1
+   },
+   
+/*436*/
+   {
+      "<1-8191>",
+      1654,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1042,
+      1
+   },
+   
+/*437*/
+   {
+      "<1-8191>",
+      1654,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1044,
+      1
+   },
+   
+/*438*/
+   {
+      "<1-8191>",
+      1654,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      1046,
+      1
+   },
+   
+/*439*/
+   {
+      "<1-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepDbRMepIdentifier,
+      MIN_dot1agCfmMepDbRMepIdentifier,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*440*/
+   {
+      "<1-8191>",
+      182,
+      WORD_DATA,
+      MAX_dot1agCfmMepDbRMepIdentifier,
+      MIN_dot1agCfmMepDbRMepIdentifier,
+      NULL_ARG,
+      1088,
+      1
+   },
+   
+/*441*/
+   {
+      "<1-8191>",
+      181,
+      WORD_DATA,
+      MAX_dot1agCfmMepIdentifier,
+      MIN_dot1agCfmMepIdentifier,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*442*/
+   {
+      "<1-8>",
+      18,
+      WORD_DATA,
+      8,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*443*/
+   {
+      "<1-8>",
+      18,
+      WORD_DATA,
+      8,
+      1,
+      NULL_ARG,
+      1098,
+      1
+   },
+   
+/*444*/
+   {
+      "<1-8>",
+      18,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_TRUNK_PER_SYSTEM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*445*/
+   {
+      "<1-900>",
+      268,
+      WORD_DATA,
+      900,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*446*/
+   {
+      "<10-2000>",
+      195,
+      WORD_DATA,
+      SYS_ADPT_ERPS_MAX_TIMER_GUARD,
+      SYS_ADPT_ERPS_MIN_TIMER_GUARD,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*447*/
+   {
+      "<10-31740>",
+      503,
+      WORD_DATA,
+      MAX_igmpSnoopProxyQueryResponseInterval,
+      MIN_igmpSnoopProxyQueryResponseInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*448*/
+   {
+      "<15-15>",
+      1,
+      WORD_DATA,
+      SYS_ADPT_MAX_LOGIN_PRIVILEGE,
+      SYS_ADPT_MAX_LOGIN_PRIVILEGE,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*449*/
+   {
+      "<16-23>",
+      559,
+      WORD_DATA,
+      23,
+      16,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*450*/
+   {
+      "<18-2184>",
+      589,
+      WORD_DATA,
+      SYS_ADPT_MAX_DOT1D_TP_AGING_TIME,
+      SYS_ADPT_MIN_DOT1D_TP_AGING_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*451*/
+   {
+      "<1970-2037>",
+      1552,
+      WORD_DATA,
+      SYS_TIME_MAX_CONFIGURABLE_YEAR,
+      SYS_TIME_MIN_CONFIGURABLE_YEAR,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*452*/
+   {
+      "<2001-2050>",
+      855,
+      WORD_DATA,
+      2050,
+      2001,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*453*/
+   {
+      "<2009-2037>",
+      1535,
+      WORD_DATA,
+      2037,
+      2009,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*454*/
+   {
+      "<2009-2037>",
+      1535,
+      WORD_DATA,
+      2037,
+      2009,
+      NULL_ARG,
+      1143,
+      1
+   },
+   
+/*455*/
+   {
+      "<3-10>",
+      186,
+      WORD_DATA,
+      CFM_TYPE_FNG_MAX_ALARM_TIME,
+      CFM_TYPE_FNG_MIN_ALARM_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*456*/
+   {
+      "<3-10>",
+      186,
+      WORD_DATA,
+      CFM_TYPE_FNG_MAX_RESET_TIME,
+      CFM_TYPE_FNG_MIN_RESET_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*457*/
+   {
+      "<300-3600>",
+      1009,
+      WORD_DATA,
+      3600,
+      300,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*458*/
+   {
+      "<4-7>",
+      378,
+      WORD_DATA,
+      7,
+      4,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*459*/
+   {
+      "<5-12>",
+      217,
+      WORD_DATA,
+      SYS_ADPT_ERPS_MAX_TIMER_WTR,
+      SYS_ADPT_ERPS_MIN_TIMER_WTR,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*460*/
+   {
+      "<5-43200>",
+      1004,
+      WORD_DATA,
+      MAX_voiceVlanAgingTime,
+      MIN_voiceVlanAgingTime,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*461*/
+   {
+      "<500-262143>",
+      1403,
+      WORD_DATA,
+      1000000,
+      64,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*462*/
+   {
+      "<500-262143>",
+      1355,
+      WORD_DATA,
+      SYS_ADPT_MAX_BSTORM_RATE_LIMIT,
+      SYS_ADPT_MIN_BSTORM_RATE_LIMIT,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*463*/
+   {
+      "<512-896>",
+      521,
+      WORD_DATA,
+      SSHD_MAX_SERVER_KEY_SIZE,
+      SSHD_MIN_SERVER_KEY_SIZE,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*464*/
+   {
+      "<64-1518>",
+      1649,
+      WORD_DATA,
+      CFM_TYPE_MAX_DMM_PKTSIZE,
+      CFM_TYPE_MIN_DMM_PKTSIZE,
+      NULL_ARG,
+      2035,
+      1
+   },
+   
+/*465*/
+   {
+      "<64-1518>",
+      1649,
+      WORD_DATA,
+      CFM_TYPE_MAX_DMM_PKTSIZE,
+      CFM_TYPE_MIN_DMM_PKTSIZE,
+      NULL_ARG,
+      2036,
+      1
+   },
+   
+/*466*/
+   {
+      "<64-1518>",
+      1649,
+      WORD_DATA,
+      CFM_TYPE_MAX_LBM_PKTSIZE,
+      CFM_TYPE_MIN_LBM_PKTSIZE,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*467*/
+   {
+      "<64-2000>",
+      334,
+      WORD_DATA,
+      SYS_ADPT_DOS_MAX_RATELIMIT,
+      SYS_ADPT_DOS_MIN_RATELIMIT,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*468*/
+   {
+      "<>",
+      91,
+      WORD_DATA,
+      63L,
+      0L,
+      NULL_ARG,
+      1637,
+      1
+   },
+   
+/*469*/
+   {
+      "<>",
+      91,
+      WORD_DATA,
+      63L,
+      0L,
+      NULL_ARG,
+      1638,
+      1
+   },
+   
+/*470*/
+   {
+      "<>",
+      118,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IPV6_NEXT_HEADER,
+      MIN_diffServIpv6AceNextHeader,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*471*/
+   {
+      "<>",
+      118,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IPV6_NEXT_HEADER,
+      MIN_diffServIpv6AceNextHeader,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*472*/
+   {
+      "<LLDP_TYPE_MIN_NOTIFY_INTERVAL-LLDP_TYPE_MAX_NOTIFY_INTERVAL>",
+      553,
+      WORD_DATA,
+      MAX_lldpNotificationInterval,
+      MIN_lldpNotificationInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*473*/
+   {
+      "<LLDP_TYPE_MIN_REINIT_DELAY-LLDP_TYPE_MAX_REINIT_DELAY>",
+      553,
+      WORD_DATA,
+      MAX_lldpReinitDelay,
+      MIN_lldpReinitDelay,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*474*/
+   {
+      "<LLDP_TYPE_MIN_TX_DELAY-LLDP_TYPE_MAX_TX_DELAY>",
+      553,
+      WORD_DATA,
+      MAX_lldpTxDelay,
+      MIN_lldpTxDelay,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*475*/
+   {
+      "<LLDP_TYPE_MIN_TX_HOLD_MUL-LLDP_TYPE_MAX_TX_HOLD_MUL>",
+      549,
+      WORD_DATA,
+      MAX_lldpMessageTxHoldMultiplier,
+      MIN_lldpMessageTxHoldMultiplier,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*476*/
+   {
+      "<LLDP_TYPE_MIN_TX_INTERVAL-LLDP_TYPE_MAX_TX_INTERVAL>",
+      553,
+      WORD_DATA,
+      MAX_lldpMessageTxInterval,
+      MIN_lldpMessageTxInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*477*/
+   {
+      "<MIN_MAXREQ_TIME-MAX_MAXREQ_TIME>",
+      1045,
+      WORD_DATA,
+      MAX_MAXREQ_TIME,
+      MIN_MAXREQ_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*478*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1063,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*479*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1065,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*480*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1073,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*481*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1067,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*482*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1069,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*483*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1071,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*484*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1075,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*485*/
+   {
+      "<MIN_PERIOD_TIME-MAX_PERIOD_TIME>",
+      1077,
+      WORD_DATA,
+      MAX_PERIOD_TIME,
+      MIN_PERIOD_TIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*486*/
+   {
+      "<MIN_arpCacheTimeout-MAX_arpCacheTimeout>",
+      252,
+      WORD_DATA,
+      MAX_arpCacheTimeout,
+      MIN_arpCacheTimeout,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*487*/
+   {
+      "<SNTP_MIN_POLLTIME-SNTP_MAX_POLLTIME>",
+      969,
+      WORD_DATA,
+      SNTP_MAX_POLLTIME,
+      SNTP_MIN_POLLTIME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*488*/
+   {
+      "<XSTP_TYPE_MIN_MSTID-XSTP_TYPE_MAX_MSTID>",
+      1300,
+      WORD_DATA,
+      XSTP_TYPE_MAX_MSTID,
+      XSTP_TYPE_MIN_MSTID,
+      NULL_ARG,
+      991,
+      1
+   },
+   
+/*489*/
+   {
+      "<XSTP_TYPE_MIN_MSTID-XSTP_TYPE_MAX_MSTID>",
+      1300,
+      WORD_DATA,
+      XSTP_TYPE_MAX_MSTID,
+      XSTP_TYPE_MIN_MSTID,
+      NULL_ARG,
+      992,
+      1
+   },
+   
+/*490*/
+   {
+      "<XSTP_TYPE_MIN_MSTID-XSTP_TYPE_MAX_MSTID>",
+      1300,
+      WORD_DATA,
+      XSTP_TYPE_MAX_MSTID,
+      XSTP_TYPE_MIN_MSTID,
+      NULL_ARG,
+      1738,
+      1
+   },
+   
+/*491*/
+   {
+      "<XSTP_TYPE_MIN_MSTID-XSTP_TYPE_MAX_MSTID>",
+      1300,
+      WORD_DATA,
+      XSTP_TYPE_MAX_MSTID,
+      XSTP_TYPE_MIN_MSTID,
+      NULL_ARG,
+      1739,
+      1
+   },
+   
+/*492*/
+   {
+      "<XSTP_TYPE_MIN_MSTID-XSTP_TYPE_MAX_MSTID>",
+      1300,
+      WORD_DATA,
+      XSTP_TYPE_MAX_MSTID,
+      XSTP_TYPE_MIN_MSTID,
+      NULL_ARG,
+      937,
+      1
+   },
+   
+/*493*/
+   {
+      "<control-flag>",
+      111,
+      WORD_DATA,
+      ACL_TCP_CODE_BITMASK_MAX_RANGE,
+      ACL_TCP_CODE_BITMASK_MIN_RANGE,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*494*/
+   {
+      "<control-flag>",
+      104,
+      WORD_DATA,
+      MAX_diffServIpAceControlCodeBitmask,
+      MIN_diffServIpAceControlCodeBitmask,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*495*/
+   {
+      "<control-flag>",
+      104,
+      WORD_DATA,
+      MAX_diffServIpAceControlCodeBitmask,
+      MIN_diffServIpAceControlCodeBitmask,
+      0,
+      2016,
+      1
+   },
+   
+/*496*/
+   {
+      "<control-flag>",
+      110,
+      WORD_DATA,
+      ACL_TCP_CODE_MAX_RANGE,
+      ACL_TCP_CODE_MIN_RANGE,
+      NULL_ARG,
+      493,
+      1
+   },
+   
+/*497*/
+   {
+      "<control-flag>",
+      103,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_CONTROL_CODE,
+      MIN_diffServIpAceControlCode,
+      NULL_ARG,
+      494,
+      1
+   },
+   
+/*498*/
+   {
+      "<control-flag>",
+      103,
+      WORD_DATA,
+      RULE_TYPE_MAX_OF_IP_CONTROL_CODE,
+      MIN_diffServIpAceControlCode,
+      NULL_ARG,
+      2019,
+      1
+   },
+   
+/*499*/
+   {
+      "<dport>",
+      108,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      977,
+      1
+   },
+   
+/*500*/
+   {
+      "<ethertype>",
+      145,
+      HEX_DATA,
+      ACL_ETHER_TYPE_MAX_RANGE,
+      ACL_ETHER_TYPE_MIN_RANGE,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*501*/
+   {
+      "<sport>",
+      109,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      981,
+      1
+   },
+   
+/*502*/
+   {
+      "<vid>",
+      135,
+      WORD_DATA,
+      ACL_VID_MAX_RANGE,
+      ACL_VID_MIN_RANGE,
+      0,
+      1216,
+      1
+   },
+   
+/*503*/
+   {
+      "<x-x>",
+      1502,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_BURST,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_BURST,
+      NULL_ARG,
+      510,
+      1
+   },
+   
+/*504*/
+   {
+      "<x-x>",
+      1502,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_BURST,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_BURST,
+      NULL_ARG,
+      512,
+      1
+   },
+   
+/*505*/
+   {
+      "<x-x>",
+      1502,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_BURST,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_BURST,
+      NULL_ARG,
+      956,
+      1
+   },
+   
+/*506*/
+   {
+      "<x-x>",
+      1501,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_RATE,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_RATE,
+      NULL_ARG,
+      503,
+      1
+   },
+   
+/*507*/
+   {
+      "<x-x>",
+      1501,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_RATE,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_RATE,
+      NULL_ARG,
+      505,
+      1
+   },
+   
+/*508*/
+   {
+      "<x-x>",
+      1512,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_RATE,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_RATE,
+      NULL_ARG,
+      503,
+      1
+   },
+   
+/*509*/
+   {
+      "<x-x>",
+      1512,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_RATE,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_RATE,
+      NULL_ARG,
+      504,
+      1
+   },
+   
+/*510*/
+   {
+      "<x-x>",
+      1509,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_BURST,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_BURST,
+      NULL_ARG,
+      955,
+      1
+   },
+   
+/*511*/
+   {
+      "<x-x>",
+      1515,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_BURST,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_BURST,
+      NULL_ARG,
+      955,
+      1
+   },
+   
+/*512*/
+   {
+      "<x-x>",
+      1514,
+      WORD_DATA,
+      SYS_ADPT_DIFFSERV_MAX_POLICE_RATE,
+      SYS_ADPT_DIFFSERV_MIN_POLICE_RATE,
+      NULL_ARG,
+      511,
+      1
+   },
+   
+/*513*/
+   {
+      "<x-x>",
+      1507,
+      WORD_DATA,
+      MAX_DSCP_VAL,
+      MIN_DSCP_VAL,
+      NULL_ARG,
+      2124,
+      1
+   },
+   
+/*514*/
+   {
+      "<x-x>",
+      1519,
+      WORD_DATA,
+      MAX_COS_VAL,
+      MIN_COS_VAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*515*/
+   {
+      "<x-x>",
+      158,
+      WORD_DATA,
+      MAX_DSCP_VAL,
+      MIN_DSCP_VAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*516*/
+   {
+      "<x-x>",
+      159,
+      WORD_DATA,
+      MAX_PRE_VAL,
+      MIN_PRE_VAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*517*/
+   {
+      "<x-x>",
+      43,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*518*/
+   {
+      "<x-x>",
+      1524,
+      WORD_DATA,
+      MAX_DSCP_VAL,
+      MIN_DSCP_VAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*519*/
+   {
+      "<x-x>",
+      1507,
+      WORD_DATA,
+      MAX_DSCP_VAL,
+      MIN_DSCP_VAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*520*/
+   {
+      "<x-x>",
+      1521,
+      WORD_DATA,
+      MAX_PHB_VAL,
+      MIN_PHB_VAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*521*/
+   {
+      "A.B.C.D",
+      622,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      563,
+      1
+   },
+   
+/*522*/
+   {
+      "A.B.C.D",
+      77,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      594,
+      1
+   },
+   
+/*523*/
+   {
+      "A.B.C.D",
+      77,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      595,
+      1
+   },
+   
+/*524*/
+   {
+      "A.B.C.D",
+      77,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1526,
+      1
+   },
+   
+/*525*/
+   {
+      "A.B.C.D",
+      77,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      596,
+      1
+   },
+   
+/*526*/
+   {
+      "A.B.C.D",
+      77,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      597,
+      1
+   },
+   
+/*527*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      579,
+      1
+   },
+   
+/*528*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      579,
+      1
+   },
+   
+/*529*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      580,
+      1
+   },
+   
+/*530*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1285,
+      1
+   },
+   
+/*531*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1397,
+      1
+   },
+   
+/*532*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1163,
+      1
+   },
+   
+/*533*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1366,
+      1
+   },
+   
+/*534*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2097,
+      1
+   },
+   
+/*535*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2098,
+      1
+   },
+   
+/*536*/
+   {
+      "A.B.C.D",
+      1013,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      569,
+      1
+   },
+   
+/*537*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      560,
+      1
+   },
+   
+/*538*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      561,
+      1
+   },
+   
+/*539*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      606,
+      1
+   },
+   
+/*540*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1525,
+      1
+   },
+   
+/*541*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      876,
+      1
+   },
+   
+/*542*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      877,
+      1
+   },
+   
+/*543*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      855,
+      1
+   },
+   
+/*544*/
+   {
+      "A.B.C.D",
+      65,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      557,
+      1
+   },
+   
+/*545*/
+   {
+      "A.B.C.D",
+      65,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      558,
+      1
+   },
+   
+/*546*/
+   {
+      "A.B.C.D",
+      65,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      605,
+      1
+   },
+   
+/*547*/
+   {
+      "A.B.C.D",
+      65,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      874,
+      1
+   },
+   
+/*548*/
+   {
+      "A.B.C.D",
+      65,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      875,
+      1
+   },
+   
+/*549*/
+   {
+      "A.B.C.D",
+      55,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      554,
+      1
+   },
+   
+/*550*/
+   {
+      "A.B.C.D",
+      55,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      599,
+      1
+   },
+   
+/*551*/
+   {
+      "A.B.C.D",
+      127,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      881,
+      1
+   },
+   
+/*552*/
+   {
+      "A.B.C.D",
+      78,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      553,
+      1
+   },
+   
+/*553*/
+   {
+      "A.B.C.D",
+      79,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1526,
+      1
+   },
+   
+/*554*/
+   {
+      "A.B.C.D",
+      777,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2128,
+      1
+   },
+   
+/*555*/
+   {
+      "A.B.C.D",
+      66,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      559,
+      1
+   },
+   
+/*556*/
+   {
+      "A.B.C.D",
+      66,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      562,
+      1
+   },
+   
+/*557*/
+   {
+      "A.B.C.D",
+      112,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      874,
+      1
+   },
+   
+/*558*/
+   {
+      "A.B.C.D",
+      112,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      875,
+      1
+   },
+   
+/*559*/
+   {
+      "A.B.C.D",
+      67,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1525,
+      1
+   },
+   
+/*560*/
+   {
+      "A.B.C.D",
+      67,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      876,
+      1
+   },
+   
+/*561*/
+   {
+      "A.B.C.D",
+      67,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      877,
+      1
+   },
+   
+/*562*/
+   {
+      "A.B.C.D",
+      67,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      855,
+      1
+   },
+   
+/*563*/
+   {
+      "A.B.C.D",
+      623,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*564*/
+   {
+      "A.B.C.D",
+      77,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1063,
+      1
+   },
+   
+/*565*/
+   {
+      "A.B.C.D",
+      77,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      969,
+      1
+   },
+   
+/*566*/
+   {
+      "A.B.C.D",
+      77,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1052,
+      1
+   },
+   
+/*567*/
+   {
+      "A.B.C.D",
+      77,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      959,
+      1
+   },
+   
+/*568*/
+   {
+      "A.B.C.D",
+      606,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*569*/
+   {
+      "A.B.C.D",
+      1014,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*570*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*571*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      1860,
+      NULL_ARG,
+      1
+   },
+   
+/*572*/
+   {
+      "A.B.C.D",
+      51,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*573*/
+   {
+      "A.B.C.D",
+      989,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1457,
+      1
+   },
+   
+/*574*/
+   {
+      "A.B.C.D",
+      421,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*575*/
+   {
+      "A.B.C.D",
+      421,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*576*/
+   {
+      "A.B.C.D",
+      2001,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      2286,
+      1
+   },
+   
+/*577*/
+   {
+      "A.B.C.D",
+      619,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*578*/
+   {
+      "A.B.C.D",
+      617,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      288,
+      1
+   },
+   
+/*579*/
+   {
+      "A.B.C.D",
+      1410,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1849,
+      1
+   },
+   
+/*580*/
+   {
+      "A.B.C.D",
+      1410,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1027,
+      1
+   },
+   
+/*581*/
+   {
+      "A.B.C.D",
+      1993,
+      IP_ADDR_DATA,
+      0,
+      0,
+      766,
+      NULL_ARG,
+      1
+   },
+   
+/*582*/
+   {
+      "A.B.C.D",
+      5,
+      IP_ADDR_DATA,
+      0,
+      0,
+      714,
+      996,
+      1
+   },
+   
+/*583*/
+   {
+      "A.B.C.D",
+      5,
+      IP_ADDR_DATA,
+      0,
+      0,
+      715,
+      998,
+      1
+   },
+   
+/*584*/
+   {
+      "A.B.C.D",
+      439,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      585,
+      1
+   },
+   
+/*585*/
+   {
+      "A.B.C.D",
+      440,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      586,
+      1
+   },
+   
+/*586*/
+   {
+      "A.B.C.D",
+      441,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      587,
+      1
+   },
+   
+/*587*/
+   {
+      "A.B.C.D",
+      442,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      588,
+      1
+   },
+   
+/*588*/
+   {
+      "A.B.C.D",
+      443,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*589*/
+   {
+      "A.B.C.D",
+      65,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*590*/
+   {
+      "A.B.C.D",
+      65,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*591*/
+   {
+      "A.B.C.D",
+      125,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      975,
+      1
+   },
+   
+/*592*/
+   {
+      "A.B.C.D",
+      125,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      985,
+      1
+   },
+   
+/*593*/
+   {
+      "A.B.C.D",
+      127,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      880,
+      1
+   },
+   
+/*594*/
+   {
+      "A.B.C.D",
+      79,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1063,
+      1
+   },
+   
+/*595*/
+   {
+      "A.B.C.D",
+      79,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      969,
+      1
+   },
+   
+/*596*/
+   {
+      "A.B.C.D",
+      79,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1052,
+      1
+   },
+   
+/*597*/
+   {
+      "A.B.C.D",
+      79,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      959,
+      1
+   },
+   
+/*598*/
+   {
+      "A.B.C.D",
+      509,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      604,
+      1
+   },
+   
+/*599*/
+   {
+      "A.B.C.D",
+      777,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*600*/
+   {
+      "A.B.C.D",
+      510,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*601*/
+   {
+      "A.B.C.D",
+      510,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      600,
+      1
+   },
+   
+/*602*/
+   {
+      "A.B.C.D",
+      510,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      601,
+      1
+   },
+   
+/*603*/
+   {
+      "A.B.C.D",
+      510,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      602,
+      1
+   },
+   
+/*604*/
+   {
+      "A.B.C.D",
+      510,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      603,
+      1
+   },
+   
+/*605*/
+   {
+      "A.B.C.D",
+      112,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*606*/
+   {
+      "A.B.C.D",
+      67,
+      IPV4_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*607*/
+   {
+      "A.B.C.D",
+      846,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      631,
+      1
+   },
+   
+/*608*/
+   {
+      "A.B.C.D",
+      605,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      568,
+      1
+   },
+   
+/*609*/
+   {
+      "A.B.C.D",
+      1974,
+      IP_ADDR_DATA,
+      0,
+      0,
+      784,
+      415,
+      1
+   },
+   
+/*610*/
+   {
+      "A.B.C.D | XX:XX:XX:XX::XX",
+      565,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*611*/
+   {
+      "A.B.C.D | XX:XX:XX:XX::XX",
+      761,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      612,
+      1
+   },
+   
+/*612*/
+   {
+      "A.B.C.D | XX:XX:XX:XX::XX",
+      762,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      613,
+      1
+   },
+   
+/*613*/
+   {
+      "A.B.C.D | XX:XX:XX:XX::XX",
+      763,
+      IP_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*614*/
+   {
+      "A.B.C.D | XX:XX:XX:XX::XX",
+      458,
+      IP_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*615*/
+   {
+      "ASCII-number",
+      1977,
+      NO_DATA,
+      0,
+      0,
+      616,
+      105,
+      1
+   },
+   
+/*616*/
+   {
+      "CHAR",
+      1978,
+      CHAR_DATA,
+      1,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*617*/
+   {
+      "FE80::X%ZoneID",
+      531,
+      IPV6_ADDR_DATA_WITH_SCOPE_ID,
+      0,
+      0,
+      790,
+      NULL_ARG,
+      1
+   },
+   
+/*618*/
+   {
+      "FE80::X%ZoneID",
+      1697,
+      IPV6_ADDR_DATA_WITH_SCOPE_ID,
+      0,
+      0,
+      690,
+      994,
+      1
+   },
+   
+/*619*/
+   {
+      "LINE",
+      1413,
+      LINE_DATA,
+      MAXSIZE_ifAlias,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*620*/
+   {
+      "LINE",
+      1165,
+      LINE_DATA,
+      32,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*621*/
+   {
+      "LINE",
+      913,
+      LINE_DATA,
+      MAXSIZE_sysContact,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*622*/
+   {
+      "LINE",
+      1040,
+      LINE_DATA,
+      MAXSIZE_ifAlias,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*623*/
+   {
+      "LINE",
+      1021,
+      LINE_DATA,
+      65,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*624*/
+   {
+      "LINE",
+      1495,
+      LINE_DATA,
+      XSTP_MSTP_REGION_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*625*/
+   {
+      "LINE",
+      996,
+      LINE_DATA,
+      300L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*626*/
+   {
+      "LINE",
+      811,
+      LINE_DATA,
+      PPPOE_IA_TYPE_MAX_GENERIC_ERMSG_LEN,
+      PPPOE_IA_TYPE_MIN_GENERIC_ERMSG_LEN,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*627*/
+   {
+      "LINE",
+      680,
+      LINE_DATA,
+      CLI_DEF_MAX_PRIVILEGE_CMDS_STRING,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*628*/
+   {
+      "LINE",
+      942,
+      LINE_DATA,
+      MAXSIZE_sysLocation,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*629*/
+   {
+      "Leave timer",
+      1101,
+      NO_DATA,
+      0,
+      0,
+      1439,
+      NULL_ARG,
+      1
+   },
+   
+/*630*/
+   {
+      "MIN_trapDestUdpPort-MAX_trapDestUdpPort",
+      936,
+      WORD_DATA,
+      MAX_trapDestUdpPort,
+      MIN_trapDestUdpPort,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*631*/
+   {
+      "Timeout",
+      694,
+      NO_DATA,
+      0,
+      0,
+      806,
+      409,
+      1
+   },
+   
+/*632*/
+   {
+      "WORD",
+      245,
+      CHAR_DATA,
+      SYS_ADPT_ACL_MAX_NAME_LEN,
+      1,
+      NULL_ARG,
+      1358,
+      1
+   },
+   
+/*633*/
+   {
+      "WORD",
+      245,
+      CHAR_DATA,
+      SYS_ADPT_ACL_MAX_NAME_LEN,
+      1,
+      NULL_ARG,
+      1359,
+      1
+   },
+   
+/*634*/
+   {
+      "WORD",
+      242,
+      CHAR_DATA,
+      16,
+      1,
+      NULL_ARG,
+      2146,
+      1
+   },
+   
+/*635*/
+   {
+      "WORD",
+      242,
+      CHAR_DATA,
+      16,
+      1,
+      NULL_ARG,
+      2147,
+      1
+   },
+   
+/*636*/
+   {
+      "WORD",
+      621,
+      CHAR_DATA,
+      SYS_ADPT_MVR_PROFILE_NAME_MAX_LEN,
+      1,
+      NULL_ARG,
+      521,
+      1
+   },
+   
+/*637*/
+   {
+      "WORD",
+      795,
+      CHAR_DATA,
+      SYS_ADPT_MAX_USER_NAME_LEN,
+      1,
+      NULL_ARG,
+      802,
+      1
+   },
+   
+/*638*/
+   {
+      "WORD",
+      741,
+      CHAR_DATA,
+      MAXSIZE_vacmGroupName,
+      1,
+      NULL_ARG,
+      2096,
+      1
+   },
+   
+/*639*/
+   {
+      "WORD",
+      741,
+      CHAR_DATA,
+      MAXSIZE_vacmGroupName,
+      1,
+      NULL_ARG,
+      2100,
+      1
+   },
+   
+/*640*/
+   {
+      "WORD",
+      227,
+      CHAR_DATA,
+      255L,
+      1,
+      NULL_ARG,
+      1946,
+      1
+   },
+   
+/*641*/
+   {
+      "WORD",
+      235,
+      CHAR_DATA,
+      255L,
+      1,
+      NULL_ARG,
+      1278,
+      1
+   },
+   
+/*642*/
+   {
+      "WORD",
+      720,
+      CHAR_DATA,
+      SYS_ADPT_MAX_COMM_STR_NAME_LEN,
+      1,
+      NULL_ARG,
+      2114,
+      1
+   },
+   
+/*643*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      1410,
+      1
+   },
+   
+/*644*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      1415,
+      1
+   },
+   
+/*645*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1516,
+      1
+   },
+   
+/*646*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1517,
+      1
+   },
+   
+/*647*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1518,
+      1
+   },
+   
+/*648*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1519,
+      1
+   },
+   
+/*649*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1520,
+      1
+   },
+   
+/*650*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1521,
+      1
+   },
+   
+/*651*/
+   {
+      "WORD",
+      369,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1522,
+      1
+   },
+   
+/*652*/
+   {
+      "WORD",
+      756,
+      CHAR_DATA,
+      MAXSIZE_VIEW_SUBTREE,
+      1,
+      NULL_ARG,
+      1222,
+      1
+   },
+   
+/*653*/
+   {
+      "WORD",
+      944,
+      CHAR_DATA,
+      MAXSIZE_vacmGroupName,
+      1,
+      NULL_ARG,
+      1799,
+      1
+   },
+   
+/*654*/
+   {
+      "WORD",
+      753,
+      CHAR_DATA,
+      MAXSIZE_usmUserName,
+      1,
+      NULL_ARG,
+      653,
+      1
+   },
+   
+/*655*/
+   {
+      "WORD",
+      753,
+      CHAR_DATA,
+      MAXSIZE_usmUserName,
+      1,
+      NULL_ARG,
+      1798,
+      1
+   },
+   
+/*656*/
+   {
+      "WORD",
+      385,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      1480,
+      1
+   },
+   
+/*657*/
+   {
+      "WORD",
+      457,
+      CHAR_DATA,
+      MAXHOSTNAMELEN,
+      1,
+      NULL_ARG,
+      614,
+      1
+   },
+   
+/*658*/
+   {
+      "WORD",
+      457,
+      CHAR_DATA,
+      MAXHOSTNAMELEN,
+      1,
+      NULL_ARG,
+      789,
+      1
+   },
+   
+/*659*/
+   {
+      "WORD",
+      300,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1689,
+      1
+   },
+   
+/*660*/
+   {
+      "WORD",
+      300,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1690,
+      1
+   },
+   
+/*661*/
+   {
+      "WORD",
+      300,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1691,
+      1
+   },
+   
+/*662*/
+   {
+      "WORD",
+      276,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1827,
+      1
+   },
+   
+/*663*/
+   {
+      "WORD",
+      276,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1828,
+      1
+   },
+   
+/*664*/
+   {
+      "WORD",
+      287,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1249,
+      1
+   },
+   
+/*665*/
+   {
+      "WORD",
+      280,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1131,
+      1
+   },
+   
+/*666*/
+   {
+      "WORD",
+      280,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1874,
+      1
+   },
+   
+/*667*/
+   {
+      "WORD",
+      278,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1770,
+      1
+   },
+   
+/*668*/
+   {
+      "WORD",
+      278,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1771,
+      1
+   },
+   
+/*669*/
+   {
+      "WORD",
+      289,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1541,
+      1
+   },
+   
+/*670*/
+   {
+      "WORD",
+      755,
+      CHAR_DATA,
+      MAXSIZE_vacmViewTreeFamilyViewName,
+      1,
+      NULL_ARG,
+      652,
+      1
+   },
+   
+/*671*/
+   {
+      "WORD",
+      319,
+      CHAR_DATA,
+      MAXSIZE_sysTimeZoneName,
+      1,
+      NULL_ARG,
+      1342,
+      1
+   },
+   
+/*672*/
+   {
+      "WORD",
+      45,
+      CHAR_DATA,
+      SYS_ADPT_MAX_VLAN_NAME_LEN,
+      1,
+      NULL_ARG,
+      1587,
+      1
+   },
+   
+/*673*/
+   {
+      "WORD",
+      751,
+      CHAR_DATA,
+      MAXSIZE_snmpTargetParamsName,
+      1,
+      NULL_ARG,
+      1800,
+      1
+   },
+   
+/*674*/
+   {
+      "WORD",
+      151,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_DESCRIPTION_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*675*/
+   {
+      "WORD",
+      226,
+      CHAR_DATA,
+      255L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*676*/
+   {
+      "WORD",
+      245,
+      CHAR_DATA,
+      SYS_ADPT_ACL_MAX_NAME_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*677*/
+   {
+      "WORD",
+      245,
+      CHAR_DATA,
+      SYS_ADPT_ACL_MAX_NAME_LEN,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*678*/
+   {
+      "WORD",
+      242,
+      CHAR_DATA,
+      16,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*679*/
+   {
+      "WORD",
+      156,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*680*/
+   {
+      "WORD",
+      357,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*681*/
+   {
+      "WORD",
+      357,
+      CHAR_DATA,
+      SYS_ADPT_MAX_PASSWORD_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*682*/
+   {
+      "WORD",
+      162,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*683*/
+   {
+      "WORD",
+      162,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_NAME_LENGTH,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*684*/
+   {
+      "WORD",
+      162,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      1561,
+      1
+   },
+   
+/*685*/
+   {
+      "WORD",
+      273,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*686*/
+   {
+      "WORD",
+      621,
+      CHAR_DATA,
+      SYS_ADPT_MVR_PROFILE_NAME_MAX_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*687*/
+   {
+      "WORD",
+      815,
+      CHAR_DATA,
+      SYS_ADPT_MAX_PROMPT_STRING_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*688*/
+   {
+      "WORD",
+      284,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*689*/
+   {
+      "WORD",
+      1006,
+      CHAR_DATA,
+      SYS_ADPT_ADD_VOICE_VLAN_MAX_OUI_DESC_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*690*/
+   {
+      "WORD",
+      1698,
+      CHAR_DATA,
+      64,
+      1,
+      NULL_ARG,
+      994,
+      1
+   },
+   
+/*691*/
+   {
+      "WORD",
+      1566,
+      CHAR_DATA,
+      44,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*692*/
+   {
+      "WORD",
+      1566,
+      CHAR_DATA,
+      MAXSIZE_dot1agCfmMdName,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*693*/
+   {
+      "WORD",
+      795,
+      CHAR_DATA,
+      SYS_ADPT_MAX_USER_NAME_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*694*/
+   {
+      "WORD",
+      310,
+      CHAR_DATA,
+      SYS_ADPT_FILE_SYSTEM_NAME_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*695*/
+   {
+      "WORD",
+      310,
+      CHAR_DATA,
+      SYS_ADPT_FILE_SYSTEM_NAME_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*696*/
+   {
+      "WORD",
+      310,
+      CHAR_DATA,
+      SYS_ADPT_FILE_SYSTEM_NAME_LEN,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*697*/
+   {
+      "WORD",
+      1113,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LENGTH_OF_CID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*698*/
+   {
+      "WORD",
+      433,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LENGTH_OF_RID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*699*/
+   {
+      "WORD",
+      842,
+      CHAR_DATA,
+      48L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*700*/
+   {
+      "WORD",
+      842,
+      CHAR_DATA,
+      48L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*701*/
+   {
+      "WORD",
+      842,
+      CHAR_DATA,
+      48L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*702*/
+   {
+      "WORD",
+      842,
+      CHAR_DATA,
+      48L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*703*/
+   {
+      "WORD",
+      842,
+      CHAR_DATA,
+      48L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*704*/
+   {
+      "WORD",
+      842,
+      CHAR_DATA,
+      RADIUS_MAX_SECRET_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*705*/
+   {
+      "WORD",
+      633,
+      CHAR_DATA,
+      32,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*706*/
+   {
+      "WORD",
+      227,
+      CHAR_DATA,
+      255L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*707*/
+   {
+      "WORD",
+      235,
+      CHAR_DATA,
+      255L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*708*/
+   {
+      "WORD",
+      669,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*709*/
+   {
+      "WORD",
+      669,
+      CHAR_DATA,
+      SYS_ADPT_DIFFSERV_MAX_NAME_LENGTH,
+      1,
+      0,
+      948,
+      1
+   },
+   
+/*710*/
+   {
+      "WORD",
+      720,
+      CHAR_DATA,
+      SYS_ADPT_MAX_COMM_STR_NAME_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*711*/
+   {
+      "WORD",
+      720,
+      CHAR_DATA,
+      SYS_ADPT_MAX_COMM_STR_NAME_LEN,
+      1,
+      NULL_ARG,
+      2113,
+      1
+   },
+   
+/*712*/
+   {
+      "WORD",
+      720,
+      CHAR_DATA,
+      SYS_ADPT_MAX_COMM_STR_NAME_LEN,
+      1,
+      NULL_ARG,
+      1826,
+      1
+   },
+   
+/*713*/
+   {
+      "WORD",
+      9,
+      CHAR_DATA,
+      MAXHOSTNAMELEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*714*/
+   {
+      "WORD",
+      9,
+      CHAR_DATA,
+      MAXHOSTNAMELEN,
+      1,
+      NULL_ARG,
+      996,
+      1
+   },
+   
+/*715*/
+   {
+      "WORD",
+      9,
+      CHAR_DATA,
+      MAXHOSTNAMELEN,
+      1,
+      NULL_ARG,
+      998,
+      1
+   },
+   
+/*716*/
+   {
+      "WORD",
+      238,
+      CHAR_DATA,
+      255L,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*717*/
+   {
+      "WORD",
+      666,
+      CHAR_DATA,
+      SYS_ADPT_MVR_PROFILE_NAME_MAX_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*718*/
+   {
+      "WORD",
+      614,
+      CHAR_DATA,
+      SYS_ADPT_MVR_PROFILE_NAME_MAX_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*719*/
+   {
+      "WORD",
+      1425,
+      CHAR_DATA,
+      DHCP_TYPE_CLASSID_BUF_MAX_SIZE,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*720*/
+   {
+      "WORD",
+      199,
+      CHAR_DATA,
+      SYS_ADPT_ERPS_MAX_LEN_OF_DOMAIN_NAME,
+      SYS_ADPT_ERPS_MIN_LEN_OF_DOMAIN_NAME,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*721*/
+   {
+      "WORD",
+      295,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*722*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*723*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      2061,
+      1
+   },
+   
+/*724*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      2082,
+      1
+   },
+   
+/*725*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      2130,
+      1
+   },
+   
+/*726*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      1000,
+      1
+   },
+   
+/*727*/
+   {
+      "WORD",
+      167,
+      CHAR_DATA,
+      CFM_TYPE_MA_MAX_NAME_LENGTH,
+      CFM_TYPE_MA_MIN_NAME_LENGTH,
+      NULL_ARG,
+      999,
+      1
+   },
+   
+/*728*/
+   {
+      "WORD",
+      756,
+      CHAR_DATA,
+      MAXSIZE_VIEW_SUBTREE,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*729*/
+   {
+      "WORD",
+      985,
+      CHAR_DATA,
+      MAXSIZE_tacacsServerKey,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*730*/
+   {
+      "WORD",
+      810,
+      CHAR_DATA,
+      PPPOE_IA_TYPE_MAX_ACCESS_NODE_ID_LEN,
+      PPPOE_IA_TYPE_MIN_ACCESS_NODE_ID_LEN,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*731*/
+   {
+      "WORD",
+      306,
+      CHAR_DATA,
+      BANNER_MAX_NOTE_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*732*/
+   {
+      "WORD",
+      1453,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LEN_OF_ACCOUNTING_LIST_NAME,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*733*/
+   {
+      "WORD",
+      959,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      1740,
+      1
+   },
+   
+/*734*/
+   {
+      "WORD",
+      964,
+      CHAR_DATA,
+      20 *2,
+      20 *2,
+      NULL_ARG,
+      1741,
+      1
+   },
+   
+/*735*/
+   {
+      "WORD",
+      947,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      1742,
+      1
+   },
+   
+/*736*/
+   {
+      "WORD",
+      947,
+      CHAR_DATA,
+      20 *2,
+      20 *2,
+      NULL_ARG,
+      1743,
+      1
+   },
+   
+/*737*/
+   {
+      "WORD",
+      947,
+      CHAR_DATA,
+      MAX_SNMPV3_PASSWORD_LEN,
+      MIN_SNMPV3_PASSWORD_LEN,
+      NULL_ARG,
+      1744,
+      1
+   },
+   
+/*738*/
+   {
+      "WORD",
+      955,
+      CHAR_DATA,
+      MAX_SNMPV3_PASSWORD_LEN,
+      MIN_SNMPV3_PASSWORD_LEN,
+      NULL_ARG,
+      1744,
+      1
+   },
+   
+/*739*/
+   {
+      "WORD",
+      1347,
+      CHAR_DATA,
+      PPPOE_IA_TYPE_MAX_CIRCUIT_ID_LEN,
+      PPPOE_IA_TYPE_MIN_CIRCUIT_ID_LEN,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*740*/
+   {
+      "WORD",
+      385,
+      CHAR_DATA,
+      DNS_MAX_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*741*/
+   {
+      "WORD",
+      454,
+      CHAR_DATA,
+      DNS_MAX_NAME_LENGTH,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*742*/
+   {
+      "WORD",
+      302,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*743*/
+   {
+      "WORD",
+      302,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1630,
+      1
+   },
+   
+/*744*/
+   {
+      "WORD",
+      302,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      1632,
+      1
+   },
+   
+/*745*/
+   {
+      "WORD",
+      291,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*746*/
+   {
+      "WORD",
+      920,
+      CHAR_DATA,
+      MAXSIZE_vacmViewTreeFamilyViewName,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*747*/
+   {
+      "WORD",
+      397,
+      CHAR_DATA,
+      MAXSIZE_sysName,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*748*/
+   {
+      "WORD",
+      304,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*749*/
+   {
+      "WORD",
+      962,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*750*/
+   {
+      "WORD",
+      965,
+      CHAR_DATA,
+      20 *2,
+      20 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*751*/
+   {
+      "WORD",
+      950,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*752*/
+   {
+      "WORD",
+      950,
+      CHAR_DATA,
+      20 *2,
+      20 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*753*/
+   {
+      "WORD",
+      950,
+      CHAR_DATA,
+      MAX_SNMPV3_PASSWORD_LEN,
+      MIN_SNMPV3_PASSWORD_LEN,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*754*/
+   {
+      "WORD",
+      922,
+      CHAR_DATA,
+      MAXSIZE_vacmViewTreeFamilyViewName,
+      1,
+      NULL_ARG,
+      1647,
+      1
+   },
+   
+/*755*/
+   {
+      "WORD",
+      1348,
+      CHAR_DATA,
+      PPPOE_IA_TYPE_MAX_REMOTE_ID_LEN,
+      PPPOE_IA_TYPE_MIN_REMOTE_ID_LEN,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*756*/
+   {
+      "WORD",
+      297,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*757*/
+   {
+      "WORD",
+      282,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*758*/
+   {
+      "WORD",
+      1019,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LEN_OF_ACCOUNTING_LIST_NAME,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*759*/
+   {
+      "WORD",
+      350,
+      CHAR_DATA,
+      DOT1X_TYPE_SUP_MAX_LEN_IDPF_PASSWORD_CLI,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*760*/
+   {
+      "WORD",
+      1000,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*761*/
+   {
+      "WORD",
+      1000,
+      CHAR_DATA,
+      SYS_ADPT_MAX_PASSWORD_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*762*/
+   {
+      "WORD",
+      293,
+      CHAR_DATA,
+      BANNER_MAX_DATA_LENGTH,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*763*/
+   {
+      "WORD",
+      352,
+      CHAR_DATA,
+      DOT1X_TYPE_SUP_MAX_LEN_IDPF_USERNAME,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*764*/
+   {
+      "WORD",
+      755,
+      CHAR_DATA,
+      MAXSIZE_vacmViewTreeFamilyViewName,
+      1,
+      NULL_ARG,
+      728,
+      1
+   },
+   
+/*765*/
+   {
+      "WORD",
+      924,
+      CHAR_DATA,
+      MAXSIZE_vacmViewTreeFamilyViewName,
+      1,
+      NULL_ARG,
+      1648,
+      1
+   },
+   
+/*766*/
+   {
+      "WORD",
+      1994,
+      CHAR_DATA,
+      MAXHOSTNAMELEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*767*/
+   {
+      "WORD",
+      569,
+      CHAR_DATA,
+      41,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*768*/
+   {
+      "WORD",
+      1479,
+      CHAR_DATA,
+      16 *2,
+      16 *2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*769*/
+   {
+      "WORD",
+      1479,
+      CHAR_DATA,
+      SYS_ADPT_MAX_PASSWORD_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*770*/
+   {
+      "WORD",
+      574,
+      CHAR_DATA,
+      41,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*771*/
+   {
+      "WORD",
+      991,
+      CHAR_DATA,
+      MAXSIZE_tacacsServerKey,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*772*/
+   {
+      "WORD",
+      991,
+      CHAR_DATA,
+      MAXSIZE_tacacsServerKey,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*773*/
+   {
+      "WORD",
+      991,
+      CHAR_DATA,
+      MAXSIZE_tacacsServerKey,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*774*/
+   {
+      "WORD",
+      88,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LENGTH_OF_TIME_ACL_TABLE_NAME,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*775*/
+   {
+      "WORD",
+      88,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LENGTH_OF_TIME_ACL_TABLE_NAME,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*776*/
+   {
+      "WORD",
+      1167,
+      CHAR_DATA,
+      2,
+      2,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*777*/
+   {
+      "WORD",
+      803,
+      CHAR_DATA,
+      8,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*778*/
+   {
+      "WORD",
+      1632,
+      CHAR_DATA,
+      SYS_ADPT_MAX_USER_NAME_LEN,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*779*/
+   {
+      "WORD",
+      1632,
+      CHAR_DATA,
+      SYS_ADPT_MAX_USER_NAME_LEN,
+      1,
+      NULL_ARG,
+      1106,
+      1
+   },
+   
+/*780*/
+   {
+      "WORD",
+      1456,
+      CHAR_DATA,
+      SYS_ADPT_MAX_LEN_OF_AUTHORIZATION_LIST_NAME,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*781*/
+   {
+      "WORD",
+      45,
+      CHAR_DATA,
+      SYS_ADPT_MAX_VLAN_NAME_LEN,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*782*/
+   {
+      "WORD",
+      644,
+      WORD_DATA,
+      SYS_ADPT_CLUSTER_MAX_NBR_OF_MEMBERS,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*783*/
+   {
+      "WORD",
+      330,
+      WORD_DATA,
+      SYS_ADPT_CLUSTER_MAX_NBR_OF_MEMBERS,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*784*/
+   {
+      "WORD",
+      1976,
+      CHAR_DATA,
+      127,
+      1,
+      NULL_ARG,
+      415,
+      1
+   },
+   
+/*785*/
+   {
+      "X:X:X:X::X",
+      120,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      859,
+      1
+   },
+   
+/*786*/
+   {
+      "X:X:X:X::X",
+      120,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      860,
+      1
+   },
+   
+/*787*/
+   {
+      "X:X:X:X::X",
+      1428,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      797,
+      1489,
+      1
+   },
+   
+/*788*/
+   {
+      "X:X:X:X::X",
+      1692,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      618,
+      994,
+      1
+   },
+   
+/*789*/
+   {
+      "X:X:X:X::X",
+      458,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*790*/
+   {
+      "X:X:X:X::X",
+      532,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*791*/
+   {
+      "X:X:X:X::X",
+      120,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*792*/
+   {
+      "X:X:X:X::X",
+      120,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*793*/
+   {
+      "X:X:X:X::X",
+      1428,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*794*/
+   {
+      "X:X:X:X::X",
+      1428,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      798,
+      1490,
+      1
+   },
+   
+/*795*/
+   {
+      "X:X:X:X::X",
+      1841,
+      IPV6_ADDR_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*796*/
+   {
+      "X:X:X:X::X/<0-128>",
+      1833,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*797*/
+   {
+      "X:X:X:X::X/<0-128>",
+      1430,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1217,
+      1
+   },
+   
+/*798*/
+   {
+      "X:X:X:X::X/<0-128>",
+      1430,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1218,
+      1
+   },
+   
+/*799*/
+   {
+      "absolute",
+      890,
+      NO_DATA,
+      0,
+      0,
+      1029,
+      1825,
+      1
+   },
+   
+/*800*/
+   {
+      "access",
+      1399,
+      NO_DATA,
+      0,
+      0,
+      1345,
+      NULL_ARG,
+      1
+   },
+   
+/*801*/
+   {
+      "access",
+      1389,
+      NO_DATA,
+      0,
+      0,
+      2088,
+      NULL_ARG,
+      1
+   },
+   
+/*802*/
+   {
+      "access-level",
+      997,
+      NO_DATA,
+      0,
+      0,
+      1645,
+      77,
+      1
+   },
+   
+/*803*/
+   {
+      "access-list",
+      155,
+      NO_DATA,
+      0,
+      0,
+      1419,
+      679,
+      1
+   },
+   
+/*804*/
+   {
+      "access-node-identifier",
+      675,
+      NO_DATA,
+      0,
+      0,
+      1275,
+      730,
+      1
+   },
+   
+/*805*/
+   {
+      "access-node-identifier",
+      675,
+      NO_DATA,
+      0,
+      0,
+      1276,
+      NULL_ARG,
+      1
+   },
+   
+/*806*/
+   {
+      "acct-port",
+      689,
+      NO_DATA,
+      0,
+      0,
+      912,
+      381,
+      1
+   },
+   
+/*807*/
+   {
+      "acct-port",
+      689,
+      NO_DATA,
+      0,
+      0,
+      1463,
+      381,
+      1
+   },
+   
+/*808*/
+   {
+      "action",
+      1210,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1880,
+      1
+   },
+   
+/*809*/
+   {
+      "active",
+      1090,
+      NO_DATA,
+      0,
+      0,
+      1683,
+      NULL_ARG,
+      1
+   },
+   
+/*810*/
+   {
+      "active",
+      1546,
+      NO_DATA,
+      0,
+      0,
+      1975,
+      1835,
+      1
+   },
+   
+/*811*/
+   {
+      "add",
+      1392,
+      NO_DATA,
+      0,
+      0,
+      1803,
+      340,
+      1
+   },
+   
+/*812*/
+   {
+      "add",
+      1384,
+      NO_DATA,
+      0,
+      0,
+      1805,
+      342,
+      1
+   },
+   
+/*813*/
+   {
+      "add",
+      819,
+      NO_DATA,
+      0,
+      0,
+      1804,
+      1262,
+      1
+   },
+   
+/*814*/
+   {
+      "address",
+      1865,
+      NO_DATA,
+      0,
+      0,
+      1001,
+      2283,
+      1
+   },
+   
+/*815*/
+   {
+      "address",
+      1594,
+      NO_DATA,
+      0,
+      0,
+      832,
+      2280,
+      1
+   },
+   
+/*816*/
+   {
+      "address",
+      1602,
+      NO_DATA,
+      0,
+      0,
+      1373,
+      2271,
+      1
+   },
+   
+/*817*/
+   {
+      "address",
+      1602,
+      NO_DATA,
+      0,
+      0,
+      1123,
+      2272,
+      1
+   },
+   
+/*818*/
+   {
+      "address",
+      1888,
+      NO_DATA,
+      0,
+      0,
+      1124,
+      2273,
+      1
+   },
+   
+/*819*/
+   {
+      "address",
+      1888,
+      NO_DATA,
+      0,
+      0,
+      1388,
+      2273,
+      1
+   },
+   
+/*820*/
+   {
+      "address",
+      1888,
+      NO_DATA,
+      0,
+      0,
+      1388,
+      2274,
+      1
+   },
+   
+/*821*/
+   {
+      "address",
+      1868,
+      NO_DATA,
+      0,
+      0,
+      1402,
+      NULL_ARG,
+      1
+   },
+   
+/*822*/
+   {
+      "address",
+      1891,
+      NO_DATA,
+      0,
+      0,
+      1403,
+      NULL_ARG,
+      1
+   },
+   
+/*823*/
+   {
+      "admin-key",
+      1417,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      141,
+      1
+   },
+   
+/*824*/
+   {
+      "admin-key",
+      1417,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*825*/
+   {
+      "after-utc",
+      323,
+      NO_DATA,
+      0,
+      0,
+      920,
+      NULL_ARG,
+      1
+   },
+   
+/*826*/
+   {
+      "alarm-time",
+      185,
+      NO_DATA,
+      0,
+      0,
+      1514,
+      455,
+      1
+   },
+   
+/*827*/
+   {
+      "alarm-time",
+      185,
+      NO_DATA,
+      0,
+      0,
+      1515,
+      NULL_ARG,
+      1
+   },
+   
+/*828*/
+   {
+      "all",
+      679,
+      NO_DATA,
+      0,
+      0,
+      627,
+      627,
+      1
+   },
+   
+/*829*/
+   {
+      "all",
+      679,
+      NO_DATA,
+      0,
+      0,
+      1486,
+      1486,
+      1
+   },
+   
+/*830*/
+   {
+      "all",
+      1971,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1806,
+      1
+   },
+   
+/*831*/
+   {
+      "all",
+      663,
+      NO_DATA,
+      0,
+      0,
+      2285,
+      NULL_ARG,
+      1
+   },
+   
+/*832*/
+   {
+      "all",
+      1595,
+      NO_DATA,
+      0,
+      0,
+      1372,
+      NULL_ARG,
+      1
+   },
+   
+/*833*/
+   {
+      "all",
+      1381,
+      NO_DATA,
+      0,
+      0,
+      1991,
+      NULL_ARG,
+      1
+   },
+   
+/*834*/
+   {
+      "ansi-bbs",
+      1981,
+      NO_DATA,
+      0,
+      0,
+      2162,
+      NULL_ARG,
+      1
+   },
+   
+/*835*/
+   {
+      "any",
+      114,
+      NO_DATA,
+      0,
+      0,
+      1317,
+      859,
+      1
+   },
+   
+/*836*/
+   {
+      "any",
+      114,
+      NO_DATA,
+      0,
+      0,
+      1318,
+      860,
+      1
+   },
+   
+/*837*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1312,
+      874,
+      1
+   },
+   
+/*838*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1313,
+      874,
+      1
+   },
+   
+/*839*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1314,
+      875,
+      1
+   },
+   
+/*840*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1309,
+      876,
+      1
+   },
+   
+/*841*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1310,
+      876,
+      1
+   },
+   
+/*842*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1311,
+      877,
+      1
+   },
+   
+/*843*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1319,
+      863,
+      1
+   },
+   
+/*844*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1320,
+      864,
+      1
+   },
+   
+/*845*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1321,
+      865,
+      1
+   },
+   
+/*846*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1322,
+      866,
+      1
+   },
+   
+/*847*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1323,
+      867,
+      1
+   },
+   
+/*848*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1324,
+      868,
+      1
+   },
+   
+/*849*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1325,
+      869,
+      1
+   },
+   
+/*850*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1326,
+      870,
+      1
+   },
+   
+/*851*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1327,
+      871,
+      1
+   },
+   
+/*852*/
+   {
+      "any",
+      128,
+      NO_DATA,
+      0,
+      0,
+      1328,
+      872,
+      1
+   },
+   
+/*853*/
+   {
+      "any",
+      143,
+      NO_DATA,
+      0,
+      0,
+      1289,
+      873,
+      1
+   },
+   
+/*854*/
+   {
+      "any",
+      143,
+      NO_DATA,
+      0,
+      0,
+      1290,
+      873,
+      1
+   },
+   
+/*855*/
+   {
+      "any",
+      70,
+      NO_DATA,
+      0,
+      0,
+      1330,
+      1526,
+      1
+   },
+   
+/*856*/
+   {
+      "any",
+      56,
+      NO_DATA,
+      0,
+      0,
+      1332,
+      1525,
+      1
+   },
+   
+/*857*/
+   {
+      "any",
+      56,
+      NO_DATA,
+      0,
+      0,
+      1333,
+      855,
+      1
+   },
+   
+/*858*/
+   {
+      "any",
+      123,
+      NO_DATA,
+      0,
+      0,
+      1329,
+      881,
+      1
+   },
+   
+/*859*/
+   {
+      "any",
+      115,
+      NO_DATA,
+      0,
+      0,
+      1050,
+      1108,
+      1
+   },
+   
+/*860*/
+   {
+      "any",
+      115,
+      NO_DATA,
+      0,
+      0,
+      1051,
+      1109,
+      1
+   },
+   
+/*861*/
+   {
+      "any",
+      114,
+      NO_DATA,
+      0,
+      0,
+      1291,
+      NULL_ARG,
+      1
+   },
+   
+/*862*/
+   {
+      "any",
+      114,
+      NO_DATA,
+      0,
+      0,
+      1292,
+      2016,
+      1
+   },
+   
+/*863*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1299,
+      NULL_ARG,
+      1
+   },
+   
+/*864*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1300,
+      1204,
+      1
+   },
+   
+/*865*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1301,
+      2016,
+      1
+   },
+   
+/*866*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1302,
+      2117,
+      1
+   },
+   
+/*867*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1303,
+      1202,
+      1
+   },
+   
+/*868*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1304,
+      1207,
+      1
+   },
+   
+/*869*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1305,
+      1208,
+      1
+   },
+   
+/*870*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1306,
+      2026,
+      1
+   },
+   
+/*871*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1307,
+      1205,
+      1
+   },
+   
+/*872*/
+   {
+      "any",
+      129,
+      NO_DATA,
+      0,
+      0,
+      1308,
+      1211,
+      1
+   },
+   
+/*873*/
+   {
+      "any",
+      144,
+      NO_DATA,
+      0,
+      0,
+      1336,
+      1214,
+      1
+   },
+   
+/*874*/
+   {
+      "any",
+      84,
+      NO_DATA,
+      0,
+      0,
+      1297,
+      1052,
+      1
+   },
+   
+/*875*/
+   {
+      "any",
+      84,
+      NO_DATA,
+      0,
+      0,
+      1298,
+      959,
+      1
+   },
+   
+/*876*/
+   {
+      "any",
+      84,
+      NO_DATA,
+      0,
+      0,
+      1295,
+      1063,
+      1
+   },
+   
+/*877*/
+   {
+      "any",
+      84,
+      NO_DATA,
+      0,
+      0,
+      1296,
+      969,
+      1
+   },
+   
+/*878*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1316,
+      NULL_ARG,
+      1
+   },
+   
+/*879*/
+   {
+      "any",
+      83,
+      NO_DATA,
+      0,
+      0,
+      1315,
+      2016,
+      1
+   },
+   
+/*880*/
+   {
+      "any",
+      124,
+      NO_DATA,
+      0,
+      0,
+      1338,
+      975,
+      1
+   },
+   
+/*881*/
+   {
+      "any",
+      124,
+      NO_DATA,
+      0,
+      0,
+      1339,
+      985,
+      1
+   },
+   
+/*882*/
+   {
+      "any",
+      71,
+      NO_DATA,
+      0,
+      0,
+      1331,
+      1508,
+      1
+   },
+   
+/*883*/
+   {
+      "any",
+      123,
+      NO_DATA,
+      0,
+      0,
+      1340,
+      880,
+      1
+   },
+   
+/*884*/
+   {
+      "any",
+      58,
+      NO_DATA,
+      0,
+      0,
+      1334,
+      1508,
+      1
+   },
+   
+/*885*/
+   {
+      "any",
+      58,
+      NO_DATA,
+      0,
+      0,
+      1335,
+      882,
+      1
+   },
+   
+/*886*/
+   {
+      "april",
+      853,
+      NO_DATA,
+      0,
+      0,
+      900,
+      302,
+      1
+   },
+   
+/*887*/
+   {
+      "april",
+      853,
+      NO_DATA,
+      0,
+      0,
+      899,
+      304,
+      1
+   },
+   
+/*888*/
+   {
+      "april",
+      853,
+      NO_DATA,
+      0,
+      0,
+      901,
+      451,
+      1
+   },
+   
+/*889*/
+   {
+      "april",
+      853,
+      NO_DATA,
+      0,
+      0,
+      902,
+      453,
+      1
+   },
+   
+/*890*/
+   {
+      "april",
+      853,
+      NO_DATA,
+      0,
+      0,
+      903,
+      454,
+      1
+   },
+   
+/*891*/
+   {
+      "april",
+      853,
+      NO_DATA,
+      0,
+      0,
+      904,
+      452,
+      1
+   },
+   
+/*892*/
+   {
+      "arp",
+      823,
+      NO_DATA,
+      0,
+      0,
+      1426,
+      NULL_ARG,
+      1
+   },
+   
+/*893*/
+   {
+      "ascii",
+      429,
+      NO_DATA,
+      0,
+      0,
+      1284,
+      NULL_ARG,
+      1
+   },
+   
+/*894*/
+   {
+      "associated-profile",
+      666,
+      0,
+      0,
+      0,
+      0,
+      717,
+      1
+   },
+   
+/*895*/
+   {
+      "associated-profile",
+      614,
+      0,
+      0,
+      0,
+      2091,
+      718,
+      1
+   },
+   
+/*896*/
+   {
+      "at",
+      850,
+      NO_DATA,
+      0,
+      0,
+      941,
+      102,
+      1
+   },
+   
+/*897*/
+   {
+      "at",
+      868,
+      NO_DATA,
+      0,
+      0,
+      1357,
+      NULL_ARG,
+      1
+   },
+   
+/*898*/
+   {
+      "attempts",
+      1437,
+      WORD_DATA,
+      600,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*899*/
+   {
+      "august",
+      856,
+      NO_DATA,
+      0,
+      0,
+      1011,
+      304,
+      1
+   },
+   
+/*900*/
+   {
+      "august",
+      856,
+      NO_DATA,
+      0,
+      0,
+      1012,
+      310,
+      1
+   },
+   
+/*901*/
+   {
+      "august",
+      856,
+      NO_DATA,
+      0,
+      0,
+      1013,
+      451,
+      1
+   },
+   
+/*902*/
+   {
+      "august",
+      856,
+      NO_DATA,
+      0,
+      0,
+      1014,
+      453,
+      1
+   },
+   
+/*903*/
+   {
+      "august",
+      856,
+      NO_DATA,
+      0,
+      0,
+      1015,
+      454,
+      1
+   },
+   
+/*904*/
+   {
+      "august",
+      856,
+      NO_DATA,
+      0,
+      0,
+      1016,
+      452,
+      1
+   },
+   
+/*905*/
+   {
+      "auth",
+      957,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1583,
+      1
+   },
+   
+/*906*/
+   {
+      "auth",
+      945,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1581,
+      1
+   },
+   
+/*907*/
+   {
+      "auth",
+      945,
+      NO_DATA,
+      0,
+      0,
+      1141,
+      1582,
+      1
+   },
+   
+/*908*/
+   {
+      "auth",
+      953,
+      NO_DATA,
+      0,
+      0,
+      1140,
+      1580,
+      1
+   },
+   
+/*909*/
+   {
+      "auth",
+      937,
+      NO_DATA,
+      0,
+      0,
+      1640,
+      2073,
+      1
+   },
+   
+/*910*/
+   {
+      "auth",
+      925,
+      NO_DATA,
+      0,
+      0,
+      1639,
+      1646,
+      1
+   },
+   
+/*911*/
+   {
+      "auth",
+      745,
+      NO_DATA,
+      0,
+      0,
+      1641,
+      NULL_ARG,
+      1
+   },
+   
+/*912*/
+   {
+      "auth-port",
+      848,
+      NO_DATA,
+      0,
+      0,
+      1461,
+      413,
+      1
+   },
+   
+/*913*/
+   {
+      "authentication",
+      724,
+      NO_DATA,
+      0,
+      0,
+      1493,
+      NULL_ARG,
+      0
+   },
+   
+/*914*/
+   {
+      "authentication",
+      724,
+      NO_DATA,
+      0,
+      0,
+      1493,
+      NULL_ARG,
+      0
+   },
+   
+/*915*/
+   {
+      "auto",
+      1058,
+      NO_DATA,
+      0,
+      0,
+      1257,
+      NULL_ARG,
+      1
+   },
+   
+/*916*/
+   {
+      "auto",
+      1406,
+      NO_DATA,
+      0,
+      0,
+      1539,
+      NULL_ARG,
+      1
+   },
+   
+/*917*/
+   {
+      "auto",
+      1366,
+      NO_DATA,
+      0,
+      0,
+      1693,
+      NULL_ARG,
+      1
+   },
+   
+/*918*/
+   {
+      "auto",
+      1371,
+      NO_DATA,
+      0,
+      0,
+      1540,
+      NULL_ARG,
+      1
+   },
+   
+/*919*/
+   {
+      "auto",
+      1365,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*920*/
+   {
+      "before-utc",
+      324,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*921*/
+   {
+      "begin",
+      1904,
+      NO_DATA,
+      0,
+      0,
+      1221,
+      1971,
+      1
+   },
+   
+/*922*/
+   {
+      "bit-rate-in-kilo",
+      333,
+      NO_DATA,
+      0,
+      0,
+      0,
+      467,
+      1
+   },
+   
+/*923*/
+   {
+      "bit-rate-in-kilo",
+      333,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*924*/
+   {
+      "block",
+      1369,
+      NO_DATA,
+      0,
+      0,
+      1877,
+      NULL_ARG,
+      1
+   },
+   
+/*925*/
+   {
+      "block-traffic",
+      1184,
+      NO_DATA,
+      0,
+      0,
+      1682,
+      NULL_ARG,
+      1
+   },
+   
+/*926*/
+   {
+      "block-traffic",
+      1042,
+      NO_DATA,
+      0,
+      0,
+      1282,
+      NULL_ARG,
+      1
+   },
+   
+/*927*/
+   {
+      "blocking",
+      994,
+      NO_DATA,
+      0,
+      0,
+      1259,
+      NULL_ARG,
+      1
+   },
+   
+/*928*/
+   {
+      "boot-rom:",
+      309,
+      COLON_DATA,
+      0,
+      0,
+      952,
+      694,
+      1
+   },
+   
+/*929*/
+   {
+      "boot-rom:",
+      309,
+      COLON_DATA,
+      0,
+      0,
+      953,
+      696,
+      1
+   },
+   
+/*930*/
+   {
+      "bootp",
+      1419,
+      NO_DATA,
+      0,
+      0,
+      1081,
+      NULL_ARG,
+      1
+   },
+   
+/*931*/
+   {
+      "both",
+      715,
+      NO_DATA,
+      0,
+      0,
+      1843,
+      NULL_ARG,
+      1
+   },
+   
+/*932*/
+   {
+      "both",
+      1341,
+      NO_DATA,
+      0,
+      0,
+      1842,
+      NULL_ARG,
+      0
+   },
+   
+/*933*/
+   {
+      "brief",
+      1737,
+      NO_DATA,
+      0,
+      0,
+      252,
+      NULL_ARG,
+      1
+   },
+   
+/*934*/
+   {
+      "brief",
+      1737,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*935*/
+   {
+      "brief",
+      1830,
+      NO_DATA,
+      0,
+      0,
+      0,
+      2131,
+      1
+   },
+   
+/*936*/
+   {
+      "brief",
+      1944,
+      NO_DATA,
+      0,
+      0,
+      1173,
+      NULL_ARG,
+      1
+   },
+   
+/*937*/
+   {
+      "brief",
+      1944,
+      NO_DATA,
+      0,
+      0,
+      1160,
+      NULL_ARG,
+      1
+   },
+   
+/*938*/
+   {
+      "buckets",
+      1356,
+      NO_DATA,
+      0,
+      0,
+      1408,
+      402,
+      1
+   },
+   
+/*939*/
+   {
+      "buckets",
+      1356,
+      NO_DATA,
+      0,
+      0,
+      0,
+      402,
+      1
+   },
+   
+/*940*/
+   {
+      "bytes",
+      1435,
+      WORD_DATA,
+      65535,
+      1280,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*941*/
+   {
+      "cancel",
+      867,
+      NO_DATA,
+      0,
+      0,
+      1356,
+      897,
+      1
+   },
+   
+/*942*/
+   {
+      "cdp",
+      1322,
+      NO_DATA,
+      0,
+      0,
+      1495,
+      NULL_ARG,
+      1
+   },
+   
+/*943*/
+   {
+      "cdp",
+      1394,
+      NO_DATA,
+      0,
+      0,
+      1497,
+      NULL_ARG,
+      1
+   },
+   
+/*944*/
+   {
+      "character-string",
+      175,
+      NO_DATA,
+      0,
+      0,
+      1346,
+      NULL_ARG,
+      1
+   },
+   
+/*945*/
+   {
+      "characters",
+      1984,
+      WORD_DATA,
+      80,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*946*/
+   {
+      "circuit-id",
+      1251,
+      NO_DATA,
+      0,
+      0,
+      1801,
+      739,
+      1
+   },
+   
+/*947*/
+   {
+      "circuit-id",
+      1251,
+      NO_DATA,
+      0,
+      0,
+      1802,
+      NULL_ARG,
+      1
+   },
+   
+/*948*/
+   {
+      "class",
+      1898,
+      NO_DATA,
+      0,
+      0,
+      0,
+      682,
+      1
+   },
+   
+/*949*/
+   {
+      "community",
+      906,
+      CHAR_DATA,
+      MAXSIZE_eventCommunity,
+      1,
+      NULL_ARG,
+      1038,
+      1
+   },
+   
+/*950*/
+   {
+      "community",
+      906,
+      CHAR_DATA,
+      MAXSIZE_eventCommunity,
+      1,
+      NULL_ARG,
+      1039,
+      1
+   },
+   
+/*951*/
+   {
+      "config",
+      728,
+      NO_DATA,
+      0,
+      0,
+      1512,
+      NULL_ARG,
+      1
+   },
+   
+/*952*/
+   {
+      "config:",
+      311,
+      COLON_DATA,
+      0,
+      0,
+      1663,
+      694,
+      1
+   },
+   
+/*953*/
+   {
+      "config:",
+      311,
+      COLON_DATA,
+      0,
+      0,
+      1664,
+      696,
+      1
+   },
+   
+/*954*/
+   {
+      "configuration",
+      1946,
+      NO_DATA,
+      0,
+      0,
+      492,
+      NULL_ARG,
+      1
+   },
+   
+/*955*/
+   {
+      "conform-action",
+      1503,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2048,
+      1
+   },
+   
+/*956*/
+   {
+      "conform-action",
+      1503,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2049,
+      1
+   },
+   
+/*957*/
+   {
+      "console",
+      34,
+      NO_DATA,
+      0,
+      0,
+      2166,
+      NULL_ARG,
+      1
+   },
+   
+/*958*/
+   {
+      "console",
+      34,
+      NO_DATA,
+      0,
+      0,
+      2167,
+      NULL_ARG,
+      1
+   },
+   
+/*959*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1057,
+      496,
+      1
+   },
+   
+/*960*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      225,
+      496,
+      1
+   },
+   
+/*961*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      0,
+      496,
+      1
+   },
+   
+/*962*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1058,
+      496,
+      1
+   },
+   
+/*963*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1059,
+      496,
+      1
+   },
+   
+/*964*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1060,
+      496,
+      1
+   },
+   
+/*965*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1061,
+      496,
+      1
+   },
+   
+/*966*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1062,
+      497,
+      1
+   },
+   
+/*967*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      226,
+      497,
+      1
+   },
+   
+/*968*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      0,
+      497,
+      1
+   },
+   
+/*969*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1068,
+      498,
+      1
+   },
+   
+/*970*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      2020,
+      498,
+      1
+   },
+   
+/*971*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      498,
+      1
+   },
+   
+/*972*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1069,
+      498,
+      1
+   },
+   
+/*973*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1070,
+      498,
+      1
+   },
+   
+/*974*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1071,
+      498,
+      1
+   },
+   
+/*975*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1072,
+      493,
+      1
+   },
+   
+/*976*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      499,
+      493,
+      1
+   },
+   
+/*977*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      0,
+      493,
+      1
+   },
+   
+/*978*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1073,
+      493,
+      1
+   },
+   
+/*979*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1100,
+      493,
+      1
+   },
+   
+/*980*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1074,
+      493,
+      1
+   },
+   
+/*981*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1075,
+      493,
+      1
+   },
+   
+/*982*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1076,
+      493,
+      1
+   },
+   
+/*983*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1077,
+      493,
+      1
+   },
+   
+/*984*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1078,
+      493,
+      1
+   },
+   
+/*985*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1079,
+      493,
+      1
+   },
+   
+/*986*/
+   {
+      "control-flag",
+      102,
+      NO_DATA,
+      0,
+      0,
+      1080,
+      493,
+      1
+   },
+   
+/*987*/
+   {
+      "copper-forced",
+      1189,
+      NO_DATA,
+      0,
+      0,
+      1867,
+      NULL_ARG,
+      1
+   },
+   
+/*988*/
+   {
+      "cos",
+      1518,
+      NO_DATA,
+      0,
+      0,
+      1688,
+      514,
+      1
+   },
+   
+/*989*/
+   {
+      "cos",
+      1518,
+      NO_DATA,
+      0,
+      0,
+      1420,
+      514,
+      1
+   },
+   
+/*990*/
+   {
+      "cos",
+      1353,
+      NO_DATA,
+      0,
+      0,
+      1118,
+      NULL_ARG,
+      1
+   },
+   
+/*991*/
+   {
+      "cost",
+      1301,
+      NO_DATA,
+      0,
+      0,
+      1728,
+      201,
+      1
+   },
+   
+/*992*/
+   {
+      "cost",
+      1301,
+      NO_DATA,
+      0,
+      0,
+      1729,
+      NULL_ARG,
+      1
+   },
+   
+/*993*/
+   {
+      "count",
+      1693,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1003,
+      1
+   },
+   
+/*994*/
+   {
+      "count",
+      1693,
+      NO_DATA,
+      0,
+      0,
+      1886,
+      1004,
+      1
+   },
+   
+/*995*/
+   {
+      "count",
+      6,
+      NO_DATA,
+      0,
+      0,
+      0,
+      281,
+      1
+   },
+   
+/*996*/
+   {
+      "count",
+      6,
+      NO_DATA,
+      0,
+      0,
+      1888,
+      282,
+      1
+   },
+   
+/*997*/
+   {
+      "count",
+      1688,
+      NO_DATA,
+      0,
+      0,
+      0,
+      279,
+      1
+   },
+   
+/*998*/
+   {
+      "count",
+      1688,
+      NO_DATA,
+      0,
+      0,
+      1889,
+      280,
+      1
+   },
+   
+/*999*/
+   {
+      "count",
+      1644,
+      NO_DATA,
+      0,
+      0,
+      1411,
+      365,
+      1
+   },
+   
+/*1000*/
+   {
+      "count",
+      1659,
+      NO_DATA,
+      0,
+      0,
+      1893,
+      368,
+      1
+   },
+   
+/*1001*/
+   {
+      "count",
+      1871,
+      NO_DATA,
+      0,
+      0,
+      1386,
+      1385,
+      1
+   },
+   
+/*1002*/
+   {
+      "count",
+      551,
+      WORD_DATA,
+      10,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1003*/
+   {
+      "count-range",
+      1694,
+      WORD_DATA,
+      SYS_ADPT_MAX_PING6_NUM,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1004*/
+   {
+      "count-range",
+      1694,
+      WORD_DATA,
+      SYS_ADPT_MAX_PING6_NUM,
+      1,
+      NULL_ARG,
+      1885,
+      1
+   },
+   
+/*1005*/
+   {
+      "counters",
+      26,
+      NO_DATA,
+      0,
+      0,
+      1406,
+      NULL_ARG,
+      1
+   },
+   
+/*1006*/
+   {
+      "critical-event",
+      1081,
+      NO_DATA,
+      0,
+      0,
+      1122,
+      NULL_ARG,
+      1
+   },
+   
+/*1007*/
+   {
+      "cvid",
+      1316,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      330,
+      1
+   },
+   
+/*1008*/
+   {
+      "daily",
+      1538,
+      NO_DATA,
+      0,
+      0,
+      1263,
+      99,
+      1
+   },
+   
+/*1009*/
+   {
+      "daily",
+      1538,
+      NO_DATA,
+      0,
+      0,
+      1264,
+      100,
+      1
+   },
+   
+/*1010*/
+   {
+      "daily",
+      878,
+      NO_DATA,
+      0,
+      0,
+      1604,
+      NULL_ARG,
+      1
+   },
+   
+/*1011*/
+   {
+      "december",
+      857,
+      NO_DATA,
+      0,
+      0,
+      1231,
+      304,
+      1
+   },
+   
+/*1012*/
+   {
+      "december",
+      857,
+      NO_DATA,
+      0,
+      0,
+      1230,
+      310,
+      1
+   },
+   
+/*1013*/
+   {
+      "december",
+      857,
+      NO_DATA,
+      0,
+      0,
+      1232,
+      451,
+      1
+   },
+   
+/*1014*/
+   {
+      "december",
+      857,
+      NO_DATA,
+      0,
+      0,
+      1233,
+      453,
+      1
+   },
+   
+/*1015*/
+   {
+      "december",
+      857,
+      NO_DATA,
+      0,
+      0,
+      1234,
+      454,
+      1
+   },
+   
+/*1016*/
+   {
+      "december",
+      857,
+      NO_DATA,
+      0,
+      0,
+      1235,
+      452,
+      1
+   },
+   
+/*1017*/
+   {
+      "default",
+      1331,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      174,
+      1
+   },
+   
+/*1018*/
+   {
+      "default",
+      234,
+      NO_DATA,
+      0,
+      0,
+      641,
+      1278,
+      1
+   },
+   
+/*1019*/
+   {
+      "default",
+      221,
+      NO_DATA,
+      0,
+      0,
+      640,
+      1946,
+      1
+   },
+   
+/*1020*/
+   {
+      "default",
+      1331,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1021*/
+   {
+      "default",
+      171,
+      NO_DATA,
+      0,
+      0,
+      1224,
+      NULL_ARG,
+      1
+   },
+   
+/*1022*/
+   {
+      "default",
+      635,
+      NO_DATA,
+      0,
+      0,
+      706,
+      NULL_ARG,
+      1
+   },
+   
+/*1023*/
+   {
+      "default",
+      234,
+      NO_DATA,
+      0,
+      0,
+      707,
+      NULL_ARG,
+      1
+   },
+   
+/*1024*/
+   {
+      "default",
+      1018,
+      NO_DATA,
+      0,
+      0,
+      758,
+      NULL_ARG,
+      1
+   },
+   
+/*1025*/
+   {
+      "default",
+      1452,
+      NO_DATA,
+      0,
+      0,
+      732,
+      NULL_ARG,
+      1
+   },
+   
+/*1026*/
+   {
+      "default",
+      1455,
+      NO_DATA,
+      0,
+      0,
+      780,
+      NULL_ARG,
+      1
+   },
+   
+/*1027*/
+   {
+      "default-gateway",
+      420,
+      NO_DATA,
+      0,
+      0,
+      1849,
+      574,
+      1
+   },
+   
+/*1028*/
+   {
+      "delete-on-reset",
+      593,
+      NO_DATA,
+      0,
+      0,
+      1687,
+      NULL_ARG,
+      1
+   },
+   
+/*1029*/
+   {
+      "delta",
+      899,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1825,
+      1
+   },
+   
+/*1030*/
+   {
+      "deny",
+      1119,
+      NO_DATA,
+      0,
+      0,
+      1809,
+      NULL_ARG,
+      1
+   },
+   
+/*1031*/
+   {
+      "des56",
+      949,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      751,
+      1
+   },
+   
+/*1032*/
+   {
+      "des56",
+      949,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      752,
+      1
+   },
+   
+/*1033*/
+   {
+      "des56",
+      949,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      753,
+      1
+   },
+   
+/*1034*/
+   {
+      "des56",
+      961,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      749,
+      1
+   },
+   
+/*1035*/
+   {
+      "des56",
+      961,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      750,
+      1
+   },
+   
+/*1036*/
+   {
+      "description",
+      900,
+      NO_DATA,
+      0,
+      0,
+      1507,
+      1968,
+      1
+   },
+   
+/*1037*/
+   {
+      "description",
+      900,
+      NO_DATA,
+      0,
+      0,
+      1674,
+      1968,
+      1
+   },
+   
+/*1038*/
+   {
+      "description",
+      900,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1968,
+      1
+   },
+   
+/*1039*/
+   {
+      "description",
+      900,
+      NO_DATA,
+      0,
+      0,
+      1673,
+      1968,
+      1
+   },
+   
+/*1040*/
+   {
+      "description",
+      1005,
+      NO_DATA,
+      0,
+      0,
+      0,
+      689,
+      1
+   },
+   
+/*1041*/
+   {
+      "dest-mep",
+      1642,
+      NO_DATA,
+      0,
+      0,
+      1937,
+      429,
+      1
+   },
+   
+/*1042*/
+   {
+      "dest-mep",
+      1642,
+      NO_DATA,
+      0,
+      0,
+      2189,
+      429,
+      1
+   },
+   
+/*1043*/
+   {
+      "dest-mep",
+      1642,
+      NO_DATA,
+      0,
+      0,
+      1938,
+      430,
+      1
+   },
+   
+/*1044*/
+   {
+      "dest-mep",
+      1642,
+      NO_DATA,
+      0,
+      0,
+      2190,
+      430,
+      1
+   },
+   
+/*1045*/
+   {
+      "dest-mep",
+      1642,
+      NO_DATA,
+      0,
+      0,
+      1939,
+      431,
+      1
+   },
+   
+/*1046*/
+   {
+      "dest-mep",
+      1642,
+      NO_DATA,
+      0,
+      0,
+      2191,
+      431,
+      1
+   },
+   
+/*1047*/
+   {
+      "destination",
+      703,
+      NO_DATA,
+      0,
+      0,
+      1795,
+      1375,
+      1
+   },
+   
+/*1048*/
+   {
+      "destination",
+      703,
+      NO_DATA,
+      0,
+      0,
+      1796,
+      1376,
+      1
+   },
+   
+/*1049*/
+   {
+      "destination",
+      708,
+      NO_DATA,
+      0,
+      0,
+      1405,
+      2086,
+      1
+   },
+   
+/*1050*/
+   {
+      "destination-ipv6-prefix/prefix-length",
+      119,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1108,
+      1
+   },
+   
+/*1051*/
+   {
+      "destination-ipv6-prefix/prefix-length",
+      119,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1109,
+      1
+   },
+   
+/*1052*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1110,
+      229,
+      1
+   },
+   
+/*1053*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1914,
+      229,
+      1
+   },
+   
+/*1054*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      238,
+      229,
+      1
+   },
+   
+/*1055*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      0,
+      229,
+      1
+   },
+   
+/*1056*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1915,
+      229,
+      1
+   },
+   
+/*1057*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1111,
+      230,
+      1
+   },
+   
+/*1058*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1916,
+      230,
+      1
+   },
+   
+/*1059*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      239,
+      230,
+      1
+   },
+   
+/*1060*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      0,
+      230,
+      1
+   },
+   
+/*1061*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1917,
+      230,
+      1
+   },
+   
+/*1062*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      2021,
+      231,
+      1
+   },
+   
+/*1063*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1112,
+      232,
+      1
+   },
+   
+/*1064*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1918,
+      232,
+      1
+   },
+   
+/*1065*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      2017,
+      232,
+      1
+   },
+   
+/*1066*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      232,
+      1
+   },
+   
+/*1067*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1919,
+      232,
+      1
+   },
+   
+/*1068*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1113,
+      233,
+      1
+   },
+   
+/*1069*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1920,
+      233,
+      1
+   },
+   
+/*1070*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      233,
+      1
+   },
+   
+/*1071*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1921,
+      233,
+      1
+   },
+   
+/*1072*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1116,
+      976,
+      1
+   },
+   
+/*1073*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1922,
+      979,
+      1
+   },
+   
+/*1074*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      501,
+      979,
+      1
+   },
+   
+/*1075*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      0,
+      979,
+      1
+   },
+   
+/*1076*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1923,
+      979,
+      1
+   },
+   
+/*1077*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1924,
+      979,
+      1
+   },
+   
+/*1078*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1930,
+      979,
+      1
+   },
+   
+/*1079*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1117,
+      979,
+      1
+   },
+   
+/*1080*/
+   {
+      "destination-port",
+      85,
+      NO_DATA,
+      0,
+      0,
+      1926,
+      979,
+      1
+   },
+   
+/*1081*/
+   {
+      "dhcp",
+      422,
+      NO_DATA,
+      0,
+      0,
+      529,
+      NULL_ARG,
+      1
+   },
+   
+/*1082*/
+   {
+      "dhcp",
+      1111,
+      NO_DATA,
+      0,
+      0,
+      528,
+      NULL_ARG,
+      1
+   },
+   
+/*1083*/
+   {
+      "dhcp-snooping",
+      1815,
+      NO_DATA,
+      0,
+      0,
+      1958,
+      NULL_ARG,
+      1
+   },
+   
+/*1084*/
+   {
+      "disable",
+      1663,
+      NO_DATA,
+      0,
+      0,
+      1136,
+      1575,
+      1
+   },
+   
+/*1085*/
+   {
+      "disable",
+      498,
+      NO_DATA,
+      0,
+      0,
+      1137,
+      NULL_ARG,
+      1
+   },
+   
+/*1086*/
+   {
+      "domain",
+      1740,
+      NO_DATA,
+      0,
+      0,
+      0,
+      720,
+      1
+   },
+   
+/*1087*/
+   {
+      "domain",
+      1565,
+      NO_DATA,
+      0,
+      0,
+      1483,
+      691,
+      1
+   },
+   
+/*1088*/
+   {
+      "domain",
+      1565,
+      NO_DATA,
+      0,
+      0,
+      1484,
+      692,
+      1
+   },
+   
+/*1089*/
+   {
+      "domain",
+      1565,
+      NO_DATA,
+      0,
+      0,
+      1393,
+      692,
+      1
+   },
+   
+/*1090*/
+   {
+      "domain",
+      1565,
+      NO_DATA,
+      0,
+      0,
+      1609,
+      692,
+      1
+   },
+   
+/*1091*/
+   {
+      "domain-id",
+      612,
+      WORD_DATA,
+      SYS_ADPT_MVR_MAX_INSTANCE_ID,
+      SYS_ADPT_MVR_MIN_INSTANCE_ID,
+      NULL_ARG,
+      1355,
+      1
+   },
+   
+/*1092*/
+   {
+      "domain-id",
+      612,
+      WORD_DATA,
+      SYS_ADPT_MVR_MAX_INSTANCE_ID,
+      SYS_ADPT_MVR_MIN_INSTANCE_ID,
+      NULL_ARG,
+      2092,
+      1
+   },
+   
+/*1093*/
+   {
+      "domain-id",
+      612,
+      WORD_DATA,
+      SYS_ADPT_MVR_MAX_INSTANCE_ID,
+      SYS_ADPT_MVR_MIN_INSTANCE_ID,
+      NULL_ARG,
+      2134,
+      1
+   },
+   
+/*1094*/
+   {
+      "dot1x",
+      1710,
+      NO_DATA,
+      0,
+      0,
+      1223,
+      1961,
+      1
+   },
+   
+/*1095*/
+   {
+      "downlink",
+      786,
+      NO_DATA,
+      0,
+      0,
+      1865,
+      1157,
+      1
+   },
+   
+/*1096*/
+   {
+      "downlink",
+      786,
+      NO_DATA,
+      0,
+      0,
+      2083,
+      1157,
+      1
+   },
+   
+/*1097*/
+   {
+      "downlink",
+      786,
+      NO_DATA,
+      0,
+      0,
+      1705,
+      1157,
+      1
+   },
+   
+/*1098*/
+   {
+      "downlink",
+      786,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1157,
+      1
+   },
+   
+/*1099*/
+   {
+      "downlink",
+      786,
+      NO_DATA,
+      0,
+      0,
+      1866,
+      1157,
+      1
+   },
+   
+/*1100*/
+   {
+      "dport",
+      108,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      977,
+      1
+   },
+   
+/*1101*/
+   {
+      "drop",
+      1506,
+      NO_DATA,
+      0,
+      0,
+      513,
+      2124,
+      1
+   },
+   
+/*1102*/
+   {
+      "drop",
+      435,
+      NO_DATA,
+      0,
+      0,
+      1453,
+      NULL_ARG,
+      1
+   },
+   
+/*1103*/
+   {
+      "drop",
+      448,
+      NO_DATA,
+      0,
+      0,
+      1452,
+      NULL_ARG,
+      1
+   },
+   
+/*1104*/
+   {
+      "drop",
+      1506,
+      NO_DATA,
+      0,
+      0,
+      519,
+      NULL_ARG,
+      1
+   },
+   
+/*1105*/
+   {
+      "dsa",
+      1672,
+      NO_DATA,
+      0,
+      0,
+      1831,
+      NULL_ARG,
+      0
+   },
+   
+/*1106*/
+   {
+      "dsa",
+      1633,
+      NO_DATA,
+      0,
+      0,
+      1832,
+      NULL_ARG,
+      0
+   },
+   
+/*1107*/
+   {
+      "dsa",
+      1669,
+      NO_DATA,
+      0,
+      0,
+      1833,
+      NULL_ARG,
+      0
+   },
+   
+/*1108*/
+   {
+      "dscp",
+      116,
+      NO_DATA,
+      0,
+      0,
+      1637,
+      468,
+      1
+   },
+   
+/*1109*/
+   {
+      "dscp",
+      116,
+      NO_DATA,
+      0,
+      0,
+      1638,
+      469,
+      1
+   },
+   
+/*1110*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1730,
+      204,
+      1
+   },
+   
+/*1111*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1731,
+      205,
+      1
+   },
+   
+/*1112*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1732,
+      206,
+      1
+   },
+   
+/*1113*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1733,
+      207,
+      1
+   },
+   
+/*1114*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1734,
+      515,
+      1
+   },
+   
+/*1115*/
+   {
+      "dscp",
+      1523,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      518,
+      1
+   },
+   
+/*1116*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1735,
+      978,
+      1
+   },
+   
+/*1117*/
+   {
+      "dscp",
+      90,
+      NO_DATA,
+      0,
+      0,
+      1736,
+      983,
+      1
+   },
+   
+/*1118*/
+   {
+      "dscp",
+      1354,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1119*/
+   {
+      "dst-ip",
+      804,
+      NO_DATA,
+      0,
+      0,
+      1121,
+      NULL_ARG,
+      1
+   },
+   
+/*1120*/
+   {
+      "dst-mac",
+      416,
+      NO_DATA,
+      0,
+      0,
+      1425,
+      1424,
+      1
+   },
+   
+/*1121*/
+   {
+      "dst-mac",
+      805,
+      NO_DATA,
+      0,
+      0,
+      1931,
+      NULL_ARG,
+      1
+   },
+   
+/*1122*/
+   {
+      "dying-gasp",
+      1082,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1123*/
+   {
+      "dynamic",
+      1606,
+      NO_DATA,
+      0,
+      0,
+      1374,
+      816,
+      1
+   },
+   
+/*1124*/
+   {
+      "dynamic",
+      1606,
+      NO_DATA,
+      0,
+      0,
+      1389,
+      819,
+      1
+   },
+   
+/*1125*/
+   {
+      "east",
+      210,
+      NO_DATA,
+      0,
+      0,
+      2176,
+      1392,
+      1
+   },
+   
+/*1126*/
+   {
+      "east",
+      203,
+      NO_DATA,
+      0,
+      0,
+      2177,
+      1588,
+      1
+   },
+   
+/*1127*/
+   {
+      "east",
+      210,
+      NO_DATA,
+      0,
+      0,
+      2178,
+      NULL_ARG,
+      1
+   },
+   
+/*1128*/
+   {
+      "east",
+      203,
+      NO_DATA,
+      0,
+      0,
+      2179,
+      NULL_ARG,
+      1
+   },
+   
+/*1129*/
+   {
+      "echo-chargen",
+      332,
+      NO_DATA,
+      0,
+      0,
+      1898,
+      922,
+      1
+   },
+   
+/*1130*/
+   {
+      "echo-chargen",
+      332,
+      NO_DATA,
+      0,
+      0,
+      1899,
+      923,
+      1
+   },
+   
+/*1131*/
+   {
+      "electrical-circuit",
+      281,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      757,
+      1
+   },
+   
+/*1132*/
+   {
+      "electrical-circuit",
+      281,
+      NO_DATA,
+      0,
+      0,
+      1251,
+      NULL_ARG,
+      1
+   },
+   
+/*1133*/
+   {
+      "electrical-circuit",
+      281,
+      NO_DATA,
+      0,
+      0,
+      1772,
+      NULL_ARG,
+      1
+   },
+   
+/*1134*/
+   {
+      "electrical-circuit",
+      281,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1135*/
+   {
+      "electrical-circuit",
+      281,
+      NO_DATA,
+      0,
+      0,
+      1773,
+      NULL_ARG,
+      1
+   },
+   
+/*1136*/
+   {
+      "enable",
+      1664,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1575,
+      1
+   },
+   
+/*1137*/
+   {
+      "enable",
+      499,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1138*/
+   {
+      "encode",
+      428,
+      NO_DATA,
+      0,
+      0,
+      0,
+      893,
+      1
+   },
+   
+/*1139*/
+   {
+      "encode",
+      428,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1140*/
+   {
+      "encrypted",
+      952,
+      NO_DATA,
+      0,
+      0,
+      0,
+      905,
+      1
+   },
+   
+/*1141*/
+   {
+      "encrypted",
+      952,
+      NO_DATA,
+      0,
+      0,
+      0,
+      906,
+      1
+   },
+   
+/*1142*/
+   {
+      "end",
+      1531,
+      NO_DATA,
+      0,
+      0,
+      1945,
+      97,
+      1
+   },
+   
+/*1143*/
+   {
+      "end",
+      1531,
+      NO_DATA,
+      0,
+      0,
+      0,
+      97,
+      1
+   },
+   
+/*1144*/
+   {
+      "ethernet",
+      1557,
+      NO_DATA,
+      0,
+      0,
+      1696,
+      258,
+      1
+   },
+   
+/*1145*/
+   {
+      "ethernet",
+      705,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      256,
+      1
+   },
+   
+/*1146*/
+   {
+      "ethernet",
+      705,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      264,
+      1
+   },
+   
+/*1147*/
+   {
+      "ethernet",
+      714,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      255,
+      1
+   },
+   
+/*1148*/
+   {
+      "ethernet",
+      1713,
+      NO_DATA,
+      0,
+      0,
+      1707,
+      250,
+      1
+   },
+   
+/*1149*/
+   {
+      "ethernet",
+      592,
+      NO_DATA,
+      0,
+      0,
+      1710,
+      249,
+      1
+   },
+   
+/*1150*/
+   {
+      "ethernet",
+      592,
+      NO_DATA,
+      0,
+      0,
+      1698,
+      258,
+      1
+   },
+   
+/*1151*/
+   {
+      "ethernet",
+      592,
+      NO_DATA,
+      0,
+      0,
+      0,
+      258,
+      1
+   },
+   
+/*1152*/
+   {
+      "ethernet",
+      592,
+      NO_DATA,
+      0,
+      0,
+      1699,
+      258,
+      1
+   },
+   
+/*1153*/
+   {
+      "ethernet",
+      592,
+      NO_DATA,
+      0,
+      0,
+      1700,
+      263,
+      1
+   },
+   
+/*1154*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1723,
+      250,
+      1
+   },
+   
+/*1155*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      250,
+      1
+   },
+   
+/*1156*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1718,
+      250,
+      1
+   },
+   
+/*1157*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1704,
+      253,
+      1
+   },
+   
+/*1158*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1706,
+      254,
+      1
+   },
+   
+/*1159*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      256,
+      1
+   },
+   
+/*1160*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1721,
+      258,
+      1
+   },
+   
+/*1161*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1722,
+      258,
+      1
+   },
+   
+/*1162*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      258,
+      1
+   },
+   
+/*1163*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1723,
+      258,
+      1
+   },
+   
+/*1164*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1531,
+      258,
+      1
+   },
+   
+/*1165*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1697,
+      258,
+      1
+   },
+   
+/*1166*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      0,
+      258,
+      1
+   },
+   
+/*1167*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1708,
+      258,
+      1
+   },
+   
+/*1168*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1701,
+      258,
+      1
+   },
+   
+/*1169*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1714,
+      258,
+      1
+   },
+   
+/*1170*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1726,
+      258,
+      1
+   },
+   
+/*1171*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1532,
+      258,
+      1
+   },
+   
+/*1172*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1724,
+      258,
+      1
+   },
+   
+/*1173*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1615,
+      258,
+      1
+   },
+   
+/*1174*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1719,
+      258,
+      1
+   },
+   
+/*1175*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      259,
+      1
+   },
+   
+/*1176*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1725,
+      260,
+      1
+   },
+   
+/*1177*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1709,
+      260,
+      1
+   },
+   
+/*1178*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      0,
+      262,
+      1
+   },
+   
+/*1179*/
+   {
+      "ethernet",
+      15,
+      NO_DATA,
+      0,
+      0,
+      1531,
+      265,
+      1
+   },
+   
+/*1180*/
+   {
+      "ethernet",
+      821,
+      NO_DATA,
+      0,
+      0,
+      1494,
+      1754,
+      1
+   },
+   
+/*1181*/
+   {
+      "ethernet",
+      1763,
+      NO_DATA,
+      0,
+      0,
+      1702,
+      258,
+      1
+   },
+   
+/*1182*/
+   {
+      "ethernet",
+      1889,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      261,
+      1
+   },
+   
+/*1183*/
+   {
+      "ethernet",
+      1582,
+      NO_DATA,
+      0,
+      0,
+      1712,
+      258,
+      1
+   },
+   
+/*1184*/
+   {
+      "ethernet",
+      1582,
+      NO_DATA,
+      0,
+      0,
+      1713,
+      258,
+      1
+   },
+   
+/*1185*/
+   {
+      "ethernet",
+      1991,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      258,
+      1
+   },
+   
+/*1186*/
+   {
+      "ethernet",
+      1988,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      258,
+      1
+   },
+   
+/*1187*/
+   {
+      "ethernet",
+      1724,
+      NO_DATA,
+      0,
+      0,
+      0,
+      258,
+      1
+   },
+   
+/*1188*/
+   {
+      "ethernet",
+      1858,
+      NO_DATA,
+      0,
+      0,
+      0,
+      258,
+      1
+   },
+   
+/*1189*/
+   {
+      "ethernet",
+      1860,
+      NO_DATA,
+      0,
+      0,
+      1711,
+      250,
+      1
+   },
+   
+/*1190*/
+   {
+      "ethernet",
+      1605,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      258,
+      1
+   },
+   
+/*1191*/
+   {
+      "ethernet",
+      1605,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      261,
+      1
+   },
+   
+/*1192*/
+   {
+      "ethernet",
+      1922,
+      NO_DATA,
+      0,
+      0,
+      1716,
+      257,
+      1
+   },
+   
+/*1193*/
+   {
+      "ethernet",
+      1746,
+      NO_DATA,
+      0,
+      0,
+      1716,
+      257,
+      1
+   },
+   
+/*1194*/
+   {
+      "ethernet",
+      1746,
+      NO_DATA,
+      0,
+      0,
+      1721,
+      258,
+      1
+   },
+   
+/*1195*/
+   {
+      "ethernet",
+      1746,
+      NO_DATA,
+      0,
+      0,
+      1715,
+      258,
+      1
+   },
+   
+/*1196*/
+   {
+      "ethernet",
+      1746,
+      NO_DATA,
+      0,
+      0,
+      0,
+      258,
+      1
+   },
+   
+/*1197*/
+   {
+      "ethernet",
+      1746,
+      NO_DATA,
+      0,
+      0,
+      1716,
+      258,
+      1
+   },
+   
+/*1198*/
+   {
+      "ethernet",
+      1746,
+      NO_DATA,
+      0,
+      0,
+      1723,
+      258,
+      1
+   },
+   
+/*1199*/
+   {
+      "ethernet",
+      1846,
+      NO_DATA,
+      0,
+      0,
+      1723,
+      250,
+      1
+   },
+   
+/*1200*/
+   {
+      "ethernet",
+      1846,
+      NO_DATA,
+      0,
+      0,
+      1720,
+      250,
+      1
+   },
+   
+/*1201*/
+   {
+      "ethernet",
+      592,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1834,
+      1
+   },
+   
+/*1202*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2118,
+      14,
+      1
+   },
+   
+/*1203*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      213,
+      14,
+      1
+   },
+   
+/*1204*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      0,
+      14,
+      1
+   },
+   
+/*1205*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2028,
+      15,
+      1
+   },
+   
+/*1206*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2029,
+      15,
+      1
+   },
+   
+/*1207*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      15,
+      1
+   },
+   
+/*1208*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2119,
+      16,
+      1
+   },
+   
+/*1209*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      214,
+      16,
+      1
+   },
+   
+/*1210*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      0,
+      16,
+      1
+   },
+   
+/*1211*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2024,
+      17,
+      1
+   },
+   
+/*1212*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2025,
+      17,
+      1
+   },
+   
+/*1213*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      17,
+      1
+   },
+   
+/*1214*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      2123,
+      500,
+      1
+   },
+   
+/*1215*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      502,
+      500,
+      1
+   },
+   
+/*1216*/
+   {
+      "ethertype",
+      130,
+      NO_DATA,
+      0,
+      0,
+      0,
+      500,
+      1
+   },
+   
+/*1217*/
+   {
+      "eui-64",
+      1431,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1218*/
+   {
+      "eui-64",
+      1431,
+      NO_DATA,
+      0,
+      0,
+      1490,
+      NULL_ARG,
+      1
+   },
+   
+/*1219*/
+   {
+      "even",
+      1476,
+      NO_DATA,
+      0,
+      0,
+      1642,
+      NULL_ARG,
+      1
+   },
+   
+/*1220*/
+   {
+      "exceed-action",
+      1510,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1101,
+      1
+   },
+   
+/*1221*/
+   {
+      "exclude",
+      1906,
+      NO_DATA,
+      0,
+      0,
+      1360,
+      1971,
+      1
+   },
+   
+/*1222*/
+   {
+      "excluded",
+      967,
+      NO_DATA,
+      0,
+      0,
+      1361,
+      NULL_ARG,
+      1
+   },
+   
+/*1223*/
+   {
+      "exec",
+      1717,
+      NO_DATA,
+      0,
+      0,
+      1960,
+      1962,
+      1
+   },
+   
+/*1224*/
+   {
+      "explicit",
+      172,
+      NO_DATA,
+      0,
+      0,
+      1644,
+      NULL_ARG,
+      1
+   },
+   
+/*1225*/
+   {
+      "extended",
+      244,
+      NO_DATA,
+      0,
+      0,
+      1942,
+      677,
+      1
+   },
+   
+/*1226*/
+   {
+      "extended",
+      248,
+      NO_DATA,
+      0,
+      0,
+      1943,
+      677,
+      1
+   },
+   
+/*1227*/
+   {
+      "extended",
+      1705,
+      NO_DATA,
+      0,
+      0,
+      1944,
+      677,
+      1
+   },
+   
+/*1228*/
+   {
+      "falling-threshold",
+      893,
+      NO_DATA,
+      0,
+      0,
+      138,
+      95,
+      1
+   },
+   
+/*1229*/
+   {
+      "falling-threshold",
+      893,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      95,
+      1
+   },
+   
+/*1230*/
+   {
+      "february",
+      858,
+      NO_DATA,
+      0,
+      0,
+      1432,
+      289,
+      1
+   },
+   
+/*1231*/
+   {
+      "february",
+      858,
+      NO_DATA,
+      0,
+      0,
+      1431,
+      304,
+      1
+   },
+   
+/*1232*/
+   {
+      "february",
+      858,
+      NO_DATA,
+      0,
+      0,
+      1433,
+      451,
+      1
+   },
+   
+/*1233*/
+   {
+      "february",
+      858,
+      NO_DATA,
+      0,
+      0,
+      1434,
+      453,
+      1
+   },
+   
+/*1234*/
+   {
+      "february",
+      858,
+      NO_DATA,
+      0,
+      0,
+      1435,
+      454,
+      1
+   },
+   
+/*1235*/
+   {
+      "february",
+      858,
+      NO_DATA,
+      0,
+      0,
+      1436,
+      452,
+      1
+   },
+   
+/*1236*/
+   {
+      "file",
+      1614,
+      NO_DATA,
+      0,
+      0,
+      1269,
+      1237,
+      1
+   },
+   
+/*1237*/
+   {
+      "file",
+      1615,
+      NO_DATA,
+      0,
+      0,
+      1270,
+      NULL_ARG,
+      1
+   },
+   
+/*1238*/
+   {
+      "file",
+      1615,
+      NO_DATA,
+      0,
+      0,
+      1343,
+      NULL_ARG,
+      1
+   },
+   
+/*1239*/
+   {
+      "file",
+      1615,
+      NO_DATA,
+      0,
+      0,
+      1271,
+      NULL_ARG,
+      1
+   },
+   
+/*1240*/
+   {
+      "file",
+      1615,
+      NO_DATA,
+      0,
+      0,
+      1272,
+      NULL_ARG,
+      1
+   },
+   
+/*1241*/
+   {
+      "file",
+      1615,
+      NO_DATA,
+      0,
+      0,
+      1344,
+      NULL_ARG,
+      1
+   },
+   
+/*1242*/
+   {
+      "file",
+      1615,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1243*/
+   {
+      "flash",
+      561,
+      NO_DATA,
+      0,
+      0,
+      1783,
+      172,
+      1
+   },
+   
+/*1244*/
+   {
+      "flash",
+      561,
+      NO_DATA,
+      0,
+      0,
+      1785,
+      NULL_ARG,
+      0
+   },
+   
+/*1245*/
+   {
+      "flash",
+      561,
+      NO_DATA,
+      0,
+      0,
+      1784,
+      NULL_ARG,
+      1
+   },
+   
+/*1246*/
+   {
+      "flash",
+      561,
+      NO_DATA,
+      0,
+      0,
+      1786,
+      NULL_ARG,
+      1
+   },
+   
+/*1247*/
+   {
+      "flash",
+      561,
+      NO_DATA,
+      0,
+      0,
+      1787,
+      1510,
+      1
+   },
+   
+/*1248*/
+   {
+      "floor",
+      275,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      662,
+      1
+   },
+   
+/*1249*/
+   {
+      "floor",
+      275,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      663,
+      1
+   },
+   
+/*1250*/
+   {
+      "floor",
+      301,
+      NO_DATA,
+      0,
+      0,
+      1542,
+      1542,
+      1
+   },
+   
+/*1251*/
+   {
+      "floor",
+      275,
+      NO_DATA,
+      0,
+      0,
+      1772,
+      1133,
+      1
+   },
+   
+/*1252*/
+   {
+      "floor",
+      275,
+      NO_DATA,
+      0,
+      0,
+      1546,
+      1542,
+      1
+   },
+   
+/*1253*/
+   {
+      "flow",
+      1500,
+      NO_DATA,
+      0,
+      0,
+      1940,
+      507,
+      1
+   },
+   
+/*1254*/
+   {
+      "flowcontrol",
+      1037,
+      NO_DATA,
+      0,
+      0,
+      1979,
+      NULL_ARG,
+      1
+   },
+   
+/*1255*/
+   {
+      "flowcontrol",
+      1227,
+      NO_DATA,
+      0,
+      0,
+      1978,
+      NULL_ARG,
+      1
+   },
+   
+/*1256*/
+   {
+      "flowcontrol",
+      1227,
+      NO_DATA,
+      0,
+      0,
+      1979,
+      NULL_ARG,
+      1
+   },
+   
+/*1257*/
+   {
+      "force-authorized",
+      1059,
+      NO_DATA,
+      0,
+      0,
+      1258,
+      NULL_ARG,
+      1
+   },
+   
+/*1258*/
+   {
+      "force-unauthorized",
+      1060,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1259*/
+   {
+      "forwarding",
+      995,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1260*/
+   {
+      "frame",
+      1084,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2010,
+      1
+   },
+   
+/*1261*/
+   {
+      "frame",
+      1084,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2011,
+      1
+   },
+   
+/*1262*/
+   {
+      "frame-type",
+      820,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1180,
+      1
+   },
+   
+/*1263*/
+   {
+      "friday",
+      881,
+      NO_DATA,
+      0,
+      0,
+      1601,
+      99,
+      1
+   },
+   
+/*1264*/
+   {
+      "friday",
+      881,
+      NO_DATA,
+      0,
+      0,
+      1602,
+      100,
+      1
+   },
+   
+/*1265*/
+   {
+      "friday",
+      881,
+      NO_DATA,
+      0,
+      0,
+      1603,
+      NULL_ARG,
+      1
+   },
+   
+/*1266*/
+   {
+      "from",
+      1351,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      137,
+      1
+   },
+   
+/*1267*/
+   {
+      "from",
+      1351,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      158,
+      1
+   },
+   
+/*1268*/
+   {
+      "from",
+      1351,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      168,
+      1
+   },
+   
+/*1269*/
+   {
+      "ftp",
+      1621,
+      NO_DATA,
+      0,
+      0,
+      1837,
+      1238,
+      1
+   },
+   
+/*1270*/
+   {
+      "ftp",
+      1616,
+      NO_DATA,
+      0,
+      0,
+      1838,
+      NULL_ARG,
+      1
+   },
+   
+/*1271*/
+   {
+      "ftp",
+      1616,
+      NO_DATA,
+      0,
+      0,
+      1950,
+      NULL_ARG,
+      1
+   },
+   
+/*1272*/
+   {
+      "ftp",
+      1616,
+      NO_DATA,
+      0,
+      0,
+      1840,
+      NULL_ARG,
+      1
+   },
+   
+/*1273*/
+   {
+      "general-query-suppression",
+      488,
+      NO_DATA,
+      0,
+      0,
+      1353,
+      NULL_ARG,
+      1
+   },
+   
+/*1274*/
+   {
+      "general-query-suppression",
+      488,
+      NO_DATA,
+      0,
+      0,
+      1354,
+      NULL_ARG,
+      1
+   },
+   
+/*1275*/
+   {
+      "generic-error-message",
+      676,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      626,
+      1
+   },
+   
+/*1276*/
+   {
+      "generic-error-message",
+      676,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1277*/
+   {
+      "global",
+      1744,
+      NO_DATA,
+      0,
+      0,
+      1400,
+      NULL_ARG,
+      1
+   },
+   
+/*1278*/
+   {
+      "group",
+      223,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1988,
+      1
+   },
+   
+/*1279*/
+   {
+      "group",
+      223,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1782,
+      1
+   },
+   
+/*1280*/
+   {
+      "group",
+      616,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      570,
+      1
+   },
+   
+/*1281*/
+   {
+      "group-id",
+      818,
+      WORD_DATA,
+      2147483647L,
+      1,
+      NULL_ARG,
+      813,
+      1
+   },
+   
+/*1282*/
+   {
+      "guest-vlan",
+      1043,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1283*/
+   {
+      "hex",
+      1422,
+      NO_DATA,
+      0,
+      0,
+      2006,
+      1286,
+      1
+   },
+   
+/*1284*/
+   {
+      "hex",
+      430,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1285*/
+   {
+      "hex-value",
+      917,
+      HEX_STR_DATA,
+      32L *2,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1286*/
+   {
+      "hex-value",
+      1423,
+      HEX_STR_DATA,
+      32L *2,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1287*/
+   {
+      "hold-time",
+      389,
+      NO_DATA,
+      0,
+      0,
+      1884,
+      392,
+      1
+   },
+   
+/*1288*/
+   {
+      "hold-time",
+      389,
+      NO_DATA,
+      0,
+      0,
+      1894,
+      NULL_ARG,
+      1
+   },
+   
+/*1289*/
+   {
+      "host",
+      147,
+      NO_DATA,
+      0,
+      0,
+      1692,
+      873,
+      1
+   },
+   
+/*1290*/
+   {
+      "host",
+      147,
+      NO_DATA,
+      0,
+      0,
+      2237,
+      873,
+      1
+   },
+   
+/*1291*/
+   {
+      "host",
+      149,
+      NO_DATA,
+      0,
+      0,
+      1912,
+      791,
+      1
+   },
+   
+/*1292*/
+   {
+      "host",
+      149,
+      NO_DATA,
+      0,
+      0,
+      1913,
+      792,
+      1
+   },
+   
+/*1293*/
+   {
+      "host",
+      845,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      607,
+      1
+   },
+   
+/*1294*/
+   {
+      "host",
+      988,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      573,
+      1
+   },
+   
+/*1295*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      522,
+      564,
+      1
+   },
+   
+/*1296*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      523,
+      565,
+      1
+   },
+   
+/*1297*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      525,
+      566,
+      1
+   },
+   
+/*1298*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      526,
+      567,
+      1
+   },
+   
+/*1299*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2194,
+      2243,
+      1
+   },
+   
+/*1300*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2195,
+      2244,
+      1
+   },
+   
+/*1301*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2196,
+      2246,
+      1
+   },
+   
+/*1302*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2197,
+      2247,
+      1
+   },
+   
+/*1303*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2198,
+      2248,
+      1
+   },
+   
+/*1304*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2199,
+      2249,
+      1
+   },
+   
+/*1305*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2200,
+      2250,
+      1
+   },
+   
+/*1306*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2201,
+      2251,
+      1
+   },
+   
+/*1307*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2202,
+      2252,
+      1
+   },
+   
+/*1308*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      2203,
+      2253,
+      1
+   },
+   
+/*1309*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1997,
+      541,
+      1
+   },
+   
+/*1310*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      537,
+      541,
+      1
+   },
+   
+/*1311*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      538,
+      542,
+      1
+   },
+   
+/*1312*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1996,
+      547,
+      1
+   },
+   
+/*1313*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      544,
+      547,
+      1
+   },
+   
+/*1314*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      545,
+      548,
+      1
+   },
+   
+/*1315*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      539,
+      589,
+      1
+   },
+   
+/*1316*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      546,
+      590,
+      1
+   },
+   
+/*1317*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1910,
+      785,
+      1
+   },
+   
+/*1318*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1911,
+      786,
+      1
+   },
+   
+/*1319*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2205,
+      2215,
+      1
+   },
+   
+/*1320*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2206,
+      2216,
+      1
+   },
+   
+/*1321*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2207,
+      2217,
+      1
+   },
+   
+/*1322*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2208,
+      2218,
+      1
+   },
+   
+/*1323*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2209,
+      2219,
+      1
+   },
+   
+/*1324*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2210,
+      2220,
+      1
+   },
+   
+/*1325*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1992,
+      2221,
+      1
+   },
+   
+/*1326*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2212,
+      2222,
+      1
+   },
+   
+/*1327*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      2213,
+      2223,
+      1
+   },
+   
+/*1328*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1993,
+      2224,
+      1
+   },
+   
+/*1329*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      551,
+      881,
+      1
+   },
+   
+/*1330*/
+   {
+      "host",
+      76,
+      NO_DATA,
+      0,
+      0,
+      1527,
+      524,
+      1
+   },
+   
+/*1331*/
+   {
+      "host",
+      72,
+      NO_DATA,
+      0,
+      0,
+      1509,
+      2245,
+      1
+   },
+   
+/*1332*/
+   {
+      "host",
+      64,
+      NO_DATA,
+      0,
+      0,
+      555,
+      540,
+      1
+   },
+   
+/*1333*/
+   {
+      "host",
+      64,
+      NO_DATA,
+      0,
+      0,
+      556,
+      543,
+      1
+   },
+   
+/*1334*/
+   {
+      "host",
+      60,
+      NO_DATA,
+      0,
+      0,
+      2225,
+      2267,
+      1
+   },
+   
+/*1335*/
+   {
+      "host",
+      60,
+      NO_DATA,
+      0,
+      0,
+      2226,
+      2268,
+      1
+   },
+   
+/*1336*/
+   {
+      "host",
+      146,
+      NO_DATA,
+      0,
+      0,
+      2261,
+      1214,
+      1
+   },
+   
+/*1337*/
+   {
+      "host",
+      1919,
+      NO_DATA,
+      0,
+      0,
+      2093,
+      NULL_ARG,
+      1
+   },
+   
+/*1338*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      591,
+      975,
+      1
+   },
+   
+/*1339*/
+   {
+      "host",
+      99,
+      NO_DATA,
+      0,
+      0,
+      592,
+      985,
+      1
+   },
+   
+/*1340*/
+   {
+      "host",
+      100,
+      NO_DATA,
+      0,
+      0,
+      1752,
+      880,
+      1
+   },
+   
+/*1341*/
+   {
+      "hour",
+      872,
+      NO_DATA,
+      0,
+      0,
+      1596,
+      118,
+      1
+   },
+   
+/*1342*/
+   {
+      "hours",
+      320,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      73,
+      1
+   },
+   
+/*1343*/
+   {
+      "https-certificate",
+      1622,
+      NO_DATA,
+      0,
+      0,
+      1759,
+      NULL_ARG,
+      1
+   },
+   
+/*1344*/
+   {
+      "https-certificate",
+      1627,
+      NO_DATA,
+      0,
+      0,
+      1760,
+      NULL_ARG,
+      1
+   },
+   
+/*1345*/
+   {
+      "hybrid",
+      1400,
+      NO_DATA,
+      0,
+      0,
+      2060,
+      NULL_ARG,
+      1
+   },
+   
+/*1346*/
+   {
+      "icc-based",
+      176,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1347*/
+   {
+      "id",
+      1957,
+      NO_DATA,
+      0,
+      0,
+      1621,
+      343,
+      1
+   },
+   
+/*1348*/
+   {
+      "id",
+      42,
+      NO_DATA,
+      0,
+      0,
+      1623,
+      343,
+      1
+   },
+   
+/*1349*/
+   {
+      "id",
+      42,
+      NO_DATA,
+      0,
+      0,
+      1624,
+      343,
+      1
+   },
+   
+/*1350*/
+   {
+      "id",
+      330,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      782,
+      1
+   },
+   
+/*1351*/
+   {
+      "id",
+      330,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      783,
+      1
+   },
+   
+/*1352*/
+   {
+      "igmpsnp",
+      1801,
+      NO_DATA,
+      0,
+      0,
+      2094,
+      NULL_ARG,
+      1
+   },
+   
+/*1353*/
+   {
+      "immediate-leave",
+      489,
+      NO_DATA,
+      0,
+      0,
+      1468,
+      NULL_ARG,
+      1
+   },
+   
+/*1354*/
+   {
+      "immediate-leave",
+      489,
+      NO_DATA,
+      0,
+      0,
+      1469,
+      NULL_ARG,
+      1
+   },
+   
+/*1355*/
+   {
+      "immediate-leave",
+      1195,
+      0,
+      0,
+      0,
+      2153,
+      NULL_ARG,
+      1
+   },
+   
+/*1356*/
+   {
+      "in",
+      871,
+      NO_DATA,
+      0,
+      0,
+      1793,
+      1341,
+      1
+   },
+   
+/*1357*/
+   {
+      "in",
+      869,
+      NO_DATA,
+      0,
+      0,
+      1794,
+      NULL_ARG,
+      1
+   },
+   
+/*1358*/
+   {
+      "in",
+      1105,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1359*/
+   {
+      "in",
+      1105,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*1360*/
+   {
+      "include",
+      1907,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1971,
+      1
+   },
+   
+/*1361*/
+   {
+      "included",
+      968,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1362*/
+   {
+      "index",
+      164,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      374,
+      1
+   },
+   
+/*1363*/
+   {
+      "index",
+      164,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      388,
+      1
+   },
+   
+/*1364*/
+   {
+      "index",
+      380,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      375,
+      1
+   },
+   
+/*1365*/
+   {
+      "index",
+      380,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      391,
+      1
+   },
+   
+/*1366*/
+   {
+      "inform",
+      929,
+      NO_DATA,
+      0,
+      0,
+      711,
+      1823,
+      1
+   },
+   
+/*1367*/
+   {
+      "input",
+      1279,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      708,
+      1
+   },
+   
+/*1368*/
+   {
+      "input",
+      1900,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1369*/
+   {
+      "input",
+      1269,
+      NO_DATA,
+      0,
+      0,
+      1667,
+      NULL_ARG,
+      1
+   },
+   
+/*1370*/
+   {
+      "input",
+      1269,
+      NO_DATA,
+      0,
+      0,
+      1668,
+      186,
+      1
+   },
+   
+/*1371*/
+   {
+      "interface",
+      1607,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1162,
+      1
+   },
+   
+/*1372*/
+   {
+      "interface",
+      1596,
+      NO_DATA,
+      0,
+      0,
+      2125,
+      1150,
+      1
+   },
+   
+/*1373*/
+   {
+      "interface",
+      1604,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1190,
+      1
+   },
+   
+/*1374*/
+   {
+      "interface",
+      1604,
+      NO_DATA,
+      0,
+      0,
+      1955,
+      1190,
+      1
+   },
+   
+/*1375*/
+   {
+      "interface",
+      704,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1145,
+      1
+   },
+   
+/*1376*/
+   {
+      "interface",
+      704,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1146,
+      1
+   },
+   
+/*1377*/
+   {
+      "interface",
+      713,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1147,
+      1
+   },
+   
+/*1378*/
+   {
+      "interface",
+      1987,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1186,
+      1
+   },
+   
+/*1379*/
+   {
+      "interface",
+      1886,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1190,
+      1
+   },
+   
+/*1380*/
+   {
+      "interface",
+      1712,
+      NO_DATA,
+      0,
+      0,
+      2095,
+      1148,
+      1
+   },
+   
+/*1381*/
+   {
+      "interface",
+      1712,
+      NO_DATA,
+      0,
+      0,
+      1863,
+      1176,
+      1
+   },
+   
+/*1382*/
+   {
+      "interface",
+      1866,
+      NO_DATA,
+      0,
+      0,
+      1902,
+      1153,
+      1
+   },
+   
+/*1383*/
+   {
+      "interface",
+      1866,
+      NO_DATA,
+      0,
+      0,
+      1900,
+      1153,
+      1
+   },
+   
+/*1384*/
+   {
+      "interface",
+      591,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1149,
+      1
+   },
+   
+/*1385*/
+   {
+      "interface",
+      591,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1152,
+      1
+   },
+   
+/*1386*/
+   {
+      "interface",
+      591,
+      NO_DATA,
+      0,
+      0,
+      1900,
+      1153,
+      1
+   },
+   
+/*1387*/
+   {
+      "interface",
+      1889,
+      NO_DATA,
+      0,
+      0,
+      1904,
+      1191,
+      1
+   },
+   
+/*1388*/
+   {
+      "interface",
+      1889,
+      NO_DATA,
+      0,
+      0,
+      1903,
+      1191,
+      1
+   },
+   
+/*1389*/
+   {
+      "interface",
+      1889,
+      NO_DATA,
+      0,
+      0,
+      1905,
+      1191,
+      1
+   },
+   
+/*1390*/
+   {
+      "interface",
+      1639,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1162,
+      1
+   },
+   
+/*1391*/
+   {
+      "interface",
+      1639,
+      NO_DATA,
+      0,
+      0,
+      1959,
+      1162,
+      1
+   },
+   
+/*1392*/
+   {
+      "interface",
+      216,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1162,
+      1
+   },
+   
+/*1393*/
+   {
+      "interface",
+      216,
+      NO_DATA,
+      0,
+      0,
+      1484,
+      1167,
+      1
+   },
+   
+/*1394*/
+   {
+      "interface",
+      216,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1183,
+      1
+   },
+   
+/*1395*/
+   {
+      "interface",
+      1837,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1177,
+      1
+   },
+   
+/*1396*/
+   {
+      "interface",
+      1605,
+      NO_DATA,
+      0,
+      0,
+      1904,
+      1182,
+      1
+   },
+   
+/*1397*/
+   {
+      "interface",
+      514,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1155,
+      1
+   },
+   
+/*1398*/
+   {
+      "interface",
+      13,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1156,
+      1
+   },
+   
+/*1399*/
+   {
+      "interface",
+      13,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1156,
+      1
+   },
+   
+/*1400*/
+   {
+      "interface",
+      1745,
+      NO_DATA,
+      0,
+      0,
+      2057,
+      1194,
+      1
+   },
+   
+/*1401*/
+   {
+      "interface",
+      1770,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1178,
+      1
+   },
+   
+/*1402*/
+   {
+      "interface",
+      1869,
+      NO_DATA,
+      0,
+      0,
+      2156,
+      NULL_ARG,
+      1
+   },
+   
+/*1403*/
+   {
+      "interface",
+      1892,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1404*/
+   {
+      "interface",
+      216,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1165,
+      1
+   },
+   
+/*1405*/
+   {
+      "intermediate",
+      710,
+      NO_DATA,
+      0,
+      0,
+      1908,
+      2086,
+      1
+   },
+   
+/*1406*/
+   {
+      "internal",
+      27,
+      NO_DATA,
+      0,
+      0,
+      1634,
+      NULL_ARG,
+      1
+   },
+   
+/*1407*/
+   {
+      "interval",
+      1291,
+      NO_DATA,
+      0,
+      0,
+      0,
+      246,
+      1
+   },
+   
+/*1408*/
+   {
+      "interval",
+      1356,
+      NO_DATA,
+      0,
+      0,
+      1672,
+      313,
+      1
+   },
+   
+/*1409*/
+   {
+      "interval",
+      1358,
+      NO_DATA,
+      0,
+      0,
+      0,
+      313,
+      1
+   },
+   
+/*1410*/
+   {
+      "interval",
+      377,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      458,
+      1
+   },
+   
+/*1411*/
+   {
+      "interval",
+      1646,
+      NO_DATA,
+      0,
+      0,
+      1892,
+      366,
+      1
+   },
+   
+/*1412*/
+   {
+      "interval",
+      1646,
+      NO_DATA,
+      0,
+      0,
+      1892,
+      367,
+      1
+   },
+   
+/*1413*/
+   {
+      "interval",
+      413,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      181,
+      1
+   },
+   
+/*1414*/
+   {
+      "interval",
+      1291,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1415*/
+   {
+      "interval",
+      377,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1416*/
+   {
+      "interval",
+      1370,
+      WORD_DATA,
+      XSTP_TYPE_MAX_LOOPBACK_DETECTION_SHUTDOWN_INTERVAL,
+      XSTP_TYPE_MIN_LOOPBACK_DETECTION_SHUTDOWN_INTERVAL,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1417*/
+   {
+      "inventory",
+      1174,
+      NO_DATA,
+      0,
+      0,
+      1505,
+      NULL_ARG,
+      1
+   },
+   
+/*1418*/
+   {
+      "inventory",
+      1174,
+      NO_DATA,
+      0,
+      0,
+      1506,
+      NULL_ARG,
+      1
+   },
+   
+/*1419*/
+   {
+      "ip",
+      157,
+      NO_DATA,
+      0,
+      0,
+      2136,
+      1114,
+      1
+   },
+   
+/*1420*/
+   {
+      "ip",
+      1522,
+      NO_DATA,
+      0,
+      0,
+      1688,
+      1115,
+      1
+   },
+   
+/*1421*/
+   {
+      "ip",
+      55,
+      NO_DATA,
+      0,
+      0,
+      1810,
+      856,
+      1
+   },
+   
+/*1422*/
+   {
+      "ip",
+      55,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      856,
+      1
+   },
+   
+/*1423*/
+   {
+      "ip",
+      55,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      857,
+      1
+   },
+   
+/*1424*/
+   {
+      "ip",
+      417,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1934,
+      1
+   },
+   
+/*1425*/
+   {
+      "ip",
+      417,
+      NO_DATA,
+      0,
+      0,
+      1935,
+      1934,
+      1
+   },
+   
+/*1426*/
+   {
+      "ip",
+      824,
+      NO_DATA,
+      0,
+      0,
+      1429,
+      NULL_ARG,
+      1
+   },
+   
+/*1427*/
+   {
+      "ip-address",
+      427,
+      NO_DATA,
+      0,
+      0,
+      1528,
+      1139,
+      1
+   },
+   
+/*1428*/
+   {
+      "ip-address",
+      427,
+      NO_DATA,
+      0,
+      0,
+      1534,
+      1138,
+      1
+   },
+   
+/*1429*/
+   {
+      "ipv6",
+      825,
+      NO_DATA,
+      0,
+      0,
+      1788,
+      NULL_ARG,
+      1
+   },
+   
+/*1430*/
+   {
+      "ipx-raw",
+      828,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1431*/
+   {
+      "january",
+      859,
+      NO_DATA,
+      0,
+      0,
+      1440,
+      304,
+      1
+   },
+   
+/*1432*/
+   {
+      "january",
+      859,
+      NO_DATA,
+      0,
+      0,
+      1441,
+      310,
+      1
+   },
+   
+/*1433*/
+   {
+      "january",
+      859,
+      NO_DATA,
+      0,
+      0,
+      1442,
+      451,
+      1
+   },
+   
+/*1434*/
+   {
+      "january",
+      859,
+      NO_DATA,
+      0,
+      0,
+      1443,
+      453,
+      1
+   },
+   
+/*1435*/
+   {
+      "january",
+      859,
+      NO_DATA,
+      0,
+      0,
+      1444,
+      454,
+      1
+   },
+   
+/*1436*/
+   {
+      "january",
+      859,
+      NO_DATA,
+      0,
+      0,
+      1445,
+      452,
+      1
+   },
+   
+/*1437*/
+   {
+      "join",
+      1098,
+      NO_DATA,
+      0,
+      0,
+      1474,
+      385,
+      1
+   },
+   
+/*1438*/
+   {
+      "join",
+      1098,
+      NO_DATA,
+      0,
+      0,
+      1475,
+      NULL_ARG,
+      1
+   },
+   
+/*1439*/
+   {
+      "join",
+      1098,
+      NO_DATA,
+      0,
+      0,
+      1476,
+      NULL_ARG,
+      1
+   },
+   
+/*1440*/
+   {
+      "july",
+      860,
+      NO_DATA,
+      0,
+      0,
+      1447,
+      304,
+      1
+   },
+   
+/*1441*/
+   {
+      "july",
+      860,
+      NO_DATA,
+      0,
+      0,
+      1446,
+      310,
+      1
+   },
+   
+/*1442*/
+   {
+      "july",
+      860,
+      NO_DATA,
+      0,
+      0,
+      1448,
+      451,
+      1
+   },
+   
+/*1443*/
+   {
+      "july",
+      860,
+      NO_DATA,
+      0,
+      0,
+      1449,
+      453,
+      1
+   },
+   
+/*1444*/
+   {
+      "july",
+      860,
+      NO_DATA,
+      0,
+      0,
+      1450,
+      454,
+      1
+   },
+   
+/*1445*/
+   {
+      "july",
+      860,
+      NO_DATA,
+      0,
+      0,
+      1451,
+      452,
+      1
+   },
+   
+/*1446*/
+   {
+      "june",
+      861,
+      NO_DATA,
+      0,
+      0,
+      1550,
+      302,
+      1
+   },
+   
+/*1447*/
+   {
+      "june",
+      861,
+      NO_DATA,
+      0,
+      0,
+      1549,
+      304,
+      1
+   },
+   
+/*1448*/
+   {
+      "june",
+      861,
+      NO_DATA,
+      0,
+      0,
+      1551,
+      451,
+      1
+   },
+   
+/*1449*/
+   {
+      "june",
+      861,
+      NO_DATA,
+      0,
+      0,
+      1552,
+      453,
+      1
+   },
+   
+/*1450*/
+   {
+      "june",
+      861,
+      NO_DATA,
+      0,
+      0,
+      1553,
+      454,
+      1
+   },
+   
+/*1451*/
+   {
+      "june",
+      861,
+      NO_DATA,
+      0,
+      0,
+      1554,
+      452,
+      1
+   },
+   
+/*1452*/
+   {
+      "keep",
+      449,
+      NO_DATA,
+      0,
+      0,
+      1807,
+      NULL_ARG,
+      1
+   },
+   
+/*1453*/
+   {
+      "keep",
+      436,
+      NO_DATA,
+      0,
+      0,
+      1808,
+      NULL_ARG,
+      1
+   },
+   
+/*1454*/
+   {
+      "key",
+      990,
+      NO_DATA,
+      0,
+      0,
+      0,
+      771,
+      1
+   },
+   
+/*1455*/
+   {
+      "key",
+      990,
+      NO_DATA,
+      0,
+      0,
+      1821,
+      771,
+      1
+   },
+   
+/*1456*/
+   {
+      "key",
+      990,
+      NO_DATA,
+      0,
+      0,
+      1820,
+      772,
+      1
+   },
+   
+/*1457*/
+   {
+      "key",
+      990,
+      NO_DATA,
+      0,
+      0,
+      1694,
+      773,
+      1
+   },
+   
+/*1458*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      1814,
+      699,
+      1
+   },
+   
+/*1459*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      0,
+      699,
+      1
+   },
+   
+/*1460*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      1815,
+      699,
+      1
+   },
+   
+/*1461*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      1816,
+      700,
+      1
+   },
+   
+/*1462*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      1817,
+      701,
+      1
+   },
+   
+/*1463*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      1818,
+      701,
+      1
+   },
+   
+/*1464*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      0,
+      701,
+      1
+   },
+   
+/*1465*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      0,
+      702,
+      1
+   },
+   
+/*1466*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      1819,
+      702,
+      1
+   },
+   
+/*1467*/
+   {
+      "key",
+      691,
+      NO_DATA,
+      0,
+      0,
+      0,
+      703,
+      1
+   },
+   
+/*1468*/
+   {
+      "last-memb-query-count",
+      490,
+      NO_DATA,
+      0,
+      0,
+      1471,
+      1470,
+      1
+   },
+   
+/*1469*/
+   {
+      "last-memb-query-count",
+      490,
+      NO_DATA,
+      0,
+      0,
+      1472,
+      NULL_ARG,
+      1
+   },
+   
+/*1470*/
+   {
+      "last-memb-query-count",
+      491,
+      WORD_DATA,
+      MAX_igmpSnoopLastMemberQueryCount,
+      MIN_igmpSnoopLastMemberQueryCount,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1471*/
+   {
+      "last-memb-query-intvl",
+      492,
+      NO_DATA,
+      0,
+      0,
+      1611,
+      1473,
+      1
+   },
+   
+/*1472*/
+   {
+      "last-memb-query-intvl",
+      492,
+      NO_DATA,
+      0,
+      0,
+      1612,
+      NULL_ARG,
+      1
+   },
+   
+/*1473*/
+   {
+      "last-memb-query-intvl",
+      493,
+      WORD_DATA,
+      MAX_igmpSnoopLastMemberQueryInterval,
+      MIN_igmpSnoopLastMemberQueryInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1474*/
+   {
+      "leave",
+      1100,
+      NO_DATA,
+      0,
+      0,
+      1477,
+      387,
+      1
+   },
+   
+/*1475*/
+   {
+      "leave",
+      1100,
+      NO_DATA,
+      0,
+      0,
+      1478,
+      NULL_ARG,
+      1
+   },
+   
+/*1476*/
+   {
+      "leave",
+      1100,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1477*/
+   {
+      "leaveall",
+      1101,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      386,
+      1
+   },
+   
+/*1478*/
+   {
+      "leaveall",
+      1101,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1479*/
+   {
+      "level",
+      382,
+      NO_DATA,
+      0,
+      0,
+      1620,
+      176,
+      1
+   },
+   
+/*1480*/
+   {
+      "level",
+      382,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      176,
+      1
+   },
+   
+/*1481*/
+   {
+      "level",
+      359,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      74,
+      1
+   },
+   
+/*1482*/
+   {
+      "level",
+      359,
+      NO_DATA,
+      0,
+      0,
+      0,
+      76,
+      1
+   },
+   
+/*1483*/
+   {
+      "level",
+      383,
+      NO_DATA,
+      0,
+      0,
+      0,
+      169,
+      1
+   },
+   
+/*1484*/
+   {
+      "level",
+      383,
+      NO_DATA,
+      0,
+      0,
+      0,
+      170,
+      1
+   },
+   
+/*1485*/
+   {
+      "level",
+      383,
+      NO_DATA,
+      0,
+      0,
+      0,
+      171,
+      1
+   },
+   
+/*1486*/
+   {
+      "level",
+      812,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      75,
+      1
+   },
+   
+/*1487*/
+   {
+      "link-agg",
+      1159,
+      NO_DATA,
+      0,
+      0,
+      1537,
+      NULL_ARG,
+      1
+   },
+   
+/*1488*/
+   {
+      "link-down",
+      1209,
+      NO_DATA,
+      0,
+      0,
+      1491,
+      808,
+      1
+   },
+   
+/*1489*/
+   {
+      "link-local",
+      1429,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1490*/
+   {
+      "link-local",
+      1429,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1491*/
+   {
+      "link-up",
+      1214,
+      NO_DATA,
+      0,
+      0,
+      1492,
+      808,
+      1
+   },
+   
+/*1492*/
+   {
+      "link-up-down",
+      1215,
+      NO_DATA,
+      0,
+      0,
+      0,
+      808,
+      1
+   },
+   
+/*1493*/
+   {
+      "link-up-down",
+      736,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1494*/
+   {
+      "llc-other",
+      827,
+      NO_DATA,
+      0,
+      0,
+      1824,
+      1753,
+      1
+   },
+   
+/*1495*/
+   {
+      "lldp",
+      1323,
+      NO_DATA,
+      0,
+      0,
+      1763,
+      NULL_ARG,
+      1
+   },
+   
+/*1496*/
+   {
+      "lldp",
+      1336,
+      NO_DATA,
+      0,
+      0,
+      1665,
+      NULL_ARG,
+      1
+   },
+   
+/*1497*/
+   {
+      "lldp",
+      1395,
+      NO_DATA,
+      0,
+      0,
+      1764,
+      NULL_ARG,
+      1
+   },
+   
+/*1498*/
+   {
+      "local",
+      738,
+      NO_DATA,
+      0,
+      0,
+      1797,
+      1285,
+      1
+   },
+   
+/*1499*/
+   {
+      "local",
+      255,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1500*/
+   {
+      "local",
+      255,
+      NO_DATA,
+      0,
+      0,
+      1779,
+      1780,
+      1
+   },
+   
+/*1501*/
+   {
+      "local",
+      255,
+      NO_DATA,
+      0,
+      0,
+      1985,
+      1983,
+      1
+   },
+   
+/*1502*/
+   {
+      "local",
+      255,
+      NO_DATA,
+      0,
+      0,
+      1778,
+      1777,
+      1
+   },
+   
+/*1503*/
+   {
+      "local",
+      738,
+      NO_DATA,
+      0,
+      0,
+      1800,
+      NULL_ARG,
+      1
+   },
+   
+/*1504*/
+   {
+      "local",
+      1464,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1505*/
+   {
+      "location",
+      1175,
+      NO_DATA,
+      0,
+      0,
+      1584,
+      NULL_ARG,
+      1
+   },
+   
+/*1506*/
+   {
+      "location",
+      1175,
+      NO_DATA,
+      0,
+      0,
+      1585,
+      NULL_ARG,
+      1
+   },
+   
+/*1507*/
+   {
+      "log",
+      904,
+      NO_DATA,
+      0,
+      0,
+      1675,
+      1037,
+      1
+   },
+   
+/*1508*/
+   {
+      "log",
+      59,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1509*/
+   {
+      "log",
+      59,
+      NO_DATA,
+      0,
+      0,
+      2204,
+      NULL_ARG,
+      1
+   },
+   
+/*1510*/
+   {
+      "login",
+      1853,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1511*/
+   {
+      "long",
+      978,
+      NO_DATA,
+      0,
+      0,
+      1876,
+      NULL_ARG,
+      1
+   },
+   
+/*1512*/
+   {
+      "loop",
+      729,
+      NO_DATA,
+      0,
+      0,
+      1591,
+      NULL_ARG,
+      1
+   },
+   
+/*1513*/
+   {
+      "loopback",
+      399,
+      NO_DATA,
+      0,
+      0,
+      2148,
+      NULL_ARG,
+      1
+   },
+   
+/*1514*/
+   {
+      "lowest-priority",
+      187,
+      NO_DATA,
+      0,
+      0,
+      1811,
+      426,
+      1
+   },
+   
+/*1515*/
+   {
+      "lowest-priority",
+      187,
+      NO_DATA,
+      0,
+      0,
+      1812,
+      NULL_ARG,
+      1
+   },
+   
+/*1516*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      643,
+      1
+   },
+   
+/*1517*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      644,
+      1
+   },
+   
+/*1518*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      722,
+      1
+   },
+   
+/*1519*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      723,
+      1
+   },
+   
+/*1520*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      724,
+      1
+   },
+   
+/*1521*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      726,
+      1
+   },
+   
+/*1522*/
+   {
+      "ma",
+      183,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      727,
+      1
+   },
+   
+/*1523*/
+   {
+      "ma-up",
+      733,
+      NO_DATA,
+      0,
+      0,
+      1592,
+      NULL_ARG,
+      1
+   },
+   
+/*1524*/
+   {
+      "mac",
+      1760,
+      NO_DATA,
+      0,
+      0,
+      1610,
+      2239,
+      1
+   },
+   
+/*1525*/
+   {
+      "mac",
+      57,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      884,
+      1
+   },
+   
+/*1526*/
+   {
+      "mac",
+      57,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      885,
+      1
+   },
+   
+/*1527*/
+   {
+      "mac",
+      57,
+      NO_DATA,
+      0,
+      0,
+      552,
+      885,
+      1
+   },
+   
+/*1528*/
+   {
+      "mac-address",
+      431,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1139,
+      1
+   },
+   
+/*1529*/
+   {
+      "mac-address",
+      57,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2277,
+      1
+   },
+   
+/*1530*/
+   {
+      "mac-address",
+      57,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2281,
+      1
+   },
+   
+/*1531*/
+   {
+      "mac-address",
+      1242,
+      NO_DATA,
+      0,
+      0,
+      2137,
+      2280,
+      1
+   },
+   
+/*1532*/
+   {
+      "mac-address",
+      1242,
+      NO_DATA,
+      0,
+      0,
+      2138,
+      2282,
+      1
+   },
+   
+/*1533*/
+   {
+      "mac-address",
+      329,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2238,
+      1
+   },
+   
+/*1534*/
+   {
+      "mac-address",
+      431,
+      NO_DATA,
+      0,
+      0,
+      1967,
+      1138,
+      1
+   },
+   
+/*1535*/
+   {
+      "mac-authentication",
+      1219,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1536*/
+   {
+      "mac-based-auth",
+      1050,
+      NO_DATA,
+      0,
+      0,
+      1618,
+      NULL_ARG,
+      1
+   },
+   
+/*1537*/
+   {
+      "mac-phy",
+      1160,
+      NO_DATA,
+      0,
+      0,
+      1566,
+      NULL_ARG,
+      1
+   },
+   
+/*1538*/
+   {
+      "management-ip-address",
+      1148,
+      NO_DATA,
+      0,
+      0,
+      1727,
+      NULL_ARG,
+      1
+   },
+   
+/*1539*/
+   {
+      "manual",
+      1407,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1540*/
+   {
+      "manual",
+      1372,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1541*/
+   {
+      "manufacturer",
+      290,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      745,
+      1
+   },
+   
+/*1542*/
+   {
+      "manufacturer",
+      290,
+      NO_DATA,
+      0,
+      0,
+      1774,
+      NULL_ARG,
+      1
+   },
+   
+/*1543*/
+   {
+      "manufacturer",
+      290,
+      NO_DATA,
+      0,
+      0,
+      1875,
+      NULL_ARG,
+      1
+   },
+   
+/*1544*/
+   {
+      "manufacturer",
+      290,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1545*/
+   {
+      "manufacturer",
+      290,
+      NO_DATA,
+      0,
+      0,
+      1775,
+      NULL_ARG,
+      1
+   },
+   
+/*1546*/
+   {
+      "manufacturer",
+      290,
+      NO_DATA,
+      0,
+      0,
+      1548,
+      NULL_ARG,
+      1
+   },
+   
+/*1547*/
+   {
+      "manufacturer-ID",
+      286,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      664,
+      1
+   },
+   
+/*1548*/
+   {
+      "manufacturer-ID",
+      286,
+      NO_DATA,
+      0,
+      0,
+      1774,
+      1250,
+      1
+   },
+   
+/*1549*/
+   {
+      "march",
+      862,
+      NO_DATA,
+      0,
+      0,
+      1569,
+      304,
+      1
+   },
+   
+/*1550*/
+   {
+      "march",
+      862,
+      NO_DATA,
+      0,
+      0,
+      1570,
+      310,
+      1
+   },
+   
+/*1551*/
+   {
+      "march",
+      862,
+      NO_DATA,
+      0,
+      0,
+      1571,
+      451,
+      1
+   },
+   
+/*1552*/
+   {
+      "march",
+      862,
+      NO_DATA,
+      0,
+      0,
+      1572,
+      453,
+      1
+   },
+   
+/*1553*/
+   {
+      "march",
+      862,
+      NO_DATA,
+      0,
+      0,
+      1573,
+      454,
+      1
+   },
+   
+/*1554*/
+   {
+      "march",
+      862,
+      NO_DATA,
+      0,
+      0,
+      1574,
+      452,
+      1
+   },
+   
+/*1555*/
+   {
+      "mask",
+      630,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2241,
+      1
+   },
+   
+/*1556*/
+   {
+      "mask",
+      630,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2242,
+      1
+   },
+   
+/*1557*/
+   {
+      "mask",
+      630,
+      NO_DATA,
+      0,
+      0,
+      0,
+      2284,
+      1
+   },
+   
+/*1558*/
+   {
+      "mask",
+      630,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2284,
+      1
+   },
+   
+/*1559*/
+   {
+      "match",
+      1315,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1007,
+      1
+   },
+   
+/*1560*/
+   {
+      "match",
+      1315,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1007,
+      1
+   },
+   
+/*1561*/
+   {
+      "match-any",
+      316,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1562*/
+   {
+      "max-binding",
+      1122,
+      NO_DATA,
+      0,
+      0,
+      1882,
+      193,
+      1
+   },
+   
+/*1563*/
+   {
+      "max-binding",
+      1122,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1564*/
+   {
+      "max-count",
+      1052,
+      NO_DATA,
+      0,
+      0,
+      0,
+      269,
+      1
+   },
+   
+/*1565*/
+   {
+      "max-count",
+      1232,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1566*/
+   {
+      "max-frame",
+      1161,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1567*/
+   {
+      "max-mac-count",
+      1246,
+      NO_DATA,
+      0,
+      0,
+      0,
+      11,
+      1
+   },
+   
+/*1568*/
+   {
+      "max-mac-count",
+      1246,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1569*/
+   {
+      "may",
+      863,
+      NO_DATA,
+      0,
+      0,
+      1650,
+      304,
+      1
+   },
+   
+/*1570*/
+   {
+      "may",
+      863,
+      NO_DATA,
+      0,
+      0,
+      1649,
+      310,
+      1
+   },
+   
+/*1571*/
+   {
+      "may",
+      863,
+      NO_DATA,
+      0,
+      0,
+      1651,
+      451,
+      1
+   },
+   
+/*1572*/
+   {
+      "may",
+      863,
+      NO_DATA,
+      0,
+      0,
+      1652,
+      453,
+      1
+   },
+   
+/*1573*/
+   {
+      "may",
+      863,
+      NO_DATA,
+      0,
+      0,
+      1653,
+      454,
+      1
+   },
+   
+/*1574*/
+   {
+      "may",
+      863,
+      NO_DATA,
+      0,
+      0,
+      1654,
+      452,
+      1
+   },
+   
+/*1575*/
+   {
+      "md",
+      368,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      647,
+      1
+   },
+   
+/*1576*/
+   {
+      "md",
+      368,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      648,
+      1
+   },
+   
+/*1577*/
+   {
+      "md",
+      368,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      649,
+      1
+   },
+   
+/*1578*/
+   {
+      "md",
+      368,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      650,
+      1
+   },
+   
+/*1579*/
+   {
+      "md",
+      368,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      651,
+      1
+   },
+   
+/*1580*/
+   {
+      "md5",
+      954,
+      NO_DATA,
+      0,
+      0,
+      1869,
+      738,
+      1
+   },
+   
+/*1581*/
+   {
+      "md5",
+      946,
+      NO_DATA,
+      0,
+      0,
+      1870,
+      735,
+      1
+   },
+   
+/*1582*/
+   {
+      "md5",
+      946,
+      NO_DATA,
+      0,
+      0,
+      1871,
+      737,
+      1
+   },
+   
+/*1583*/
+   {
+      "md5",
+      958,
+      NO_DATA,
+      0,
+      0,
+      1872,
+      733,
+      1
+   },
+   
+/*1584*/
+   {
+      "med-cap",
+      1176,
+      NO_DATA,
+      0,
+      0,
+      1635,
+      NULL_ARG,
+      1
+   },
+   
+/*1585*/
+   {
+      "med-cap",
+      1176,
+      NO_DATA,
+      0,
+      0,
+      1636,
+      NULL_ARG,
+      1
+   },
+   
+/*1586*/
+   {
+      "media",
+      1544,
+      NO_DATA,
+      0,
+      0,
+      1622,
+      1201,
+      1
+   },
+   
+/*1587*/
+   {
+      "media",
+      1544,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1201,
+      1
+   },
+   
+/*1588*/
+   {
+      "mep",
+      204,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      441,
+      1
+   },
+   
+/*1589*/
+   {
+      "mep",
+      204,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1089,
+      1
+   },
+   
+/*1590*/
+   {
+      "mep",
+      204,
+      NO_DATA,
+      0,
+      0,
+      1599,
+      1089,
+      1
+   },
+   
+/*1591*/
+   {
+      "mep-down",
+      730,
+      NO_DATA,
+      0,
+      0,
+      1594,
+      NULL_ARG,
+      1
+   },
+   
+/*1592*/
+   {
+      "mep-missing",
+      734,
+      NO_DATA,
+      0,
+      0,
+      1593,
+      NULL_ARG,
+      1
+   },
+   
+/*1593*/
+   {
+      "mep-unknown",
+      735,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1594*/
+   {
+      "mep-up",
+      731,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1595*/
+   {
+      "milliseconds",
+      1439,
+      WORD_DATA,
+      3600000,
+      1000,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1596*/
+   {
+      "minute",
+      874,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      113,
+      1
+   },
+   
+/*1597*/
+   {
+      "minute",
+      874,
+      NO_DATA,
+      0,
+      0,
+      0,
+      126,
+      1
+   },
+   
+/*1598*/
+   {
+      "minute",
+      322,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      124,
+      1
+   },
+   
+/*1599*/
+   {
+      "mip",
+      1757,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1088,
+      1
+   },
+   
+/*1600*/
+   {
+      "mip-creation",
+      170,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1021,
+      1
+   },
+   
+/*1601*/
+   {
+      "monday",
+      882,
+      NO_DATA,
+      0,
+      0,
+      1845,
+      99,
+      1
+   },
+   
+/*1602*/
+   {
+      "monday",
+      882,
+      NO_DATA,
+      0,
+      0,
+      1846,
+      100,
+      1
+   },
+   
+/*1603*/
+   {
+      "monday",
+      882,
+      NO_DATA,
+      0,
+      0,
+      1847,
+      NULL_ARG,
+      1
+   },
+   
+/*1604*/
+   {
+      "monthly",
+      879,
+      NO_DATA,
+      0,
+      0,
+      2175,
+      309,
+      1
+   },
+   
+/*1605*/
+   {
+      "mpid",
+      181,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      180,
+      1
+   },
+   
+/*1606*/
+   {
+      "mpid",
+      181,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      432,
+      1
+   },
+   
+/*1607*/
+   {
+      "mpid",
+      181,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      434,
+      1
+   },
+   
+/*1608*/
+   {
+      "mpid",
+      181,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      435,
+      1
+   },
+   
+/*1609*/
+   {
+      "mpid",
+      181,
+      NO_DATA,
+      0,
+      0,
+      0,
+      439,
+      1
+   },
+   
+/*1610*/
+   {
+      "mpid",
+      181,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      440,
+      1
+   },
+   
+/*1611*/
+   {
+      "mrd",
+      494,
+      NO_DATA,
+      0,
+      0,
+      1613,
+      NULL_ARG,
+      1
+   },
+   
+/*1612*/
+   {
+      "mrd",
+      494,
+      NO_DATA,
+      0,
+      0,
+      1614,
+      NULL_ARG,
+      1
+   },
+   
+/*1613*/
+   {
+      "mrouter",
+      495,
+      NO_DATA,
+      0,
+      0,
+      1755,
+      1154,
+      1
+   },
+   
+/*1614*/
+   {
+      "mrouter",
+      495,
+      NO_DATA,
+      0,
+      0,
+      1756,
+      1163,
+      1
+   },
+   
+/*1615*/
+   {
+      "mst",
+      1945,
+      NO_DATA,
+      0,
+      0,
+      1717,
+      954,
+      1
+   },
+   
+/*1616*/
+   {
+      "mstp",
+      973,
+      NO_DATA,
+      0,
+      0,
+      1836,
+      NULL_ARG,
+      1
+   },
+   
+/*1617*/
+   {
+      "multi-host",
+      1231,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1565,
+      1
+   },
+   
+/*1618*/
+   {
+      "multi-host",
+      1051,
+      NO_DATA,
+      0,
+      0,
+      1881,
+      1564,
+      1
+   },
+   
+/*1619*/
+   {
+      "name",
+      166,
+      NO_DATA,
+      0,
+      0,
+      1626,
+      725,
+      1
+   },
+   
+/*1620*/
+   {
+      "name",
+      384,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      656,
+      1
+   },
+   
+/*1621*/
+   {
+      "name",
+      1958,
+      NO_DATA,
+      0,
+      0,
+      0,
+      781,
+      1
+   },
+   
+/*1622*/
+   {
+      "name",
+      44,
+      NO_DATA,
+      0,
+      0,
+      0,
+      672,
+      1
+   },
+   
+/*1623*/
+   {
+      "name",
+      44,
+      NO_DATA,
+      0,
+      0,
+      0,
+      781,
+      1
+   },
+   
+/*1624*/
+   {
+      "name",
+      44,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      781,
+      1
+   },
+   
+/*1625*/
+   {
+      "name",
+      44,
+      NO_DATA,
+      0,
+      0,
+      1952,
+      NULL_ARG,
+      1
+   },
+   
+/*1626*/
+   {
+      "name-format",
+      174,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      944,
+      1
+   },
+   
+/*1627*/
+   {
+      "name-format",
+      174,
+      NO_DATA,
+      0,
+      0,
+      2129,
+      NULL_ARG,
+      1
+   },
+   
+/*1628*/
+   {
+      "name1",
+      299,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      660,
+      1
+   },
+   
+/*1629*/
+   {
+      "name1",
+      299,
+      NO_DATA,
+      0,
+      0,
+      1631,
+      1631,
+      1
+   },
+   
+/*1630*/
+   {
+      "name2",
+      299,
+      NO_DATA,
+      0,
+      0,
+      0,
+      661,
+      1
+   },
+   
+/*1631*/
+   {
+      "name2",
+      299,
+      NO_DATA,
+      0,
+      0,
+      1633,
+      1633,
+      1
+   },
+   
+/*1632*/
+   {
+      "name3",
+      299,
+      NO_DATA,
+      0,
+      0,
+      0,
+      659,
+      1
+   },
+   
+/*1633*/
+   {
+      "name3",
+      299,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1634*/
+   {
+      "neighbors",
+      28,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1635*/
+   {
+      "network-policy",
+      1177,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1636*/
+   {
+      "network-policy",
+      1177,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1637*/
+   {
+      "next-header",
+      117,
+      NO_DATA,
+      0,
+      0,
+      0,
+      470,
+      1
+   },
+   
+/*1638*/
+   {
+      "next-header",
+      117,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      471,
+      1
+   },
+   
+/*1639*/
+   {
+      "noauth",
+      926,
+      NO_DATA,
+      0,
+      0,
+      1746,
+      1646,
+      1
+   },
+   
+/*1640*/
+   {
+      "noauth",
+      938,
+      NO_DATA,
+      0,
+      0,
+      1745,
+      2073,
+      1
+   },
+   
+/*1641*/
+   {
+      "noauth",
+      746,
+      NO_DATA,
+      0,
+      0,
+      1747,
+      NULL_ARG,
+      1
+   },
+   
+/*1642*/
+   {
+      "none",
+      1477,
+      NO_DATA,
+      0,
+      0,
+      1662,
+      NULL_ARG,
+      1
+   },
+   
+/*1643*/
+   {
+      "none",
+      1107,
+      NO_DATA,
+      0,
+      0,
+      1789,
+      NULL_ARG,
+      1
+   },
+   
+/*1644*/
+   {
+      "none",
+      173,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1645*/
+   {
+      "nopassword",
+      999,
+      NO_DATA,
+      0,
+      0,
+      1684,
+      NULL_ARG,
+      1
+   },
+   
+/*1646*/
+   {
+      "notify",
+      919,
+      NO_DATA,
+      0,
+      0,
+      1791,
+      746,
+      1
+   },
+   
+/*1647*/
+   {
+      "notify",
+      919,
+      NO_DATA,
+      0,
+      0,
+      2184,
+      746,
+      1
+   },
+   
+/*1648*/
+   {
+      "notify",
+      919,
+      NO_DATA,
+      0,
+      0,
+      0,
+      746,
+      1
+   },
+   
+/*1649*/
+   {
+      "november",
+      864,
+      NO_DATA,
+      0,
+      0,
+      1657,
+      302,
+      1
+   },
+   
+/*1650*/
+   {
+      "november",
+      864,
+      NO_DATA,
+      0,
+      0,
+      1656,
+      304,
+      1
+   },
+   
+/*1651*/
+   {
+      "november",
+      864,
+      NO_DATA,
+      0,
+      0,
+      1658,
+      451,
+      1
+   },
+   
+/*1652*/
+   {
+      "november",
+      864,
+      NO_DATA,
+      0,
+      0,
+      1659,
+      453,
+      1
+   },
+   
+/*1653*/
+   {
+      "november",
+      864,
+      NO_DATA,
+      0,
+      0,
+      1660,
+      454,
+      1
+   },
+   
+/*1654*/
+   {
+      "november",
+      864,
+      NO_DATA,
+      0,
+      0,
+      1661,
+      452,
+      1
+   },
+   
+/*1655*/
+   {
+      "number-of-lines",
+      1979,
+      WORD_DATA,
+      256,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1656*/
+   {
+      "october",
+      865,
+      NO_DATA,
+      0,
+      0,
+      1851,
+      304,
+      1
+   },
+   
+/*1657*/
+   {
+      "october",
+      865,
+      NO_DATA,
+      0,
+      0,
+      1850,
+      310,
+      1
+   },
+   
+/*1658*/
+   {
+      "october",
+      865,
+      NO_DATA,
+      0,
+      0,
+      1852,
+      451,
+      1
+   },
+   
+/*1659*/
+   {
+      "october",
+      865,
+      NO_DATA,
+      0,
+      0,
+      1853,
+      453,
+      1
+   },
+   
+/*1660*/
+   {
+      "october",
+      865,
+      NO_DATA,
+      0,
+      0,
+      1854,
+      454,
+      1
+   },
+   
+/*1661*/
+   {
+      "october",
+      865,
+      NO_DATA,
+      0,
+      0,
+      1855,
+      452,
+      1
+   },
+   
+/*1662*/
+   {
+      "odd",
+      1478,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1663*/
+   {
+      "opcode:",
+      312,
+      COLON_DATA,
+      0,
+      0,
+      NULL_ARG,
+      694,
+      1
+   },
+   
+/*1664*/
+   {
+      "opcode:",
+      312,
+      COLON_DATA,
+      0,
+      0,
+      0,
+      696,
+      1
+   },
+   
+/*1665*/
+   {
+      "oui",
+      1337,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1666*/
+   {
+      "oui",
+      1960,
+      NO_DATA,
+      0,
+      0,
+      1963,
+      NULL_ARG,
+      1
+   },
+   
+/*1667*/
+   {
+      "output",
+      1270,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1668*/
+   {
+      "output",
+      1270,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      186,
+      1
+   },
+   
+/*1669*/
+   {
+      "owner",
+      895,
+      NO_DATA,
+      0,
+      0,
+      145,
+      1969,
+      1
+   },
+   
+/*1670*/
+   {
+      "owner",
+      895,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1969,
+      1
+   },
+   
+/*1671*/
+   {
+      "owner",
+      902,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1677,
+      1
+   },
+   
+/*1672*/
+   {
+      "owner",
+      902,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1678,
+      1
+   },
+   
+/*1673*/
+   {
+      "owner",
+      902,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1970,
+      1
+   },
+   
+/*1674*/
+   {
+      "owner",
+      902,
+      NO_DATA,
+      0,
+      0,
+      2050,
+      1970,
+      1
+   },
+   
+/*1675*/
+   {
+      "owner",
+      902,
+      NO_DATA,
+      0,
+      0,
+      2051,
+      1970,
+      1
+   },
+   
+/*1676*/
+   {
+      "owner",
+      213,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1677*/
+   {
+      "ownername",
+      903,
+      CHAR_DATA,
+      MAXSIZE_etherStatsOwner,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1678*/
+   {
+      "ownername",
+      903,
+      CHAR_DATA,
+      MAXSIZE_historyControlOwner,
+      1,
+      NULL_ARG,
+      939,
+      1
+   },
+   
+/*1679*/
+   {
+      "packet-rate",
+      1388,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      462,
+      1
+   },
+   
+/*1680*/
+   {
+      "packet-rate",
+      1402,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      461,
+      1
+   },
+   
+/*1681*/
+   {
+      "packet-rate",
+      1405,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      461,
+      1
+   },
+   
+/*1682*/
+   {
+      "pass-traffic",
+      1185,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1683*/
+   {
+      "passive",
+      1091,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1684*/
+   {
+      "password",
+      1000,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      6,
+      1
+   },
+   
+/*1685*/
+   {
+      "period",
+      877,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1010,
+      1
+   },
+   
+/*1686*/
+   {
+      "periodic",
+      230,
+      NO_DATA,
+      0,
+      0,
+      0,
+      272,
+      1
+   },
+   
+/*1687*/
+   {
+      "permanent",
+      594,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1688*/
+   {
+      "phb",
+      1520,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      520,
+      1
+   },
+   
+/*1689*/
+   {
+      "phone-number",
+      301,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      742,
+      1
+   },
+   
+/*1690*/
+   {
+      "phone-number",
+      301,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      743,
+      1
+   },
+   
+/*1691*/
+   {
+      "phone-number",
+      301,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      744,
+      1
+   },
+   
+/*1692*/
+   {
+      "pktformat",
+      148,
+      NO_DATA,
+      0,
+      0,
+      2237,
+      854,
+      1
+   },
+   
+/*1693*/
+   {
+      "point-to-point",
+      1367,
+      NO_DATA,
+      0,
+      0,
+      1873,
+      NULL_ARG,
+      1
+   },
+   
+/*1694*/
+   {
+      "port",
+      992,
+      NO_DATA,
+      0,
+      0,
+      1820,
+      382,
+      1
+   },
+   
+/*1695*/
+   {
+      "port-based",
+      580,
+      NO_DATA,
+      0,
+      0,
+      2160,
+      NULL_ARG,
+      1
+   },
+   
+/*1696*/
+   {
+      "port-channel",
+      1558,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      422,
+      1
+   },
+   
+/*1697*/
+   {
+      "port-channel",
+      1611,
+      NO_DATA,
+      0,
+      0,
+      0,
+      422,
+      1
+   },
+   
+/*1698*/
+   {
+      "port-channel",
+      1597,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      311,
+      1
+   },
+   
+/*1699*/
+   {
+      "port-channel",
+      1597,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      422,
+      1
+   },
+   
+/*1700*/
+   {
+      "port-channel",
+      1597,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      424,
+      1
+   },
+   
+/*1701*/
+   {
+      "port-channel",
+      1767,
+      NO_DATA,
+      0,
+      0,
+      0,
+      422,
+      1
+   },
+   
+/*1702*/
+   {
+      "port-channel",
+      1764,
+      NO_DATA,
+      0,
+      0,
+      0,
+      419,
+      1
+   },
+   
+/*1703*/
+   {
+      "port-channel",
+      401,
+      NO_DATA,
+      0,
+      0,
+      0,
+      442,
+      1
+   },
+   
+/*1704*/
+   {
+      "port-channel",
+      401,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      442,
+      1
+   },
+   
+/*1705*/
+   {
+      "port-channel",
+      401,
+      NO_DATA,
+      0,
+      0,
+      0,
+      443,
+      1
+   },
+   
+/*1706*/
+   {
+      "port-channel",
+      401,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      443,
+      1
+   },
+   
+/*1707*/
+   {
+      "port-channel",
+      1714,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      418,
+      1
+   },
+   
+/*1708*/
+   {
+      "port-channel",
+      1756,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      422,
+      1
+   },
+   
+/*1709*/
+   {
+      "port-channel",
+      1756,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      423,
+      1
+   },
+   
+/*1710*/
+   {
+      "port-channel",
+      18,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      417,
+      1
+   },
+   
+/*1711*/
+   {
+      "port-channel",
+      1861,
+      NO_DATA,
+      0,
+      0,
+      0,
+      444,
+      1
+   },
+   
+/*1712*/
+   {
+      "port-channel",
+      1583,
+      NO_DATA,
+      0,
+      0,
+      2135,
+      311,
+      1
+   },
+   
+/*1713*/
+   {
+      "port-channel",
+      1583,
+      NO_DATA,
+      0,
+      0,
+      0,
+      311,
+      1
+   },
+   
+/*1714*/
+   {
+      "port-channel",
+      1772,
+      NO_DATA,
+      0,
+      0,
+      0,
+      419,
+      1
+   },
+   
+/*1715*/
+   {
+      "port-channel",
+      1772,
+      NO_DATA,
+      0,
+      0,
+      2133,
+      419,
+      1
+   },
+   
+/*1716*/
+   {
+      "port-channel",
+      1772,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      419,
+      1
+   },
+   
+/*1717*/
+   {
+      "port-channel",
+      1772,
+      NO_DATA,
+      0,
+      0,
+      1965,
+      422,
+      1
+   },
+   
+/*1718*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      0,
+      311,
+      1
+   },
+   
+/*1719*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      420,
+      1
+   },
+   
+/*1720*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      421,
+      1
+   },
+   
+/*1721*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      0,
+      422,
+      1
+   },
+   
+/*1722*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      2143,
+      422,
+      1
+   },
+   
+/*1723*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      422,
+      1
+   },
+   
+/*1724*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      2154,
+      422,
+      1
+   },
+   
+/*1725*/
+   {
+      "port-channel",
+      17,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      423,
+      1
+   },
+   
+/*1726*/
+   {
+      "port-channel",
+      1778,
+      NO_DATA,
+      0,
+      0,
+      0,
+      427,
+      1
+   },
+   
+/*1727*/
+   {
+      "port-description",
+      1149,
+      NO_DATA,
+      0,
+      0,
+      1980,
+      NULL_ARG,
+      1
+   },
+   
+/*1728*/
+   {
+      "port-priority",
+      1302,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      202,
+      1
+   },
+   
+/*1729*/
+   {
+      "port-priority",
+      1302,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1730*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      1915,
+      234,
+      1
+   },
+   
+/*1731*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      1917,
+      235,
+      1
+   },
+   
+/*1732*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      1919,
+      236,
+      1
+   },
+   
+/*1733*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      1921,
+      237,
+      1
+   },
+   
+/*1734*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      516,
+      1
+   },
+   
+/*1735*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      1925,
+      982,
+      1
+   },
+   
+/*1736*/
+   {
+      "precedence",
+      95,
+      NO_DATA,
+      0,
+      0,
+      1926,
+      986,
+      1
+   },
+   
+/*1737*/
+   {
+      "priority",
+      601,
+      NO_DATA,
+      0,
+      0,
+      0,
+      177,
+      1
+   },
+   
+/*1738*/
+   {
+      "priority",
+      188,
+      NO_DATA,
+      0,
+      0,
+      2144,
+      291,
+      1
+   },
+   
+/*1739*/
+   {
+      "priority",
+      188,
+      NO_DATA,
+      0,
+      0,
+      2145,
+      NULL_ARG,
+      1
+   },
+   
+/*1740*/
+   {
+      "priv",
+      960,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1034,
+      1
+   },
+   
+/*1741*/
+   {
+      "priv",
+      960,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1035,
+      1
+   },
+   
+/*1742*/
+   {
+      "priv",
+      948,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1031,
+      1
+   },
+   
+/*1743*/
+   {
+      "priv",
+      948,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1032,
+      1
+   },
+   
+/*1744*/
+   {
+      "priv",
+      948,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1033,
+      1
+   },
+   
+/*1745*/
+   {
+      "priv",
+      939,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2073,
+      1
+   },
+   
+/*1746*/
+   {
+      "priv",
+      927,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1646,
+      1
+   },
+   
+/*1747*/
+   {
+      "priv",
+      747,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1748*/
+   {
+      "proto-ident",
+      1154,
+      NO_DATA,
+      0,
+      0,
+      1750,
+      NULL_ARG,
+      1
+   },
+   
+/*1749*/
+   {
+      "proto-ident",
+      1154,
+      NO_DATA,
+      0,
+      0,
+      1751,
+      NULL_ARG,
+      1
+   },
+   
+/*1750*/
+   {
+      "proto-vid",
+      1155,
+      NO_DATA,
+      0,
+      0,
+      1762,
+      NULL_ARG,
+      1
+   },
+   
+/*1751*/
+   {
+      "proto-vid",
+      1155,
+      NO_DATA,
+      0,
+      0,
+      1761,
+      NULL_ARG,
+      1
+   },
+   
+/*1752*/
+   {
+      "protocol",
+      126,
+      NO_DATA,
+      0,
+      0,
+      593,
+      858,
+      1
+   },
+   
+/*1753*/
+   {
+      "protocol-type",
+      822,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1430,
+      1
+   },
+   
+/*1754*/
+   {
+      "protocol-type",
+      822,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      892,
+      1
+   },
+   
+/*1755*/
+   {
+      "proxy-address",
+      496,
+      NO_DATA,
+      0,
+      0,
+      1757,
+      570,
+      1
+   },
+   
+/*1756*/
+   {
+      "proxy-address",
+      496,
+      NO_DATA,
+      0,
+      0,
+      1758,
+      NULL_ARG,
+      1
+   },
+   
+/*1757*/
+   {
+      "proxy-reporting",
+      497,
+      NO_DATA,
+      0,
+      0,
+      1765,
+      1085,
+      1
+   },
+   
+/*1758*/
+   {
+      "proxy-reporting",
+      655,
+      NO_DATA,
+      0,
+      0,
+      1767,
+      NULL_ARG,
+      1
+   },
+   
+/*1759*/
+   {
+      "public-key",
+      1623,
+      NO_DATA,
+      0,
+      0,
+      1839,
+      NULL_ARG,
+      1
+   },
+   
+/*1760*/
+   {
+      "public-key",
+      1628,
+      NO_DATA,
+      0,
+      0,
+      1839,
+      NULL_ARG,
+      1
+   },
+   
+/*1761*/
+   {
+      "pvid",
+      1236,
+      NO_DATA,
+      0,
+      0,
+      2161,
+      NULL_ARG,
+      1
+   },
+   
+/*1762*/
+   {
+      "pvid",
+      1156,
+      NO_DATA,
+      0,
+      0,
+      2161,
+      NULL_ARG,
+      1
+   },
+   
+/*1763*/
+   {
+      "pvst+",
+      1324,
+      NO_DATA,
+      0,
+      0,
+      1928,
+      NULL_ARG,
+      1
+   },
+   
+/*1764*/
+   {
+      "pvst+",
+      1396,
+      NO_DATA,
+      0,
+      0,
+      1929,
+      NULL_ARG,
+      1
+   },
+   
+/*1765*/
+   {
+      "query-interval",
+      500,
+      NO_DATA,
+      0,
+      0,
+      1768,
+      1766,
+      1
+   },
+   
+/*1766*/
+   {
+      "query-interval",
+      501,
+      WORD_DATA,
+      MAX_igmpSnoopProxyQueryInterval,
+      MIN_igmpSnoopProxyQueryInterval,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1767*/
+   {
+      "query-interval",
+      656,
+      NO_DATA,
+      0,
+      0,
+      1769,
+      NULL_ARG,
+      1
+   },
+   
+/*1768*/
+   {
+      "query-resp-intvl",
+      502,
+      NO_DATA,
+      0,
+      0,
+      1953,
+      447,
+      1
+   },
+   
+/*1769*/
+   {
+      "query-resp-intvl",
+      502,
+      NO_DATA,
+      0,
+      0,
+      1954,
+      NULL_ARG,
+      1
+   },
+   
+/*1770*/
+   {
+      "rack",
+      279,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      665,
+      1
+   },
+   
+/*1771*/
+   {
+      "rack",
+      279,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      666,
+      1
+   },
+   
+/*1772*/
+   {
+      "rack",
+      279,
+      NO_DATA,
+      0,
+      0,
+      1829,
+      1134,
+      1
+   },
+   
+/*1773*/
+   {
+      "rack",
+      279,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1134,
+      1
+   },
+   
+/*1774*/
+   {
+      "rack",
+      279,
+      NO_DATA,
+      0,
+      0,
+      1830,
+      1543,
+      1
+   },
+   
+/*1775*/
+   {
+      "rack",
+      279,
+      NO_DATA,
+      0,
+      0,
+      1875,
+      1543,
+      1
+   },
+   
+/*1776*/
+   {
+      "radius",
+      237,
+      NO_DATA,
+      0,
+      0,
+      1987,
+      716,
+      1
+   },
+   
+/*1777*/
+   {
+      "radius",
+      256,
+      NO_DATA,
+      0,
+      0,
+      1986,
+      1983,
+      1
+   },
+   
+/*1778*/
+   {
+      "radius",
+      256,
+      NO_DATA,
+      0,
+      0,
+      1984,
+      1501,
+      1
+   },
+   
+/*1779*/
+   {
+      "radius",
+      261,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1499,
+      1
+   },
+   
+/*1780*/
+   {
+      "radius",
+      260,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1781*/
+   {
+      "radius",
+      259,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1782*/
+   {
+      "radius",
+      224,
+      NO_DATA,
+      0,
+      0,
+      1988,
+      NULL_ARG,
+      1
+   },
+   
+/*1783*/
+   {
+      "ram",
+      563,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      172,
+      1
+   },
+   
+/*1784*/
+   {
+      "ram",
+      563,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1785*/
+   {
+      "ram",
+      563,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1786*/
+   {
+      "ram",
+      563,
+      NO_DATA,
+      0,
+      0,
+      2053,
+      NULL_ARG,
+      1
+   },
+   
+/*1787*/
+   {
+      "ram",
+      563,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1510,
+      1
+   },
+   
+/*1788*/
+   {
+      "rarp",
+      826,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1789*/
+   {
+      "rate",
+      1108,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      93,
+      1
+   },
+   
+/*1790*/
+   {
+      "rate-control",
+      1023,
+      NO_DATA,
+      0,
+      0,
+      1879,
+      NULL_ARG,
+      1
+   },
+   
+/*1791*/
+   {
+      "read",
+      921,
+      NO_DATA,
+      0,
+      0,
+      2184,
+      754,
+      1
+   },
+   
+/*1792*/
+   {
+      "receiver",
+      1197,
+      0,
+      0,
+      0,
+      1909,
+      NULL_ARG,
+      1
+   },
+   
+/*1793*/
+   {
+      "regularity",
+      876,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      101,
+      1
+   },
+   
+/*1794*/
+   {
+      "regularity",
+      870,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1795*/
+   {
+      "remote",
+      706,
+      NO_DATA,
+      0,
+      0,
+      1906,
+      2126,
+      1
+   },
+   
+/*1796*/
+   {
+      "remote",
+      706,
+      NO_DATA,
+      0,
+      0,
+      1907,
+      2126,
+      1
+   },
+   
+/*1797*/
+   {
+      "remote",
+      739,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      530,
+      1
+   },
+   
+/*1798*/
+   {
+      "remote",
+      739,
+      NO_DATA,
+      0,
+      0,
+      2097,
+      534,
+      1
+   },
+   
+/*1799*/
+   {
+      "remote",
+      739,
+      NO_DATA,
+      0,
+      0,
+      2099,
+      535,
+      1
+   },
+   
+/*1800*/
+   {
+      "remote",
+      739,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      570,
+      1
+   },
+   
+/*1801*/
+   {
+      "remote-id",
+      1252,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      755,
+      1
+   },
+   
+/*1802*/
+   {
+      "remote-id",
+      1252,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1803*/
+   {
+      "remove",
+      1393,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      340,
+      1
+   },
+   
+/*1804*/
+   {
+      "remove",
+      830,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1262,
+      1
+   },
+   
+/*1805*/
+   {
+      "remove",
+      1387,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      340,
+      1
+   },
+   
+/*1806*/
+   {
+      "renumber",
+      1972,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1807*/
+   {
+      "replace",
+      450,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1808*/
+   {
+      "replace",
+      437,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1809*/
+   {
+      "replace",
+      1120,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1810*/
+   {
+      "request",
+      68,
+      NO_DATA,
+      0,
+      0,
+      1813,
+      1422,
+      1
+   },
+   
+/*1811*/
+   {
+      "reset-time",
+      189,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      456,
+      1
+   },
+   
+/*1812*/
+   {
+      "reset-time",
+      189,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1813*/
+   {
+      "response",
+      69,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1423,
+      1
+   },
+   
+/*1814*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      2030,
+      297,
+      1
+   },
+   
+/*1815*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      0,
+      297,
+      1
+   },
+   
+/*1816*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      0,
+      298,
+      1
+   },
+   
+/*1817*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      0,
+      299,
+      1
+   },
+   
+/*1818*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      2031,
+      299,
+      1
+   },
+   
+/*1819*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      0,
+      300,
+      1
+   },
+   
+/*1820*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      2032,
+      301,
+      1
+   },
+   
+/*1821*/
+   {
+      "retransmit",
+      692,
+      NO_DATA,
+      0,
+      0,
+      0,
+      301,
+      1
+   },
+   
+/*1822*/
+   {
+      "retry",
+      930,
+      NO_DATA,
+      0,
+      0,
+      642,
+      195,
+      1
+   },
+   
+/*1823*/
+   {
+      "retry",
+      930,
+      NO_DATA,
+      0,
+      0,
+      2034,
+      196,
+      1
+   },
+   
+/*1824*/
+   {
+      "rfc-1042",
+      829,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1754,
+      1
+   },
+   
+/*1825*/
+   {
+      "rising-threshold",
+      891,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      94,
+      1
+   },
+   
+/*1826*/
+   {
+      "ro",
+      910,
+      NO_DATA,
+      0,
+      0,
+      1841,
+      NULL_ARG,
+      1
+   },
+   
+/*1827*/
+   {
+      "row",
+      277,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      667,
+      1
+   },
+   
+/*1828*/
+   {
+      "row",
+      277,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      668,
+      1
+   },
+   
+/*1829*/
+   {
+      "row",
+      277,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1135,
+      1
+   },
+   
+/*1830*/
+   {
+      "row",
+      277,
+      NO_DATA,
+      0,
+      0,
+      1875,
+      1545,
+      1
+   },
+   
+/*1831*/
+   {
+      "rsa",
+      1673,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1832*/
+   {
+      "rsa",
+      1634,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1833*/
+   {
+      "rsa",
+      1670,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1834*/
+   {
+      "rspan",
+      1545,
+      NO_DATA,
+      0,
+      0,
+      1951,
+      NULL_ARG,
+      1
+   },
+   
+/*1835*/
+   {
+      "rspan",
+      1545,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1836*/
+   {
+      "rstp",
+      974,
+      NO_DATA,
+      0,
+      0,
+      1964,
+      NULL_ARG,
+      1
+   },
+   
+/*1837*/
+   {
+      "running-config",
+      1624,
+      NO_DATA,
+      0,
+      0,
+      1947,
+      1239,
+      1
+   },
+   
+/*1838*/
+   {
+      "running-config",
+      1617,
+      NO_DATA,
+      0,
+      0,
+      1948,
+      NULL_ARG,
+      1
+   },
+   
+/*1839*/
+   {
+      "running-config",
+      1617,
+      NO_DATA,
+      0,
+      0,
+      1949,
+      NULL_ARG,
+      1
+   },
+   
+/*1840*/
+   {
+      "running-config",
+      1617,
+      NO_DATA,
+      0,
+      0,
+      2009,
+      NULL_ARG,
+      1
+   },
+   
+/*1841*/
+   {
+      "rw",
+      911,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1842*/
+   {
+      "rx",
+      716,
+      NO_DATA,
+      0,
+      0,
+      2065,
+      NULL_ARG,
+      0
+   },
+   
+/*1843*/
+   {
+      "rx",
+      716,
+      NO_DATA,
+      0,
+      0,
+      2065,
+      NULL_ARG,
+      1
+   },
+   
+/*1844*/
+   {
+      "rx-only",
+      1144,
+      NO_DATA,
+      0,
+      0,
+      2066,
+      NULL_ARG,
+      1
+   },
+   
+/*1845*/
+   {
+      "saturday",
+      883,
+      NO_DATA,
+      0,
+      0,
+      1972,
+      99,
+      1
+   },
+   
+/*1846*/
+   {
+      "saturday",
+      883,
+      NO_DATA,
+      0,
+      0,
+      1973,
+      100,
+      1
+   },
+   
+/*1847*/
+   {
+      "saturday",
+      883,
+      NO_DATA,
+      0,
+      0,
+      1974,
+      NULL_ARG,
+      1
+   },
+   
+/*1848*/
+   {
+      "screen-length",
+      1980,
+      WORD_DATA,
+      512,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1849*/
+   {
+      "secondary",
+      1411,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1850*/
+   {
+      "september",
+      866,
+      NO_DATA,
+      0,
+      0,
+      308,
+      302,
+      1
+   },
+   
+/*1851*/
+   {
+      "september",
+      866,
+      NO_DATA,
+      0,
+      0,
+      305,
+      304,
+      1
+   },
+   
+/*1852*/
+   {
+      "september",
+      866,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      451,
+      1
+   },
+   
+/*1853*/
+   {
+      "september",
+      866,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      453,
+      1
+   },
+   
+/*1854*/
+   {
+      "september",
+      866,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      454,
+      1
+   },
+   
+/*1855*/
+   {
+      "september",
+      866,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      452,
+      1
+   },
+   
+/*1856*/
+   {
+      "server-index",
+      844,
+      WORD_DATA,
+      5,
+      1,
+      NULL_ARG,
+      1293,
+      1
+   },
+   
+/*1857*/
+   {
+      "server-index",
+      50,
+      WORD_DATA,
+      1,
+      1,
+      NULL_ARG,
+      1294,
+      1
+   },
+   
+/*1858*/
+   {
+      "server-index",
+      693,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_RADIUS_SERVERS,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1859*/
+   {
+      "server-index",
+      50,
+      WORD_DATA,
+      1,
+      1,
+      570,
+      NULL_ARG,
+      1
+   },
+   
+/*1860*/
+   {
+      "server-index",
+      50,
+      WORD_DATA,
+      SYS_ADPT_MAX_NBR_OF_RADIUS_SERVERS,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1861*/
+   {
+      "server-index",
+      782,
+      WORD_DATA,
+      1,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1862*/
+   {
+      "service",
+      1313,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1976,
+      1
+   },
+   
+/*1863*/
+   {
+      "service",
+      1313,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1977,
+      1
+   },
+   
+/*1864*/
+   {
+      "session",
+      788,
+      NO_DATA,
+      0,
+      0,
+      0,
+      383,
+      1
+   },
+   
+/*1865*/
+   {
+      "session",
+      787,
+      NO_DATA,
+      0,
+      0,
+      2084,
+      384,
+      1
+   },
+   
+/*1866*/
+   {
+      "session",
+      787,
+      NO_DATA,
+      0,
+      0,
+      2085,
+      384,
+      1
+   },
+   
+/*1867*/
+   {
+      "sfp-forced",
+      1190,
+      NO_DATA,
+      0,
+      0,
+      1868,
+      28,
+      1
+   },
+   
+/*1868*/
+   {
+      "sfp-preferred-auto",
+      1193,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1869*/
+   {
+      "sha",
+      956,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      738,
+      1
+   },
+   
+/*1870*/
+   {
+      "sha",
+      951,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      736,
+      1
+   },
+   
+/*1871*/
+   {
+      "sha",
+      951,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      737,
+      1
+   },
+   
+/*1872*/
+   {
+      "sha",
+      963,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      734,
+      1
+   },
+   
+/*1873*/
+   {
+      "shared",
+      1368,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1874*/
+   {
+      "shelf-rack",
+      288,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      669,
+      1
+   },
+   
+/*1875*/
+   {
+      "shelf-rack",
+      288,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1544,
+      1
+   },
+   
+/*1876*/
+   {
+      "short",
+      979,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1877*/
+   {
+      "shutdown",
+      1280,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1416,
+      1
+   },
+   
+/*1878*/
+   {
+      "shutdown",
+      1343,
+      NO_DATA,
+      0,
+      0,
+      2052,
+      NULL_ARG,
+      1
+   },
+   
+/*1879*/
+   {
+      "shutdown",
+      1024,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1880*/
+   {
+      "shutdown",
+      1211,
+      NO_DATA,
+      0,
+      0,
+      2054,
+      NULL_ARG,
+      1
+   },
+   
+/*1881*/
+   {
+      "single-host",
+      1054,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1882*/
+   {
+      "sip",
+      1124,
+      NO_DATA,
+      0,
+      0,
+      1883,
+      NULL_ARG,
+      1
+   },
+   
+/*1883*/
+   {
+      "sip-mac",
+      1125,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1884*/
+   {
+      "size",
+      391,
+      NO_DATA,
+      0,
+      0,
+      0,
+      355,
+      1
+   },
+   
+/*1885*/
+   {
+      "size",
+      1695,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1896,
+      1
+   },
+   
+/*1886*/
+   {
+      "size",
+      1695,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1897,
+      1
+   },
+   
+/*1887*/
+   {
+      "size",
+      8,
+      NO_DATA,
+      0,
+      0,
+      0,
+      109,
+      1
+   },
+   
+/*1888*/
+   {
+      "size",
+      8,
+      NO_DATA,
+      0,
+      0,
+      0,
+      110,
+      1
+   },
+   
+/*1889*/
+   {
+      "size",
+      1690,
+      NO_DATA,
+      0,
+      0,
+      0,
+      111,
+      1
+   },
+   
+/*1890*/
+   {
+      "size",
+      1684,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1655,
+      1
+   },
+   
+/*1891*/
+   {
+      "size",
+      1648,
+      NO_DATA,
+      0,
+      0,
+      2036,
+      464,
+      1
+   },
+   
+/*1892*/
+   {
+      "size",
+      1648,
+      NO_DATA,
+      0,
+      0,
+      2036,
+      465,
+      1
+   },
+   
+/*1893*/
+   {
+      "size",
+      1648,
+      NO_DATA,
+      0,
+      0,
+      0,
+      466,
+      1
+   },
+   
+/*1894*/
+   {
+      "size",
+      391,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1895*/
+   {
+      "size",
+      1684,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1896*/
+   {
+      "size-range",
+      1696,
+      WORD_DATA,
+      SYS_ADPT_MAX_PING6_SIZE,
+      SYS_ADPT_MIN_PING6_SIZE,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1897*/
+   {
+      "size-range",
+      1696,
+      WORD_DATA,
+      SYS_ADPT_MAX_PING6_SIZE,
+      SYS_ADPT_MIN_PING6_SIZE,
+      NULL_ARG,
+      993,
+      1
+   },
+   
+/*1898*/
+   {
+      "smurf",
+      335,
+      NO_DATA,
+      0,
+      0,
+      1998,
+      NULL_ARG,
+      1
+   },
+   
+/*1899*/
+   {
+      "smurf",
+      335,
+      NO_DATA,
+      0,
+      0,
+      1999,
+      NULL_ARG,
+      1
+   },
+   
+/*1900*/
+   {
+      "sort",
+      1867,
+      NO_DATA,
+      0,
+      0,
+      2150,
+      821,
+      1
+   },
+   
+/*1901*/
+   {
+      "sort",
+      1867,
+      NO_DATA,
+      0,
+      0,
+      0,
+      821,
+      1
+   },
+   
+/*1902*/
+   {
+      "sort",
+      1867,
+      NO_DATA,
+      0,
+      0,
+      2151,
+      821,
+      1
+   },
+   
+/*1903*/
+   {
+      "sort",
+      1890,
+      NO_DATA,
+      0,
+      0,
+      0,
+      822,
+      1
+   },
+   
+/*1904*/
+   {
+      "sort",
+      1890,
+      NO_DATA,
+      0,
+      0,
+      2275,
+      822,
+      1
+   },
+   
+/*1905*/
+   {
+      "sort",
+      1890,
+      NO_DATA,
+      0,
+      0,
+      1956,
+      822,
+      1
+   },
+   
+/*1906*/
+   {
+      "source",
+      712,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1377,
+      1
+   },
+   
+/*1907*/
+   {
+      "source",
+      712,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1377,
+      1
+   },
+   
+/*1908*/
+   {
+      "source",
+      711,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2087,
+      1
+   },
+   
+/*1909*/
+   {
+      "source",
+      1198,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1910*/
+   {
+      "source-ipv6-prefix/prefix-length",
+      121,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      859,
+      1
+   },
+   
+/*1911*/
+   {
+      "source-ipv6-prefix/prefix-length",
+      121,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      860,
+      1
+   },
+   
+/*1912*/
+   {
+      "source-ipv6-prefix/prefix-length",
+      121,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1913*/
+   {
+      "source-ipv6-prefix/prefix-length",
+      121,
+      IPV6_PREFIX_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*1914*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      0,
+      242,
+      1
+   },
+   
+/*1915*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2040,
+      242,
+      1
+   },
+   
+/*1916*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      0,
+      243,
+      1
+   },
+   
+/*1917*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2041,
+      243,
+      1
+   },
+   
+/*1918*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      244,
+      1
+   },
+   
+/*1919*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2018,
+      244,
+      1
+   },
+   
+/*1920*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2016,
+      245,
+      1
+   },
+   
+/*1921*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2022,
+      245,
+      1
+   },
+   
+/*1922*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      0,
+      980,
+      1
+   },
+   
+/*1923*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2045,
+      980,
+      1
+   },
+   
+/*1924*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      0,
+      984,
+      1
+   },
+   
+/*1925*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2044,
+      984,
+      1
+   },
+   
+/*1926*/
+   {
+      "source-port",
+      92,
+      NO_DATA,
+      0,
+      0,
+      2045,
+      984,
+      1
+   },
+   
+/*1927*/
+   {
+      "spanning-disabled",
+      1306,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1928*/
+   {
+      "spanning-tree",
+      1325,
+      NO_DATA,
+      0,
+      0,
+      2164,
+      NULL_ARG,
+      1
+   },
+   
+/*1929*/
+   {
+      "spanning-tree",
+      1397,
+      NO_DATA,
+      0,
+      0,
+      2165,
+      NULL_ARG,
+      1
+   },
+   
+/*1930*/
+   {
+      "sport",
+      109,
+      WORD_DATA,
+      ACL_PORT_MAX_BITMASK_RANGE,
+      ACL_PORT_MIN_BITMASK_RANGE,
+      0,
+      981,
+      1
+   },
+   
+/*1931*/
+   {
+      "src-dst-ip",
+      806,
+      NO_DATA,
+      0,
+      0,
+      1932,
+      NULL_ARG,
+      1
+   },
+   
+/*1932*/
+   {
+      "src-dst-mac",
+      807,
+      NO_DATA,
+      0,
+      0,
+      1933,
+      NULL_ARG,
+      1
+   },
+   
+/*1933*/
+   {
+      "src-ip",
+      808,
+      NO_DATA,
+      0,
+      0,
+      1936,
+      NULL_ARG,
+      1
+   },
+   
+/*1934*/
+   {
+      "src-mac",
+      418,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1935*/
+   {
+      "src-mac",
+      418,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1936*/
+   {
+      "src-mac",
+      809,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1937*/
+   {
+      "src-mep",
+      1653,
+      NO_DATA,
+      0,
+      0,
+      2189,
+      436,
+      1
+   },
+   
+/*1938*/
+   {
+      "src-mep",
+      1653,
+      NO_DATA,
+      0,
+      0,
+      2190,
+      437,
+      1
+   },
+   
+/*1939*/
+   {
+      "src-mep",
+      1653,
+      NO_DATA,
+      0,
+      0,
+      2191,
+      438,
+      1
+   },
+   
+/*1940*/
+   {
+      "srtcm-color-aware",
+      1508,
+      NO_DATA,
+      0,
+      0,
+      1941,
+      506,
+      1
+   },
+   
+/*1941*/
+   {
+      "srtcm-color-blind",
+      1511,
+      NO_DATA,
+      0,
+      0,
+      2058,
+      508,
+      1
+   },
+   
+/*1942*/
+   {
+      "standard",
+      246,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      677,
+      1
+   },
+   
+/*1943*/
+   {
+      "standard",
+      249,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      677,
+      1
+   },
+   
+/*1944*/
+   {
+      "standard",
+      1706,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      677,
+      1
+   },
+   
+/*1945*/
+   {
+      "start",
+      1536,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      98,
+      1
+   },
+   
+/*1946*/
+   {
+      "start-stop",
+      222,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1279,
+      1
+   },
+   
+/*1947*/
+   {
+      "startup-config",
+      1625,
+      NO_DATA,
+      0,
+      0,
+      2007,
+      1240,
+      1
+   },
+   
+/*1948*/
+   {
+      "startup-config",
+      1618,
+      NO_DATA,
+      0,
+      0,
+      2008,
+      NULL_ARG,
+      1
+   },
+   
+/*1949*/
+   {
+      "startup-config",
+      1618,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1950*/
+   {
+      "startup-config",
+      1618,
+      NO_DATA,
+      0,
+      0,
+      2009,
+      NULL_ARG,
+      1
+   },
+   
+/*1951*/
+   {
+      "state",
+      1543,
+      NO_DATA,
+      0,
+      0,
+      0,
+      810,
+      1
+   },
+   
+/*1952*/
+   {
+      "state",
+      1543,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1953*/
+   {
+      "static",
+      504,
+      NO_DATA,
+      0,
+      0,
+      2112,
+      532,
+      1
+   },
+   
+/*1954*/
+   {
+      "static",
+      504,
+      NO_DATA,
+      0,
+      0,
+      2115,
+      532,
+      1
+   },
+   
+/*1955*/
+   {
+      "static",
+      1608,
+      NO_DATA,
+      0,
+      0,
+      0,
+      816,
+      1
+   },
+   
+/*1956*/
+   {
+      "static",
+      1608,
+      NO_DATA,
+      0,
+      0,
+      0,
+      820,
+      1
+   },
+   
+/*1957*/
+   {
+      "static",
+      409,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1958*/
+   {
+      "static",
+      1816,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1959*/
+   {
+      "statistics",
+      1732,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1390,
+      1
+   },
+   
+/*1960*/
+   {
+      "statistics",
+      1711,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1961*/
+   {
+      "statistics",
+      1711,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1380,
+      1
+   },
+   
+/*1962*/
+   {
+      "statistics",
+      1710,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1963*/
+   {
+      "status",
+      1961,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1964*/
+   {
+      "stp",
+      975,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1965*/
+   {
+      "stp-enabled-only",
+      1947,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1966*/
+   {
+      "string",
+      432,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      697,
+      1
+   },
+   
+/*1967*/
+   {
+      "string",
+      432,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      698,
+      1
+   },
+   
+/*1968*/
+   {
+      "string",
+      901,
+      CHAR_DATA,
+      MAXSIZE_eventDescription,
+      1,
+      NULL_ARG,
+      1673,
+      1
+   },
+   
+/*1969*/
+   {
+      "string",
+      896,
+      CHAR_DATA,
+      MAXSIZE_alarmOwner,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1970*/
+   {
+      "string",
+      903,
+      CHAR_DATA,
+      MAXSIZE_eventOwner,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1971*/
+   {
+      "string",
+      1905,
+      LINE_DATA,
+      80,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1972*/
+   {
+      "sunday",
+      884,
+      NO_DATA,
+      0,
+      0,
+      2012,
+      99,
+      1
+   },
+   
+/*1973*/
+   {
+      "sunday",
+      884,
+      NO_DATA,
+      0,
+      0,
+      2013,
+      100,
+      1
+   },
+   
+/*1974*/
+   {
+      "sunday",
+      884,
+      NO_DATA,
+      0,
+      0,
+      2014,
+      NULL_ARG,
+      1
+   },
+   
+/*1975*/
+   {
+      "suspend",
+      1547,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1835,
+      1
+   },
+   
+/*1976*/
+   {
+      "svid",
+      1313,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1977*/
+   {
+      "svid",
+      1313,
+      WORD_DATA,
+      SYS_DFLT_DOT1QMAXVLANID,
+      1,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1978*/
+   {
+      "symmetric",
+      1228,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1979*/
+   {
+      "symmetric",
+      1038,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1980*/
+   {
+      "system-capabilities",
+      1150,
+      NO_DATA,
+      0,
+      0,
+      1981,
+      NULL_ARG,
+      1
+   },
+   
+/*1981*/
+   {
+      "system-description",
+      1151,
+      NO_DATA,
+      0,
+      0,
+      1982,
+      NULL_ARG,
+      1
+   },
+   
+/*1982*/
+   {
+      "system-name",
+      1152,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1983*/
+   {
+      "tacacs",
+      257,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*1984*/
+   {
+      "tacacs",
+      257,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1500,
+      1
+   },
+   
+/*1985*/
+   {
+      "tacacs",
+      258,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1499,
+      1
+   },
+   
+/*1986*/
+   {
+      "tacacs",
+      258,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1781,
+      1
+   },
+   
+/*1987*/
+   {
+      "tacacs+",
+      239,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      716,
+      1
+   },
+   
+/*1988*/
+   {
+      "tacacs+",
+      225,
+      NO_DATA,
+      0,
+      0,
+      675,
+      NULL_ARG,
+      1
+   },
+   
+/*1989*/
+   {
+      "tagged",
+      907,
+      NO_DATA,
+      0,
+      0,
+      2076,
+      NULL_ARG,
+      1
+   },
+   
+/*1990*/
+   {
+      "tagged",
+      1385,
+      NO_DATA,
+      0,
+      0,
+      2077,
+      NULL_ARG,
+      1
+   },
+   
+/*1991*/
+   {
+      "tagged",
+      1382,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*1992*/
+   {
+      "tagged-802.3",
+      137,
+      NO_DATA,
+      0,
+      0,
+      1994,
+      846,
+      1
+   },
+   
+/*1993*/
+   {
+      "tagged-802.3",
+      137,
+      NO_DATA,
+      0,
+      0,
+      1995,
+      850,
+      1
+   },
+   
+/*1994*/
+   {
+      "tagged-eth2",
+      139,
+      NO_DATA,
+      0,
+      0,
+      2078,
+      847,
+      1
+   },
+   
+/*1995*/
+   {
+      "tagged-eth2",
+      139,
+      NO_DATA,
+      0,
+      0,
+      2079,
+      851,
+      1
+   },
+   
+/*1996*/
+   {
+      "tcp",
+      101,
+      NO_DATA,
+      0,
+      0,
+      2069,
+      839,
+      1
+   },
+   
+/*1997*/
+   {
+      "tcp",
+      101,
+      NO_DATA,
+      0,
+      0,
+      2070,
+      842,
+      1
+   },
+   
+/*1998*/
+   {
+      "tcp-flooding",
+      336,
+      NO_DATA,
+      0,
+      0,
+      2000,
+      922,
+      1
+   },
+   
+/*1999*/
+   {
+      "tcp-flooding",
+      336,
+      NO_DATA,
+      0,
+      0,
+      2001,
+      923,
+      1
+   },
+   
+/*2000*/
+   {
+      "tcp-null-scan",
+      337,
+      NO_DATA,
+      0,
+      0,
+      2002,
+      NULL_ARG,
+      1
+   },
+   
+/*2001*/
+   {
+      "tcp-null-scan",
+      337,
+      NO_DATA,
+      0,
+      0,
+      2003,
+      NULL_ARG,
+      1
+   },
+   
+/*2002*/
+   {
+      "tcp-syn-fin-scan",
+      338,
+      NO_DATA,
+      0,
+      0,
+      2004,
+      NULL_ARG,
+      1
+   },
+   
+/*2003*/
+   {
+      "tcp-syn-fin-scan",
+      338,
+      NO_DATA,
+      0,
+      0,
+      2005,
+      NULL_ARG,
+      1
+   },
+   
+/*2004*/
+   {
+      "tcp-xmas-scan",
+      339,
+      NO_DATA,
+      0,
+      0,
+      2071,
+      NULL_ARG,
+      1
+   },
+   
+/*2005*/
+   {
+      "tcp-xmas-scan",
+      339,
+      NO_DATA,
+      0,
+      0,
+      2072,
+      NULL_ARG,
+      1
+   },
+   
+/*2006*/
+   {
+      "text",
+      1424,
+      NO_DATA,
+      0,
+      0,
+      0,
+      719,
+      1
+   },
+   
+/*2007*/
+   {
+      "tftp",
+      1626,
+      NO_DATA,
+      0,
+      0,
+      2074,
+      1241,
+      1
+   },
+   
+/*2008*/
+   {
+      "tftp",
+      1619,
+      NO_DATA,
+      0,
+      0,
+      2075,
+      NULL_ARG,
+      1
+   },
+   
+/*2009*/
+   {
+      "tftp",
+      1619,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2010*/
+   {
+      "threshold",
+      1085,
+      NO_DATA,
+      0,
+      0,
+      2182,
+      405,
+      1
+   },
+   
+/*2011*/
+   {
+      "threshold",
+      1085,
+      NO_DATA,
+      0,
+      0,
+      2183,
+      NULL_ARG,
+      1
+   },
+   
+/*2012*/
+   {
+      "thursday",
+      885,
+      NO_DATA,
+      0,
+      0,
+      2062,
+      99,
+      1
+   },
+   
+/*2013*/
+   {
+      "thursday",
+      885,
+      NO_DATA,
+      0,
+      0,
+      2063,
+      100,
+      1
+   },
+   
+/*2014*/
+   {
+      "thursday",
+      885,
+      NO_DATA,
+      0,
+      0,
+      2064,
+      NULL_ARG,
+      1
+   },
+   
+/*2015*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      227,
+      774,
+      1
+   },
+   
+/*2016*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      0,
+      774,
+      1
+   },
+   
+/*2017*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      240,
+      774,
+      1
+   },
+   
+/*2018*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      2042,
+      774,
+      1
+   },
+   
+/*2019*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      495,
+      774,
+      1
+   },
+   
+/*2020*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      228,
+      774,
+      1
+   },
+   
+/*2021*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      241,
+      774,
+      1
+   },
+   
+/*2022*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      2043,
+      774,
+      1
+   },
+   
+/*2023*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      13,
+      774,
+      1
+   },
+   
+/*2024*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      2122,
+      774,
+      1
+   },
+   
+/*2025*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      217,
+      774,
+      1
+   },
+   
+/*2026*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      2120,
+      774,
+      1
+   },
+   
+/*2027*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      215,
+      774,
+      1
+   },
+   
+/*2028*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      2121,
+      774,
+      1
+   },
+   
+/*2029*/
+   {
+      "time-range",
+      87,
+      NO_DATA,
+      0,
+      0,
+      216,
+      774,
+      1
+   },
+   
+/*2030*/
+   {
+      "timeout",
+      694,
+      NO_DATA,
+      0,
+      0,
+      0,
+      408,
+      1
+   },
+   
+/*2031*/
+   {
+      "timeout",
+      694,
+      NO_DATA,
+      0,
+      0,
+      0,
+      410,
+      1
+   },
+   
+/*2032*/
+   {
+      "timeout",
+      694,
+      NO_DATA,
+      0,
+      0,
+      0,
+      411,
+      1
+   },
+   
+/*2033*/
+   {
+      "timeout",
+      932,
+      NO_DATA,
+      0,
+      0,
+      642,
+      199,
+      1
+   },
+   
+/*2034*/
+   {
+      "timeout",
+      932,
+      NO_DATA,
+      0,
+      0,
+      642,
+      200,
+      1
+   },
+   
+/*2035*/
+   {
+      "timeout",
+      1652,
+      NO_DATA,
+      0,
+      0,
+      0,
+      369,
+      1
+   },
+   
+/*2036*/
+   {
+      "timeout",
+      1650,
+      NO_DATA,
+      0,
+      0,
+      0,
+      369,
+      1
+   },
+   
+/*2037*/
+   {
+      "to",
+      1539,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1009,
+      1
+   },
+   
+/*2038*/
+   {
+      "to-all",
+      981,
+      NO_DATA,
+      0,
+      0,
+      2039,
+      NULL_ARG,
+      1
+   },
+   
+/*2039*/
+   {
+      "to-vlan",
+      982,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2040*/
+   {
+      "tos",
+      97,
+      NO_DATA,
+      0,
+      0,
+      0,
+      208,
+      1
+   },
+   
+/*2041*/
+   {
+      "tos",
+      97,
+      NO_DATA,
+      0,
+      0,
+      0,
+      209,
+      1
+   },
+   
+/*2042*/
+   {
+      "tos",
+      97,
+      NO_DATA,
+      0,
+      0,
+      0,
+      210,
+      1
+   },
+   
+/*2043*/
+   {
+      "tos",
+      97,
+      NO_DATA,
+      0,
+      0,
+      0,
+      211,
+      1
+   },
+   
+/*2044*/
+   {
+      "tos",
+      97,
+      NO_DATA,
+      0,
+      0,
+      0,
+      978,
+      1
+   },
+   
+/*2045*/
+   {
+      "tos",
+      97,
+      NO_DATA,
+      0,
+      0,
+      0,
+      983,
+      1
+   },
+   
+/*2046*/
+   {
+      "tpid",
+      1391,
+      HEX_DATA,
+      0xffff,
+      0x800,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2047*/
+   {
+      "tpid",
+      1391,
+      HEX_DATA,
+      SYS_ADPT_DOT1Q_TUNNEL_TPID_MAX,
+      SYS_ADPT_DOT1Q_TUNNEL_TPID_MIN,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2048*/
+   {
+      "transmit",
+      1504,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1220,
+      1
+   },
+   
+/*2049*/
+   {
+      "transmit",
+      1504,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2124,
+      1
+   },
+   
+/*2050*/
+   {
+      "trap",
+      905,
+      NO_DATA,
+      0,
+      0,
+      0,
+      949,
+      1
+   },
+   
+/*2051*/
+   {
+      "trap",
+      905,
+      NO_DATA,
+      0,
+      0,
+      0,
+      950,
+      1
+   },
+   
+/*2052*/
+   {
+      "trap",
+      1344,
+      NO_DATA,
+      0,
+      0,
+      2055,
+      NULL_ARG,
+      1
+   },
+   
+/*2053*/
+   {
+      "trap",
+      575,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2054*/
+   {
+      "trap",
+      1212,
+      NO_DATA,
+      0,
+      0,
+      2056,
+      NULL_ARG,
+      1
+   },
+   
+/*2055*/
+   {
+      "trap-and-shutdown",
+      1345,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2056*/
+   {
+      "trap-and-shutdown",
+      1213,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2057*/
+   {
+      "traps",
+      1747,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2058*/
+   {
+      "trtcm-color-aware",
+      1513,
+      NO_DATA,
+      0,
+      0,
+      2059,
+      509,
+      1
+   },
+   
+/*2059*/
+   {
+      "trtcm-color-blind",
+      1516,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      509,
+      1
+   },
+   
+/*2060*/
+   {
+      "trunk",
+      1401,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2061*/
+   {
+      "ttl",
+      1656,
+      NO_DATA,
+      0,
+      0,
+      0,
+      287,
+      1
+   },
+   
+/*2062*/
+   {
+      "tuesday",
+      886,
+      NO_DATA,
+      0,
+      0,
+      2168,
+      99,
+      1
+   },
+   
+/*2063*/
+   {
+      "tuesday",
+      886,
+      NO_DATA,
+      0,
+      0,
+      2169,
+      100,
+      1
+   },
+   
+/*2064*/
+   {
+      "tuesday",
+      886,
+      NO_DATA,
+      0,
+      0,
+      2170,
+      NULL_ARG,
+      1
+   },
+   
+/*2065*/
+   {
+      "tx",
+      717,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2066*/
+   {
+      "tx-only",
+      1145,
+      NO_DATA,
+      0,
+      0,
+      2067,
+      NULL_ARG,
+      1
+   },
+   
+/*2067*/
+   {
+      "tx-rx",
+      1146,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2068*/
+   {
+      "type",
+      1196,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1792,
+      1
+   },
+   
+/*2069*/
+   {
+      "udp",
+      105,
+      NO_DATA,
+      0,
+      0,
+      197,
+      838,
+      1
+   },
+   
+/*2070*/
+   {
+      "udp",
+      105,
+      NO_DATA,
+      0,
+      0,
+      198,
+      841,
+      1
+   },
+   
+/*2071*/
+   {
+      "udp-flooding",
+      340,
+      NO_DATA,
+      0,
+      0,
+      2180,
+      922,
+      1
+   },
+   
+/*2072*/
+   {
+      "udp-flooding",
+      340,
+      NO_DATA,
+      0,
+      0,
+      2181,
+      923,
+      1
+   },
+   
+/*2073*/
+   {
+      "udp-port",
+      935,
+      NO_DATA,
+      0,
+      0,
+      0,
+      630,
+      1
+   },
+   
+/*2074*/
+   {
+      "unit",
+      1629,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1242,
+      1
+   },
+   
+/*2075*/
+   {
+      "unit",
+      1620,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2076*/
+   {
+      "untagged",
+      908,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2077*/
+   {
+      "untagged",
+      1386,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2078*/
+   {
+      "untagged-802.3",
+      140,
+      NO_DATA,
+      0,
+      0,
+      2080,
+      843,
+      1
+   },
+   
+/*2079*/
+   {
+      "untagged-802.3",
+      140,
+      NO_DATA,
+      0,
+      0,
+      2081,
+      845,
+      1
+   },
+   
+/*2080*/
+   {
+      "untagged-eth2",
+      141,
+      NO_DATA,
+      0,
+      0,
+      2211,
+      844,
+      1
+   },
+   
+/*2081*/
+   {
+      "untagged-eth2",
+      141,
+      NO_DATA,
+      0,
+      0,
+      2214,
+      848,
+      1
+   },
+   
+/*2082*/
+   {
+      "up",
+      1092,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2083*/
+   {
+      "uplink",
+      789,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1158,
+      1
+   },
+   
+/*2084*/
+   {
+      "uplink",
+      789,
+      NO_DATA,
+      0,
+      0,
+      2090,
+      1158,
+      1
+   },
+   
+/*2085*/
+   {
+      "uplink",
+      789,
+      NO_DATA,
+      0,
+      0,
+      2089,
+      1158,
+      1
+   },
+   
+/*2086*/
+   {
+      "uplink",
+      709,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1155,
+      1
+   },
+   
+/*2087*/
+   {
+      "uplink",
+      709,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1159,
+      1
+   },
+   
+/*2088*/
+   {
+      "uplink",
+      1390,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2089*/
+   {
+      "uplink-to-uplink",
+      790,
+      NO_DATA,
+      0,
+      0,
+      0,
+      927,
+      1
+   },
+   
+/*2090*/
+   {
+      "uplink-to-uplink",
+      790,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2091*/
+   {
+      "upstream-source-ip",
+      615,
+      0,
+      0,
+      0,
+      0,
+      570,
+      1
+   },
+   
+/*2092*/
+   {
+      "upstream-source-ip",
+      665,
+      0,
+      0,
+      0,
+      2157,
+      NULL_ARG,
+      1
+   },
+   
+/*2093*/
+   {
+      "user",
+      1920,
+      NO_DATA,
+      0,
+      0,
+      0,
+      778,
+      1
+   },
+   
+/*2094*/
+   {
+      "user",
+      1805,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2095*/
+   {
+      "username",
+      1716,
+      NO_DATA,
+      0,
+      0,
+      0,
+      777,
+      1
+   },
+   
+/*2096*/
+   {
+      "v1",
+      742,
+      NO_DATA,
+      0,
+      0,
+      2101,
+      NULL_ARG,
+      1
+   },
+   
+/*2097*/
+   {
+      "v1",
+      742,
+      NO_DATA,
+      0,
+      0,
+      2102,
+      NULL_ARG,
+      1
+   },
+   
+/*2098*/
+   {
+      "v1",
+      742,
+      NO_DATA,
+      0,
+      0,
+      2103,
+      NULL_ARG,
+      1
+   },
+   
+/*2099*/
+   {
+      "v1",
+      742,
+      NO_DATA,
+      0,
+      0,
+      2104,
+      NULL_ARG,
+      1
+   },
+   
+/*2100*/
+   {
+      "v1",
+      742,
+      NO_DATA,
+      0,
+      0,
+      2105,
+      1646,
+      1
+   },
+   
+/*2101*/
+   {
+      "v2c",
+      743,
+      NO_DATA,
+      0,
+      0,
+      2107,
+      NULL_ARG,
+      1
+   },
+   
+/*2102*/
+   {
+      "v2c",
+      743,
+      NO_DATA,
+      0,
+      0,
+      2108,
+      NULL_ARG,
+      1
+   },
+   
+/*2103*/
+   {
+      "v2c",
+      743,
+      NO_DATA,
+      0,
+      0,
+      2109,
+      NULL_ARG,
+      1
+   },
+   
+/*2104*/
+   {
+      "v2c",
+      743,
+      NO_DATA,
+      0,
+      0,
+      2110,
+      NULL_ARG,
+      1
+   },
+   
+/*2105*/
+   {
+      "v2c",
+      743,
+      NO_DATA,
+      0,
+      0,
+      2106,
+      1646,
+      1
+   },
+   
+/*2106*/
+   {
+      "v3",
+      744,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      910,
+      1
+   },
+   
+/*2107*/
+   {
+      "v3",
+      744,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      911,
+      1
+   },
+   
+/*2108*/
+   {
+      "v3",
+      744,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2109*/
+   {
+      "v3",
+      744,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      907,
+      1
+   },
+   
+/*2110*/
+   {
+      "v3",
+      744,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      908,
+      1
+   },
+   
+/*2111*/
+   {
+      "variable",
+      888,
+      CHAR_DATA,
+      SYS_ADPT_MAX_OID_STRING_LEN,
+      1,
+      NULL_ARG,
+      303,
+      1
+   },
+   
+/*2112*/
+   {
+      "version",
+      505,
+      NO_DATA,
+      0,
+      0,
+      2116,
+      315,
+      1
+   },
+   
+/*2113*/
+   {
+      "version",
+      940,
+      NO_DATA,
+      0,
+      0,
+      0,
+      22,
+      1
+   },
+   
+/*2114*/
+   {
+      "version",
+      934,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      55,
+      1
+   },
+   
+/*2115*/
+   {
+      "version",
+      505,
+      NO_DATA,
+      0,
+      0,
+      2116,
+      NULL_ARG,
+      1
+   },
+   
+/*2116*/
+   {
+      "version-exclusive",
+      507,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2117*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      218,
+      1
+   },
+   
+/*2118*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      219,
+      1
+   },
+   
+/*2119*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      220,
+      1
+   },
+   
+/*2120*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      221,
+      1
+   },
+   
+/*2121*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      222,
+      1
+   },
+   
+/*2122*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      223,
+      1
+   },
+   
+/*2123*/
+   {
+      "vid",
+      133,
+      NO_DATA,
+      0,
+      0,
+      0,
+      1215,
+      1
+   },
+   
+/*2124*/
+   {
+      "violate-action",
+      1505,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1104,
+      1
+   },
+   
+/*2125*/
+   {
+      "vlan",
+      1598,
+      NO_DATA,
+      0,
+      0,
+      0,
+      320,
+      1
+   },
+   
+/*2126*/
+   {
+      "vlan",
+      707,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      356,
+      1
+   },
+   
+/*2127*/
+   {
+      "vlan",
+      600,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      316,
+      1
+   },
+   
+/*2128*/
+   {
+      "vlan",
+      600,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      332,
+      1
+   },
+   
+/*2129*/
+   {
+      "vlan",
+      168,
+      NO_DATA,
+      0,
+      0,
+      0,
+      353,
+      1
+   },
+   
+/*2130*/
+   {
+      "vlan",
+      168,
+      NO_DATA,
+      0,
+      0,
+      0,
+      354,
+      1
+   },
+   
+/*2131*/
+   {
+      "vlan",
+      1831,
+      NO_DATA,
+      9,
+      1,
+      0,
+      327,
+      1
+   },
+   
+/*2132*/
+   {
+      "vlan",
+      1807,
+      NO_DATA,
+      0,
+      0,
+      0,
+      343,
+      1
+   },
+   
+/*2133*/
+   {
+      "vlan",
+      1776,
+      NO_DATA,
+      0,
+      0,
+      0,
+      348,
+      1
+   },
+   
+/*2134*/
+   {
+      "vlan",
+      613,
+      0,
+      0,
+      0,
+      895,
+      321,
+      1
+   },
+   
+/*2135*/
+   {
+      "vlan",
+      1584,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      343,
+      1
+   },
+   
+/*2136*/
+   {
+      "vlan",
+      133,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      517,
+      1
+   },
+   
+/*2137*/
+   {
+      "vlan",
+      1243,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      338,
+      1
+   },
+   
+/*2138*/
+   {
+      "vlan",
+      1243,
+      NO_DATA,
+      0,
+      0,
+      0,
+      339,
+      1
+   },
+   
+/*2139*/
+   {
+      "vlan",
+      513,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      329,
+      1
+   },
+   
+/*2140*/
+   {
+      "vlan",
+      513,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      337,
+      1
+   },
+   
+/*2141*/
+   {
+      "vlan",
+      513,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      338,
+      1
+   },
+   
+/*2142*/
+   {
+      "vlan",
+      1839,
+      NO_DATA,
+      0,
+      0,
+      795,
+      318,
+      1
+   },
+   
+/*2143*/
+   {
+      "vlan",
+      20,
+      NO_DATA,
+      0,
+      0,
+      0,
+      348,
+      1
+   },
+   
+/*2144*/
+   {
+      "vlan",
+      1492,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      352,
+      1
+   },
+   
+/*2145*/
+   {
+      "vlan",
+      1492,
+      NO_DATA,
+      0,
+      0,
+      0,
+      360,
+      1
+   },
+   
+/*2146*/
+   {
+      "vlan",
+      407,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      349,
+      1
+   },
+   
+/*2147*/
+   {
+      "vlan",
+      407,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      350,
+      1
+   },
+   
+/*2148*/
+   {
+      "vlan",
+      42,
+      NO_DATA,
+      0,
+      0,
+      0,
+      343,
+      1
+   },
+   
+/*2149*/
+   {
+      "vlan",
+      42,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      357,
+      1
+   },
+   
+/*2150*/
+   {
+      "vlan",
+      42,
+      NO_DATA,
+      0,
+      0,
+      0,
+      358,
+      1
+   },
+   
+/*2151*/
+   {
+      "vlan",
+      42,
+      NO_DATA,
+      0,
+      0,
+      2240,
+      358,
+      1
+   },
+   
+/*2152*/
+   {
+      "vlan",
+      42,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      359,
+      1
+   },
+   
+/*2153*/
+   {
+      "vlan",
+      487,
+      0,
+      0,
+      0,
+      2068,
+      317,
+      1
+   },
+   
+/*2154*/
+   {
+      "vlan",
+      41,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1349,
+      1
+   },
+   
+/*2155*/
+   {
+      "vlan",
+      1257,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      347,
+      1
+   },
+   
+/*2156*/
+   {
+      "vlan",
+      1870,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2157*/
+   {
+      "vlan",
+      613,
+      0,
+      0,
+      0,
+      894,
+      NULL_ARG,
+      1
+   },
+   
+/*2158*/
+   {
+      "vlan",
+      1584,
+      NO_DATA,
+      0,
+      0,
+      0,
+      344,
+      1
+   },
+   
+/*2159*/
+   {
+      "vlan",
+      1257,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2160*/
+   {
+      "vlan-based",
+      581,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2161*/
+   {
+      "vlan-name",
+      1157,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2162*/
+   {
+      "vt-100",
+      1982,
+      NO_DATA,
+      0,
+      0,
+      2163,
+      NULL_ARG,
+      1
+   },
+   
+/*2163*/
+   {
+      "vt-102",
+      1983,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2164*/
+   {
+      "vtp",
+      1326,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2165*/
+   {
+      "vtp",
+      1398,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2166*/
+   {
+      "vty",
+      35,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2167*/
+   {
+      "vty",
+      35,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2168*/
+   {
+      "wednesday",
+      887,
+      NO_DATA,
+      0,
+      0,
+      2171,
+      99,
+      1
+   },
+   
+/*2169*/
+   {
+      "wednesday",
+      887,
+      NO_DATA,
+      0,
+      0,
+      2172,
+      100,
+      1
+   },
+   
+/*2170*/
+   {
+      "wednesday",
+      887,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2171*/
+   {
+      "weekdays",
+      1540,
+      NO_DATA,
+      0,
+      0,
+      2173,
+      99,
+      1
+   },
+   
+/*2172*/
+   {
+      "weekdays",
+      1540,
+      NO_DATA,
+      0,
+      0,
+      2174,
+      100,
+      1
+   },
+   
+/*2173*/
+   {
+      "weekend",
+      1541,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      99,
+      1
+   },
+   
+/*2174*/
+   {
+      "weekend",
+      1541,
+      NO_DATA,
+      0,
+      0,
+      100,
+      100,
+      1
+   },
+   
+/*2175*/
+   {
+      "weekly",
+      880,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1265,
+      1
+   },
+   
+/*2176*/
+   {
+      "west",
+      211,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1392,
+      1
+   },
+   
+/*2177*/
+   {
+      "west",
+      205,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1588,
+      1
+   },
+   
+/*2178*/
+   {
+      "west",
+      211,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2179*/
+   {
+      "west",
+      205,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2180*/
+   {
+      "win-nuke",
+      341,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      922,
+      1
+   },
+   
+/*2181*/
+   {
+      "win-nuke",
+      341,
+      NO_DATA,
+      0,
+      0,
+      NULL_ARG,
+      923,
+      1
+   },
+   
+/*2182*/
+   {
+      "window",
+      1087,
+      NO_DATA,
+      0,
+      0,
+      0,
+      414,
+      1
+   },
+   
+/*2183*/
+   {
+      "window",
+      1087,
+      NO_DATA,
+      0,
+      0,
+      0,
+      NULL_ARG,
+      1
+   },
+   
+/*2184*/
+   {
+      "write",
+      923,
+      NO_DATA,
+      0,
+      0,
+      0,
+      765,
+      1
+   },
+   
+/*2185*/
+   {
+      "x-x-x-x-x-x",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1555,
+      1
+   },
+   
+/*2186*/
+   {
+      "x-x-x-x-x-x",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1556,
+      1
+   },
+   
+/*2187*/
+   {
+      "x-x-x-x-x-x",
+      1588,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      0,
+      793,
+      1
+   },
+   
+/*2188*/
+   {
+      "x-x-x-x-x-x",
+      57,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      0,
+      2141,
+      1
+   },
+   
+/*2189*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1576,
+      1
+   },
+   
+/*2190*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1578,
+      1
+   },
+   
+/*2191*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1579,
+      1
+   },
+   
+/*2192*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2139,
+      1
+   },
+   
+/*2193*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2140,
+      1
+   },
+   
+/*2194*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2254,
+      1
+   },
+   
+/*2195*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2255,
+      1
+   },
+   
+/*2196*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2256,
+      1
+   },
+   
+/*2197*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2257,
+      1
+   },
+   
+/*2198*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2258,
+      1
+   },
+   
+/*2199*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2259,
+      1
+   },
+   
+/*2200*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2260,
+      1
+   },
+   
+/*2201*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2262,
+      1
+   },
+   
+/*2202*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2263,
+      1
+   },
+   
+/*2203*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2264,
+      1
+   },
+   
+/*2204*/
+   {
+      "x-x-x-x-x-x",
+      74,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      0,
+      2265,
+      1
+   },
+   
+/*2205*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2227,
+      1
+   },
+   
+/*2206*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2228,
+      1
+   },
+   
+/*2207*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2229,
+      1
+   },
+   
+/*2208*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2230,
+      1
+   },
+   
+/*2209*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2231,
+      1
+   },
+   
+/*2210*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2232,
+      1
+   },
+   
+/*2211*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2233,
+      1
+   },
+   
+/*2212*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2234,
+      1
+   },
+   
+/*2213*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2235,
+      1
+   },
+   
+/*2214*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2236,
+      1
+   },
+   
+/*2215*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      863,
+      1
+   },
+   
+/*2216*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      864,
+      1
+   },
+   
+/*2217*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      865,
+      1
+   },
+   
+/*2218*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      866,
+      1
+   },
+   
+/*2219*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      867,
+      1
+   },
+   
+/*2220*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      868,
+      1
+   },
+   
+/*2221*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      869,
+      1
+   },
+   
+/*2222*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      870,
+      1
+   },
+   
+/*2223*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      871,
+      1
+   },
+   
+/*2224*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      872,
+      1
+   },
+   
+/*2225*/
+   {
+      "x-x-x-x-x-x",
+      62,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2269,
+      1
+   },
+   
+/*2226*/
+   {
+      "x-x-x-x-x-x",
+      62,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2270,
+      1
+   },
+   
+/*2227*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      863,
+      1
+   },
+   
+/*2228*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      864,
+      1
+   },
+   
+/*2229*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      865,
+      1
+   },
+   
+/*2230*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      866,
+      1
+   },
+   
+/*2231*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      867,
+      1
+   },
+   
+/*2232*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      868,
+      1
+   },
+   
+/*2233*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      869,
+      1
+   },
+   
+/*2234*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      870,
+      1
+   },
+   
+/*2235*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      871,
+      1
+   },
+   
+/*2236*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      872,
+      1
+   },
+   
+/*2237*/
+   {
+      "x-x-x-x-x-x",
+      138,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      873,
+      1
+   },
+   
+/*2238*/
+   {
+      "x-x-x-x-x-x",
+      329,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1351,
+      1
+   },
+   
+/*2239*/
+   {
+      "x-x-x-x-x-x",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1088,
+      1
+   },
+   
+/*2240*/
+   {
+      "x-x-x-x-x-x",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      0,
+      1383,
+      1
+   },
+   
+/*2241*/
+   {
+      "x-x-x-x-x-x",
+      631,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2242*/
+   {
+      "x-x-x-x-x-x",
+      631,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1040,
+      1
+   },
+   
+/*2243*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2244*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1204,
+      1
+   },
+   
+/*2245*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1508,
+      1
+   },
+   
+/*2246*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*2247*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2117,
+      1
+   },
+   
+/*2248*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1202,
+      1
+   },
+   
+/*2249*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1207,
+      1
+   },
+   
+/*2250*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1208,
+      1
+   },
+   
+/*2251*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2026,
+      1
+   },
+   
+/*2252*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1205,
+      1
+   },
+   
+/*2253*/
+   {
+      "x-x-x-x-x-x",
+      73,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1211,
+      1
+   },
+   
+/*2254*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2255*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1204,
+      1
+   },
+   
+/*2256*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2016,
+      1
+   },
+   
+/*2257*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2117,
+      1
+   },
+   
+/*2258*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1202,
+      1
+   },
+   
+/*2259*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1207,
+      1
+   },
+   
+/*2260*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1208,
+      1
+   },
+   
+/*2261*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1214,
+      1
+   },
+   
+/*2262*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2026,
+      1
+   },
+   
+/*2263*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1205,
+      1
+   },
+   
+/*2264*/
+   {
+      "x-x-x-x-x-x",
+      136,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1211,
+      1
+   },
+   
+/*2265*/
+   {
+      "x-x-x-x-x-x",
+      75,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1508,
+      1
+   },
+   
+/*2266*/
+   {
+      "x-x-x-x-x-x",
+      215,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2267*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1508,
+      1
+   },
+   
+/*2268*/
+   {
+      "x-x-x-x-x-x",
+      61,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      882,
+      1
+   },
+   
+/*2269*/
+   {
+      "x-x-x-x-x-x",
+      63,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1508,
+      1
+   },
+   
+/*2270*/
+   {
+      "x-x-x-x-x-x",
+      63,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      882,
+      1
+   },
+   
+/*2271*/
+   {
+      "x-x-x-x-x-x",
+      1603,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1371,
+      1
+   },
+   
+/*2272*/
+   {
+      "x-x-x-x-x-x",
+      1603,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1373,
+      1
+   },
+   
+/*2273*/
+   {
+      "x-x-x-x-x-x",
+      1603,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1387,
+      1
+   },
+   
+/*2274*/
+   {
+      "x-x-x-x-x-x",
+      1603,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1396,
+      1
+   },
+   
+/*2275*/
+   {
+      "x-x-x-x-x-x",
+      1893,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      0,
+      1388,
+      1
+   },
+   
+/*2276*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1384,
+      1
+   },
+   
+/*2277*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1558,
+      1
+   },
+   
+/*2278*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2149,
+      1
+   },
+   
+/*2279*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      57,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2127,
+      1
+   },
+   
+/*2280*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2281*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1557,
+      1
+   },
+   
+/*2282*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      2286,
+      1
+   },
+   
+/*2283*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      545,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      1382,
+      1
+   },
+   
+/*2284*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      631,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2285*/
+   {
+      "x-x-x-x-x-x or xxxxxxxxxxxx",
+      57,
+      MAC_ADDR_DATA,
+      0,
+      0,
+      NULL_ARG,
+      NULL_ARG,
+      1
+   },
+   
+/*2286*/
+   {
+      "|",
+      1903,
+      NO_DATA,
+      0,
+      0,
+      0,
+      921,
+      1
+   },
+
+};
+
+

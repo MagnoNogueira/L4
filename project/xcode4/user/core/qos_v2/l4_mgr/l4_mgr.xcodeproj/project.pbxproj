@@ -1,0 +1,615 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8DD76FB00486AB0100D96B5E /* l4_mgr.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* l4_mgr.1 */; };
+		C44E37C3185965B200560A19 /* stktplg_shom.c in Sources */ = {isa = PBXBuildFile; fileRef = C44E37C118595B2D00560A19 /* stktplg_shom.c */; };
+		C44E37C41859873500560A19 /* stktplg_pom.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBF91398B6A40053D892 /* stktplg_pom.c */; };
+		C4E9B4AD1901346C00270D47 /* cli_tbl.c in Sources */ = {isa = PBXBuildFile; fileRef = C4E9B4AC1901346C00270D47 /* cli_tbl.c */; };
+		D01D3D6A1441194A00CE609D /* l_sort_lst.c in Sources */ = {isa = PBXBuildFile; fileRef = D01D3D691441194A00CE609D /* l_sort_lst.c */; };
+		D01D3D6E1441195D00CE609D /* l_pt.c in Sources */ = {isa = PBXBuildFile; fileRef = D01D3D6D1441195D00CE609D /* l_pt.c */; };
+		D02BBB6D13AB5B73001EE637 /* isc.c in Sources */ = {isa = PBXBuildFile; fileRef = D02BBB6C13AB5B73001EE637 /* isc.c */; };
+		D05DE719156A15FB00F6650D /* l_link_lst.c in Sources */ = {isa = PBXBuildFile; fileRef = D05DE718156A15FB00F6650D /* l_link_lst.c */; };
+		D088F63313AA0EED001F71DA /* l4_main.c in Sources */ = {isa = PBXBuildFile; fileRef = D088F63213AA0EED001F71DA /* l4_main.c */; };
+		D098006713AABB7E0058B54F /* swctrl_pom.c in Sources */ = {isa = PBXBuildFile; fileRef = D098006613AABB7E0058B54F /* swctrl_pom.c */; };
+		D0A2F59513BFCB47007F6F2D /* cli_api_ethernet.c in Sources */ = {isa = PBXBuildFile; fileRef = D0A2F59413BFCB47007F6F2D /* cli_api_ethernet.c */; };
+		D0A9FEFC13BEEAD100B9310E /* cli_api.c in Sources */ = {isa = PBXBuildFile; fileRef = D0A9FEFB13BEEAD100B9310E /* cli_api.c */; };
+		D0B2FB3E1614437900B2600F /* rule_lib_array.c in Sources */ = {isa = PBXBuildFile; fileRef = D0B2FB3C1614433800B2600F /* rule_lib_array.c */; };
+		D0BFF432139DBD02003E4AA2 /* l_base64.c in Sources */ = {isa = PBXBuildFile; fileRef = D0BFF431139DBD02003E4AA2 /* l_base64.c */; };
+		D0BFF45E139DC4E6003E4AA2 /* cli_lib.c in Sources */ = {isa = PBXBuildFile; fileRef = D0BFF458139DC1E9003E4AA2 /* cli_lib.c */; };
+		D0CE8DB913C8684400E339EC /* sys_time.c in Sources */ = {isa = PBXBuildFile; fileRef = D0CE8DB813C8684400E339EC /* sys_time.c */; };
+		D0CE8DBD13C8689400E339EC /* l_stdlib.c in Sources */ = {isa = PBXBuildFile; fileRef = D0CE8DBC13C8689400E339EC /* l_stdlib.c */; };
+		D0D61F591447BB1300E329BE /* rule_om_exp.c in Sources */ = {isa = PBXBuildFile; fileRef = D0D61F581447BB1300E329BE /* rule_om_exp.c */; };
+		D0DBCBED1398B63E0053D892 /* sysfun.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBEC1398B63E0053D892 /* sysfun.c */; };
+		D0DBCBF11398B66C0053D892 /* sysrsc_mgr_private.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBEF1398B66C0053D892 /* sysrsc_mgr_private.c */; };
+		D0DBCBF21398B66C0053D892 /* sysrsc_mgr.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBF01398B66C0053D892 /* sysrsc_mgr.c */; };
+		D0DBCBF51398B6820053D892 /* l_inet.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBF31398B6820053D892 /* l_inet.c */; };
+		D0DBCBF61398B6820053D892 /* l_ipv4v6.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBF41398B6820053D892 /* l_ipv4v6.c */; };
+		D0DBCBF81398B6910053D892 /* l_mm.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBF71398B6910053D892 /* l_mm.c */; };
+		D0DBCBFC1398B6AE0053D892 /* stktplg_om.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBFB1398B6AE0053D892 /* stktplg_om.c */; };
+		D0DBCC001398B6CA0053D892 /* backdoor_mgr.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCBFF1398B6CA0053D892 /* backdoor_mgr.c */; };
+		D0DBCC021398B6D90053D892 /* utest.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCC011398B6D90053D892 /* utest.c */; };
+		D0DBCC541398CB260053D892 /* l_rstatus.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCC531398CB260053D892 /* l_rstatus.c */; };
+		D0DBCC581398CB470053D892 /* swctrl.c in Sources */ = {isa = PBXBuildFile; fileRef = D0DBCC571398CB470053D892 /* swctrl.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8DD76FAF0486AB0100D96B5E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				8DD76FB00486AB0100D96B5E /* l4_mgr.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8DD76FB20486AB0100D96B5E /* l4_mgr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = l4_mgr; sourceTree = BUILT_PRODUCTS_DIR; };
+		C44E37C118595B2D00560A19 /* stktplg_shom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stktplg_shom.c; path = ../../../../../../src/fakelib/stktplg_shom.c; sourceTree = SOURCE_ROOT; };
+		C49A9D7B17CEF642007DB958 /* leaf_es3626a.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = leaf_es3626a.h; path = ../../../../../../src/sysinclude/mibconstants/leaf_es3626a.h; sourceTree = "<group>"; };
+		C4BB9F7C17E6F51200F468D4 /* cli_runcfg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_runcfg.c; path = ../../../../../../src/user/apps/cli/cli_runcfg.c; sourceTree = "<group>"; };
+		C4BB9F7E17E6F5E300F468D4 /* cli_runcfg_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 2; name = cli_runcfg_utest_cases.c; path = ../../../../../../src/test/apps/cli/cli_runcfg_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		C4E9B4AC1901346C00270D47 /* cli_tbl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_tbl.c; path = ../../../../../../src/user/apps/cli/cli_tbl.c; sourceTree = "<group>"; };
+		C6A0FF2C0290799A04C91782 /* l4_mgr.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = l4_mgr.1; sourceTree = "<group>"; };
+		D014F60C139E0251002D091E /* cli_api_acl_qosv2_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_api_acl_qosv2_utest_cases.c; path = ../../../../../../src/test/apps/cli/cli_api_acl_qosv2_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D014F60E139E02C3002D091E /* cpss_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cpss_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/marvell/cpss_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D014F60F139E02C3002D091E /* dev_rm_layoff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_layoff.c; path = ../../../../../../src/test/driver/swdrv/marvell/dev_rm_layoff.c; sourceTree = SOURCE_ROOT; };
+		D014F610139E02C3002D091E /* dev_rm_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/marvell/dev_rm_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D014F611139E02C3002D091E /* rule_ctrl_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_ctrl_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/marvell/rule_ctrl_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D014F612139E02C3002D091E /* rule_om_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/marvell/rule_om_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D01D3D691441194A00CE609D /* l_sort_lst.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_sort_lst.c; path = ../../../../../../src/cmnlib/common/datastru/l_sort_lst.c; sourceTree = SOURCE_ROOT; };
+		D01D3D6D1441195D00CE609D /* l_pt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_pt.c; path = ../../../../../../src/cmnlib/common/memmgmt/l_pt.c; sourceTree = SOURCE_ROOT; };
+		D02A4DC9158F2C2800E9CD5F /* rule_om_exp_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om_exp_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/rule_om_exp_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D02BBA5113AB274B001EE637 /* cpss.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cpss.c; path = ../../../../../../src/kernel/driver/dev_driver/marvell/cpss.c; sourceTree = SOURCE_ROOT; };
+		D02BBA5213AB274B001EE637 /* dev_rm_pmgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_pmgr.c; path = ../../../../../../src/kernel/driver/dev_driver/marvell/dev_rm_pmgr.c; sourceTree = SOURCE_ROOT; };
+		D02BBA5313AB274B001EE637 /* dev_rm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm.c; path = ../../../../../../src/kernel/driver/dev_driver/marvell/dev_rm.c; sourceTree = SOURCE_ROOT; };
+		D02BBAE213AB3E3A001EE637 /* rule_om.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om.c; path = ../../../../../../src/user/driver/swdrv/marvell/rule_om.c; sourceTree = SOURCE_ROOT; };
+		D02BBB0413AB4230001EE637 /* rule_ctrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_ctrl.c; path = ../../../../../../src/user/driver/swdrv/marvell/rule_ctrl.c; sourceTree = SOURCE_ROOT; };
+		D02BBB1B13AB469F001EE637 /* l4_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = l4_mgr.h; path = ../../../../../../src/user/core/qos_v2/include/l4_mgr.h; sourceTree = SOURCE_ROOT; };
+		D02BBB1C13AB469F001EE637 /* l4_pmgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = l4_pmgr.h; path = ../../../../../../src/user/core/qos_v2/include/l4_pmgr.h; sourceTree = SOURCE_ROOT; };
+		D02BBB1D13AB469F001EE637 /* rule_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule_type.h; path = ../../../../../../src/user/core/qos_v2/include/rule_type.h; sourceTree = SOURCE_ROOT; };
+		D02BBB1E13AB46B1001EE637 /* l4_mgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l4_mgr.c; path = ../../../../../../src/user/core/qos_v2/l4_mgr.c; sourceTree = SOURCE_ROOT; };
+		D02BBB1F13AB46B1001EE637 /* l4_pmgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l4_pmgr.c; path = ../../../../../../src/user/core/qos_v2/l4_pmgr.c; sourceTree = SOURCE_ROOT; };
+		D02BBB2313AB46C2001EE637 /* rule_mgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_mgr.c; path = ../../../../../../src/user/core/qos_v2/rule_mgr/rule_mgr.c; sourceTree = SOURCE_ROOT; };
+		D02BBB2613AB46D0001EE637 /* rule_mgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule_mgr.h; path = ../../../../../../src/user/core/qos_v2/rule_mgr/include/rule_mgr.h; sourceTree = SOURCE_ROOT; };
+		D02BBB4513AB495D001EE637 /* rule_om.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om.c; path = ../../../../../../src/user/driver/swdrv/broadcom/rule_om.c; sourceTree = SOURCE_ROOT; };
+		D02BBB4A13AB4970001EE637 /* rule_ctrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_ctrl.c; path = ../../../../../../src/user/driver/swdrv/broadcom/esw/rule_ctrl.c; sourceTree = SOURCE_ROOT; };
+		D02BBB6C13AB5B73001EE637 /* isc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = isc.c; path = ../../../../../../src/user/driver/iscdrv/isc.c; sourceTree = SOURCE_ROOT; };
+		D02BBB8C13AB60B8001EE637 /* dev_rm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/dev_rm.c; sourceTree = SOURCE_ROOT; };
+		D0496C6A13C96FDD00B554B0 /* l4_mgr_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l4_mgr_utest_cases.c; path = ../../../../../../src/test/core/qos_v2/l4_mgr_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D05DE718156A15FB00F6650D /* l_link_lst.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_link_lst.c; path = ../../../../../../src/cmnlib/common/datastru/l_link_lst.c; sourceTree = SOURCE_ROOT; };
+		D0816B8413ACC10400B0EA55 /* esw_dispatch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = esw_dispatch.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/src/bcm/esw_dispatch.c; sourceTree = SOURCE_ROOT; };
+		D088F63213AA0EED001F71DA /* l4_main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l4_main.c; path = ../../../../../../src/test/core/qos_v2/l4_main.c; sourceTree = SOURCE_ROOT; };
+		D088F64813AA1129001F71DA /* rule_ctrl_utest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_ctrl_utest.c; path = ../../../../../../src/test/driver/swdrv/marvell/rule_ctrl_utest.c; sourceTree = SOURCE_ROOT; };
+		D088F65F13AA1292001F71DA /* rule_ctrl_utest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_ctrl_utest.c; path = ../../../../../../src/test/driver/swdrv/broadcom/rule_ctrl_utest.c; sourceTree = SOURCE_ROOT; };
+		D08B14CF16FAA07D00DF84D3 /* dev_rm_lib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_lib.c; path = ../../../../../../src/kernel/driver/dev_driver/marvell/dev_rm_lib.c; sourceTree = "<group>"; };
+		D08B14D116FAA0CD00DF84D3 /* dev_rm_lib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = dev_rm_lib.h; path = ../../../../../../src/user/driver/devdrv/include/dev_rm_lib.h; sourceTree = "<group>"; };
+		D08EAA0B162F9A1D00A2BD99 /* rule_config.def */ = {isa = PBXFileReference; lastKnownFileType = text; name = rule_config.def; path = ../../../../../../src/user/driver/swdrv/marvell/rule_config.def; sourceTree = "<group>"; };
+		D090AB8813AD67B100821DC1 /* dev_rm_pmgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_pmgr.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/dev_rm_pmgr.c; sourceTree = SOURCE_ROOT; };
+		D098006513AABB7E0058B54F /* swctrl_pom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = swctrl_pom.h; path = ../../../../../../src/fakelib/swctrl_pom.h; sourceTree = SOURCE_ROOT; };
+		D098006613AABB7E0058B54F /* swctrl_pom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = swctrl_pom.c; path = ../../../../../../src/fakelib/swctrl_pom.c; sourceTree = SOURCE_ROOT; };
+		D0A2F59413BFCB47007F6F2D /* cli_api_ethernet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_api_ethernet.c; path = ../../../../../../src/user/apps/cli/cli_api_ethernet.c; sourceTree = SOURCE_ROOT; };
+		D0A8AC701416015100AE0367 /* swdrv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = swdrv.h; path = ../../../../../../src/user/driver/swdrv/include/swdrv.h; sourceTree = SOURCE_ROOT; };
+		D0A9FEC913BEE48C00B9310E /* cli_api_acl_qosv2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_api_acl_qosv2.c; path = ../../../../../../src/user/apps/cli/cli_api_acl_qosv2.c; sourceTree = SOURCE_ROOT; };
+		D0A9FECB13BEE4A200B9310E /* cli_api_l4_ds_qosv2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_api_l4_ds_qosv2.c; path = ../../../../../../src/user/apps/cli/cli_api_l4_ds_qosv2.c; sourceTree = SOURCE_ROOT; };
+		D0A9FEFB13BEEAD100B9310E /* cli_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_api.c; path = ../../../../../../src/user/apps/cli/cli_api.c; sourceTree = SOURCE_ROOT; };
+		D0A9FF1F13BEEE9100B9310E /* cli_api_l4_ds_qosv2_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_api_l4_ds_qosv2_utest_cases.c; path = ../../../../../../src/test/apps/cli/cli_api_l4_ds_qosv2_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D0B2FB3C1614433800B2600F /* rule_lib_array.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = rule_lib_array.c; path = ../../../../../../src/user/driver/swdrv/rule_lib_array.c; sourceTree = "<group>"; };
+		D0B2FB3D1614433800B2600F /* rule_lib_array.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rule_lib_array.h; path = ../../../../../../src/user/driver/swdrv/rule_lib_array.h; sourceTree = "<group>"; };
+		D0BFF431139DBD02003E4AA2 /* l_base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_base64.c; path = ../../../../../../src/cmnlib/common/convert/l_base64.c; sourceTree = SOURCE_ROOT; };
+		D0BFF458139DC1E9003E4AA2 /* cli_lib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cli_lib.c; path = ../../../../../../src/user/apps/cli/cli_lib.c; sourceTree = SOURCE_ROOT; };
+		D0CE8DB813C8684400E339EC /* sys_time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sys_time.c; path = ../../../../../../src/fakelib/sys_time.c; sourceTree = SOURCE_ROOT; };
+		D0CE8DBC13C8689400E339EC /* l_stdlib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_stdlib.c; path = ../../../../../../src/cmnlib/common/l_stdlib.c; sourceTree = SOURCE_ROOT; };
+		D0D3025913AC0EFE00CC8803 /* rule_ctrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule_ctrl.h; path = ../../../../../../src/user/driver/swdrv/include/rule_ctrl.h; sourceTree = SOURCE_ROOT; };
+		D0D3025A13AC0F0900CC8803 /* rule_om.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule_om.h; path = ../../../../../../src/user/driver/swdrv/include/rule_om.h; sourceTree = SOURCE_ROOT; };
+		D0D312EA13AC849C00CC8803 /* dispatch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dispatch.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/src/bcm/dispatch.c; sourceTree = SOURCE_ROOT; };
+		D0D3231413AC999600CC8803 /* bcm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bcm.h; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/bcm.h; sourceTree = SOURCE_ROOT; };
+		D0D3234813ACA3EB00CC8803 /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = error.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/src/shared/error.c; sourceTree = SOURCE_ROOT; };
+		D0D323C713ACA93D00CC8803 /* rule_ctrl_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_ctrl_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/broadcom/rule_ctrl_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D0D61F581447BB1300E329BE /* rule_om_exp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om_exp.c; path = ../../../../../../src/user/driver/swdrv/rule_om_exp.c; sourceTree = SOURCE_ROOT; };
+		D0D61F711447BCB700E329BE /* rule_om_exp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule_om_exp.h; path = ../../../../../../src/user/driver/swdrv/include/rule_om_exp.h; sourceTree = SOURCE_ROOT; };
+		D0D61F9B1447C78600E329BE /* rule_om_exp_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om_exp_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/rule_om_exp_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBE51398B5C20053D892 /* l4_mgr_utest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l4_mgr_utest.c; path = ../../../../../../src/test/core/qos_v2/l4_mgr_utest.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBEC1398B63E0053D892 /* sysfun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sysfun.c; path = ../../../../../../src/cmnlib/user/kernel/null/sysfun.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBEF1398B66C0053D892 /* sysrsc_mgr_private.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sysrsc_mgr_private.c; path = ../../../../../../src/user/core/mgmt/sysrsc/sysrsc_mgr_private.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBF01398B66C0053D892 /* sysrsc_mgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sysrsc_mgr.c; path = ../../../../../../src/user/core/mgmt/sysrsc/sysrsc_mgr.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBF31398B6820053D892 /* l_inet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_inet.c; path = ../../../../../../src/cmnlib/common/convert/l_inet.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBF41398B6820053D892 /* l_ipv4v6.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_ipv4v6.c; path = ../../../../../../src/cmnlib/common/convert/l_ipv4v6.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBF71398B6910053D892 /* l_mm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_mm.c; path = ../../../../../../src/cmnlib/user/memmgmt/l_mm.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBF91398B6A40053D892 /* stktplg_pom.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stktplg_pom.c; path = ../../../../../../src/fakelib/stktplg_pom.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBFB1398B6AE0053D892 /* stktplg_om.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stktplg_om.c; path = ../../../../../../src/fakelib/stktplg_om.c; sourceTree = SOURCE_ROOT; };
+		D0DBCBFF1398B6CA0053D892 /* backdoor_mgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = backdoor_mgr.c; path = ../../../../../../src/fakelib/backdoor_mgr.c; sourceTree = SOURCE_ROOT; };
+		D0DBCC011398B6D90053D892 /* utest.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utest.c; path = ../../../../../../src/test/utest.c; sourceTree = SOURCE_ROOT; };
+		D0DBCC531398CB260053D892 /* l_rstatus.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = l_rstatus.c; path = ../../../../../../src/cmnlib/common/l_rstatus.c; sourceTree = SOURCE_ROOT; };
+		D0DBCC571398CB470053D892 /* swctrl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = swctrl.c; path = ../../../../../../src/fakelib/swctrl.c; sourceTree = SOURCE_ROOT; };
+		D0DBECCA13ACC66300092AFF /* field.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = field.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/src/bcm/esw/field.c; sourceTree = SOURCE_ROOT; };
+		D0E06485157344FC0040B61C /* rule_mgr_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_mgr_utest_cases.c; path = ../../../../../../src/test/core/qos_v2/rule_mgr_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D0E3293A144E829E00770EFD /* rule_ctrl_priv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule_ctrl_priv.h; path = ../../../../../../src/user/driver/swdrv/broadcom/esw/rule_ctrl_priv.h; sourceTree = SOURCE_ROOT; };
+		D0F19A5F13AA334E0076611A /* dev_rm_layoff.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_layoff.c; path = ../../../../../../src/test/driver/swdrv/broadcom/dev_rm_layoff.c; sourceTree = SOURCE_ROOT; };
+		D0F19A6013AA334E0076611A /* dev_rm_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_rm_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/broadcom/dev_rm_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D0F19A6213AA334E0076611A /* rule_om_utest_cases.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rule_om_utest_cases.c; path = ../../../../../../src/test/driver/swdrv/broadcom/rule_om_utest_cases.c; sourceTree = SOURCE_ROOT; };
+		D0FA233C157EFED60054F7C3 /* dev_swdrv_pmgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_swdrv_pmgr.c; path = ../../../../../../src/kernel/driver/dev_driver/marvell/dev_swdrv_pmgr.c; sourceTree = SOURCE_ROOT; };
+		D0FA233D157EFED60054F7C3 /* dev_swdrv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_swdrv.c; path = ../../../../../../src/kernel/driver/dev_driver/marvell/dev_swdrv.c; sourceTree = SOURCE_ROOT; };
+		D0FA2340157EFEF40054F7C3 /* dev_swdrv_pmgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_swdrv_pmgr.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/dev_swdrv_pmgr.c; sourceTree = SOURCE_ROOT; };
+		D0FA2341157EFEF40054F7C3 /* dev_swdrv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dev_swdrv.c; path = ../../../../../../src/kernel/driver/dev_driver/broadcom/dev_swdrv.c; sourceTree = SOURCE_ROOT; };
+		D0FE0982161A73CA0055AA0C /* rule_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rule_config.h; path = ../../../../../../src/user/driver/swdrv/marvell/rule_config.h; sourceTree = "<group>"; };
+		D0FF496715AFEBB20049B368 /* dev_rm_pmgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dev_rm_pmgr.h; path = ../../../../../../src/user/driver/devdrv/include/dev_rm_pmgr.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76FAD0486AB0100D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* l4_mgr */ = {
+			isa = PBXGroup;
+			children = (
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6A0FF2B0290797F04C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = l4_mgr;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				D0DBCBE81398B5DB0053D892 /* LIB */,
+				D0BFF407139DBABE003E4AA2 /* CLI */,
+				D088F65D13AA1244001F71DA /* MARVELL */,
+				D088F65E13AA1283001F71DA /* BROADCOM */,
+				D02BBB1913AB467A001EE637 /* INCLUDE */,
+				D0B2FB3C1614433800B2600F /* rule_lib_array.c */,
+				D0B2FB3D1614433800B2600F /* rule_lib_array.h */,
+				D0D61F581447BB1300E329BE /* rule_om_exp.c */,
+				D02A4DC9158F2C2800E9CD5F /* rule_om_exp_utest_cases.c */,
+				D02BBB2313AB46C2001EE637 /* rule_mgr.c */,
+				D0E06485157344FC0040B61C /* rule_mgr_utest_cases.c */,
+				D02BBB1E13AB46B1001EE637 /* l4_mgr.c */,
+				D0496C6A13C96FDD00B554B0 /* l4_mgr_utest_cases.c */,
+				D02BBB1F13AB46B1001EE637 /* l4_pmgr.c */,
+				D0A9FEC913BEE48C00B9310E /* cli_api_acl_qosv2.c */,
+				D0A9FECB13BEE4A200B9310E /* cli_api_l4_ds_qosv2.c */,
+				D014F60C139E0251002D091E /* cli_api_acl_qosv2_utest_cases.c */,
+				D0A9FF1F13BEEE9100B9310E /* cli_api_l4_ds_qosv2_utest_cases.c */,
+				C4BB9F7C17E6F51200F468D4 /* cli_runcfg.c */,
+				C4BB9F7E17E6F5E300F468D4 /* cli_runcfg_utest_cases.c */,
+				D0D61F9B1447C78600E329BE /* rule_om_exp_utest_cases.c */,
+				D0DBCBE51398B5C20053D892 /* l4_mgr_utest.c */,
+				D088F63213AA0EED001F71DA /* l4_main.c */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76FB20486AB0100D96B5E /* l4_mgr */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				C6A0FF2C0290799A04C91782 /* l4_mgr.1 */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+		D02BBB1913AB467A001EE637 /* INCLUDE */ = {
+			isa = PBXGroup;
+			children = (
+				C49A9D7B17CEF642007DB958 /* leaf_es3626a.h */,
+				D08B14D116FAA0CD00DF84D3 /* dev_rm_lib.h */,
+				D0FF496715AFEBB20049B368 /* dev_rm_pmgr.h */,
+				D0D3025913AC0EFE00CC8803 /* rule_ctrl.h */,
+				D0D3025A13AC0F0900CC8803 /* rule_om.h */,
+				D0D61F711447BCB700E329BE /* rule_om_exp.h */,
+				D02BBB2613AB46D0001EE637 /* rule_mgr.h */,
+				D02BBB1B13AB469F001EE637 /* l4_mgr.h */,
+				D02BBB1C13AB469F001EE637 /* l4_pmgr.h */,
+				D02BBB1D13AB469F001EE637 /* rule_type.h */,
+				D0A8AC701416015100AE0367 /* swdrv.h */,
+			);
+			name = INCLUDE;
+			sourceTree = "<group>";
+		};
+		D088F65D13AA1244001F71DA /* MARVELL */ = {
+			isa = PBXGroup;
+			children = (
+				D02BBA5113AB274B001EE637 /* cpss.c */,
+				D0FA233C157EFED60054F7C3 /* dev_swdrv_pmgr.c */,
+				D0FA233D157EFED60054F7C3 /* dev_swdrv.c */,
+				D02BBA5213AB274B001EE637 /* dev_rm_pmgr.c */,
+				D02BBA5313AB274B001EE637 /* dev_rm.c */,
+				D08B14CF16FAA07D00DF84D3 /* dev_rm_lib.c */,
+				D014F60E139E02C3002D091E /* cpss_utest_cases.c */,
+				D014F60F139E02C3002D091E /* dev_rm_layoff.c */,
+				D014F610139E02C3002D091E /* dev_rm_utest_cases.c */,
+				D02BBAE213AB3E3A001EE637 /* rule_om.c */,
+				D014F612139E02C3002D091E /* rule_om_utest_cases.c */,
+				D08EAA0B162F9A1D00A2BD99 /* rule_config.def */,
+				D0FE0982161A73CA0055AA0C /* rule_config.h */,
+				D02BBB0413AB4230001EE637 /* rule_ctrl.c */,
+				D014F611139E02C3002D091E /* rule_ctrl_utest_cases.c */,
+				D088F64813AA1129001F71DA /* rule_ctrl_utest.c */,
+			);
+			name = MARVELL;
+			sourceTree = "<group>";
+		};
+		D088F65E13AA1283001F71DA /* BROADCOM */ = {
+			isa = PBXGroup;
+			children = (
+				D0D3231413AC999600CC8803 /* bcm.h */,
+				D0DBECCA13ACC66300092AFF /* field.c */,
+				D0D312EA13AC849C00CC8803 /* dispatch.c */,
+				D0816B8413ACC10400B0EA55 /* esw_dispatch.c */,
+				D0D3234813ACA3EB00CC8803 /* error.c */,
+				D0FA2340157EFEF40054F7C3 /* dev_swdrv_pmgr.c */,
+				D0FA2341157EFEF40054F7C3 /* dev_swdrv.c */,
+				D02BBB8C13AB60B8001EE637 /* dev_rm.c */,
+				D090AB8813AD67B100821DC1 /* dev_rm_pmgr.c */,
+				D0F19A5F13AA334E0076611A /* dev_rm_layoff.c */,
+				D0F19A6013AA334E0076611A /* dev_rm_utest_cases.c */,
+				D02BBB4513AB495D001EE637 /* rule_om.c */,
+				D0F19A6213AA334E0076611A /* rule_om_utest_cases.c */,
+				D02BBB4A13AB4970001EE637 /* rule_ctrl.c */,
+				D0E3293A144E829E00770EFD /* rule_ctrl_priv.h */,
+				D0D323C713ACA93D00CC8803 /* rule_ctrl_utest_cases.c */,
+				D088F65F13AA1292001F71DA /* rule_ctrl_utest.c */,
+			);
+			name = BROADCOM;
+			sourceTree = "<group>";
+		};
+		D0BFF407139DBABE003E4AA2 /* CLI */ = {
+			isa = PBXGroup;
+			children = (
+				D0A9FEFB13BEEAD100B9310E /* cli_api.c */,
+				D0A2F59413BFCB47007F6F2D /* cli_api_ethernet.c */,
+				D0BFF458139DC1E9003E4AA2 /* cli_lib.c */,
+			);
+			name = CLI;
+			sourceTree = "<group>";
+		};
+		D0DBCBE81398B5DB0053D892 /* LIB */ = {
+			isa = PBXGroup;
+			children = (
+				C4E9B4AC1901346C00270D47 /* cli_tbl.c */,
+				C44E37C118595B2D00560A19 /* stktplg_shom.c */,
+				D05DE718156A15FB00F6650D /* l_link_lst.c */,
+				D01D3D691441194A00CE609D /* l_sort_lst.c */,
+				D01D3D6D1441195D00CE609D /* l_pt.c */,
+				D0DBCBEC1398B63E0053D892 /* sysfun.c */,
+				D0DBCBF01398B66C0053D892 /* sysrsc_mgr.c */,
+				D0DBCBF31398B6820053D892 /* l_inet.c */,
+				D0DBCBF41398B6820053D892 /* l_ipv4v6.c */,
+				D0DBCBF71398B6910053D892 /* l_mm.c */,
+				D0DBCC531398CB260053D892 /* l_rstatus.c */,
+				D0BFF431139DBD02003E4AA2 /* l_base64.c */,
+				D0CE8DBC13C8689400E339EC /* l_stdlib.c */,
+				D0DBCBFF1398B6CA0053D892 /* backdoor_mgr.c */,
+				D0CE8DB813C8684400E339EC /* sys_time.c */,
+				D0DBCBEF1398B66C0053D892 /* sysrsc_mgr_private.c */,
+				D0DBCBF91398B6A40053D892 /* stktplg_pom.c */,
+				D0DBCBFB1398B6AE0053D892 /* stktplg_om.c */,
+				D0DBCC571398CB470053D892 /* swctrl.c */,
+				D098006513AABB7E0058B54F /* swctrl_pom.h */,
+				D098006613AABB7E0058B54F /* swctrl_pom.c */,
+				D02BBB6C13AB5B73001EE637 /* isc.c */,
+				D0DBCC011398B6D90053D892 /* utest.c */,
+			);
+			name = LIB;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DD76FA90486AB0100D96B5E /* l4_mgr */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB928508733DD80010E9CD /* Build configuration list for PBXNativeTarget "l4_mgr" */;
+			buildPhases = (
+				8DD76FAB0486AB0100D96B5E /* Sources */,
+				8DD76FAD0486AB0100D96B5E /* Frameworks */,
+				8DD76FAF0486AB0100D96B5E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = l4_mgr;
+			productInstallPath = "$(HOME)/bin";
+			productName = l4_mgr;
+			productReference = 8DD76FB20486AB0100D96B5E /* l4_mgr */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "l4_mgr" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* l4_mgr */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76FA90486AB0100D96B5E /* l4_mgr */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76FAB0486AB0100D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0DBCBED1398B63E0053D892 /* sysfun.c in Sources */,
+				D0DBCBF11398B66C0053D892 /* sysrsc_mgr_private.c in Sources */,
+				D0DBCBF21398B66C0053D892 /* sysrsc_mgr.c in Sources */,
+				D0DBCBF51398B6820053D892 /* l_inet.c in Sources */,
+				D0DBCBF61398B6820053D892 /* l_ipv4v6.c in Sources */,
+				D0DBCBF81398B6910053D892 /* l_mm.c in Sources */,
+				D0DBCBFC1398B6AE0053D892 /* stktplg_om.c in Sources */,
+				C4E9B4AD1901346C00270D47 /* cli_tbl.c in Sources */,
+				D0DBCC001398B6CA0053D892 /* backdoor_mgr.c in Sources */,
+				D0DBCC021398B6D90053D892 /* utest.c in Sources */,
+				D0DBCC541398CB260053D892 /* l_rstatus.c in Sources */,
+				C44E37C41859873500560A19 /* stktplg_pom.c in Sources */,
+				D0DBCC581398CB470053D892 /* swctrl.c in Sources */,
+				D0BFF432139DBD02003E4AA2 /* l_base64.c in Sources */,
+				D0BFF45E139DC4E6003E4AA2 /* cli_lib.c in Sources */,
+				C44E37C3185965B200560A19 /* stktplg_shom.c in Sources */,
+				D088F63313AA0EED001F71DA /* l4_main.c in Sources */,
+				D098006713AABB7E0058B54F /* swctrl_pom.c in Sources */,
+				D02BBB6D13AB5B73001EE637 /* isc.c in Sources */,
+				D0A9FEFC13BEEAD100B9310E /* cli_api.c in Sources */,
+				D0A2F59513BFCB47007F6F2D /* cli_api_ethernet.c in Sources */,
+				D0CE8DB913C8684400E339EC /* sys_time.c in Sources */,
+				D0CE8DBD13C8689400E339EC /* l_stdlib.c in Sources */,
+				D01D3D6A1441194A00CE609D /* l_sort_lst.c in Sources */,
+				D01D3D6E1441195D00CE609D /* l_pt.c in Sources */,
+				D0D61F591447BB1300E329BE /* rule_om_exp.c in Sources */,
+				D05DE719156A15FB00F6650D /* l_link_lst.c in Sources */,
+				D0B2FB3E1614437900B2600F /* rule_lib_array.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D088F61513AA0AA3001F71DA /* Debug_ES4626F */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = SYS_HWCFG_LITTLE_ENDIAN_CPU;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../../../../src/test\"",
+					"\"$(SRCROOT)/../../../../../../src/test/core/mgmt/sysrsc\"",
+					"\"$(SRCROOT)/../../../../../../src/test/driver/swdrv\"",
+					"\"$(SRCROOT)/../../../../../../src/test/driver/swdrv/broadcom\"",
+					"\"$(SRCROOT)/../../../../../../src/test/apps/cli\"",
+					"\"$(SRCROOT)/../../../../../../src/sysinclude\"",
+					"\"$(SRCROOT)/../../../../../../src/sysinclude/mibconstants\"",
+					"\"$(SRCROOT)/../../../../../../src/sysinclude/oem/es4626f_flf_38\"",
+					"\"$(SRCROOT)/../../../../../../src/cmnlib/user/include\"",
+					"\"$(SRCROOT)/../../../../../../src/cmnlib/common/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/mgmt/sysrsc/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/mgmt/sys_callback/include\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/broadcom\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/include\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/src/bcm\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/broadcom/sdk_5.5.2/src/bcm/esw\"",
+					"\"$(SRCROOT)/../../../../../../src/user/apps/cli/oem/es3510ma_flf_38\"",
+					"\"$(SRCROOT)/../../../../../../src/user/apps/cli\"",
+					"\"$(SRCROOT)/../../../../../../src/user/apps/cli/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/cos/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/rule_mgr/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/cos\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/rule_mgr\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/security/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/devdrv/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/devdrv/include/esw\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/iscdrv/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv/broadcom\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv/broadcom/esw\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv/broadcom/esw/oem/es4626f_flf_38\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/rule_mgr/include\"",
+					"\"$(SRCROOT)/../../../../../../src/fakelib\"",
+				);
+				LLVM_LTO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.8;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug_ES4626F;
+		};
+		D088F61613AA0AA3001F71DA /* Debug_ES4626F */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_MODULES_AUTOLINK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = SYS_HWCFG_LITTLE_ENDIAN_CPU;
+				GCC_STRICT_ALIASING = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "-ferror-limit=50";
+				PRODUCT_NAME = l4_mgr;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug_ES4626F;
+		};
+		D0DBCBCF1398B2920053D892 /* Debug_ES3510MA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = SYS_HWCFG_LITTLE_ENDIAN_CPU;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../../../../src/test\"",
+					"\"$(SRCROOT)/../../../../../../src/test/core/mgmt/sysrsc\"",
+					"\"$(SRCROOT)/../../../../../../src/test/driver/swdrv\"",
+					"\"$(SRCROOT)/../../../../../../src/test/driver/swdrv/marvell\"",
+					"\"$(SRCROOT)/../../../../../../src/test/apps/cli\"",
+					"\"$(SRCROOT)/../../../../../../src/sysinclude\"",
+					"\"$(SRCROOT)/../../../../../../src/sysinclude/mibconstants\"",
+					"\"$(SRCROOT)/../../../../../../src/sysinclude/oem/es3510ma_flf_38\"",
+					"\"$(SRCROOT)/../../../../../../src/cmnlib/user/include\"",
+					"\"$(SRCROOT)/../../../../../../src/cmnlib/common/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/mgmt/sysrsc/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/mgmt/sys_callback/include\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/marvell\"",
+					"\"$(SRCROOT)/../../../../../../src/kernel/driver/dev_driver/marvell/cpss_3.4\"/**",
+					"\"$(SRCROOT)/../../../../../../src/user/apps/cli/oem/es3510ma_flf_38\"",
+					"\"$(SRCROOT)/../../../../../../src/user/apps/cli\"",
+					"\"$(SRCROOT)/../../../../../../src/user/apps/cli/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/cos/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/rule_mgr/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/cos\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/rule_mgr\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/security/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/devdrv/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/devdrv/include/marvell\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/iscdrv/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv/marvell\"",
+					"\"$(SRCROOT)/../../../../../../src/user/driver/swdrv\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/qos_v2/rule_mgr/include\"",
+					"\"$(SRCROOT)/../../../../../../src/fakelib\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/mgmt/dai/include\"",
+					"\"$(SRCROOT)/../../../../../../src/user/core/mgmt/dai\"",
+					"\"$(SRCROOT)/../../../../../../src/fakelib/asf4612mms\"",
+				);
+				LLVM_LTO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.8;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug_ES3510MA;
+		};
+		D0DBCBD01398B2920053D892 /* Debug_ES3510MA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_MODULES_AUTOLINK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = SYS_HWCFG_LITTLE_ENDIAN_CPU;
+				GCC_STRICT_ALIASING = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_USE_INDIRECT_FUNCTION_CALLS = NO;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "-ferror-limit=50";
+				PRODUCT_NAME = l4_mgr;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Debug_ES3510MA;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB928508733DD80010E9CD /* Build configuration list for PBXNativeTarget "l4_mgr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0DBCBD01398B2920053D892 /* Debug_ES3510MA */,
+				D088F61613AA0AA3001F71DA /* Debug_ES4626F */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug_ES3510MA;
+		};
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "l4_mgr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D0DBCBCF1398B2920053D892 /* Debug_ES3510MA */,
+				D088F61513AA0AA3001F71DA /* Debug_ES4626F */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug_ES3510MA;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

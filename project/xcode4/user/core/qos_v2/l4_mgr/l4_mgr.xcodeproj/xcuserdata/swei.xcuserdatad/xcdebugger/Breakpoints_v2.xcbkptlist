@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            condition = "icmp6_type == 133"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../../src/test/driver/swdrv/marvell/rule_ctrl_utest_cases.c"
+            timestampString = "436782059.326346"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22775"
+            endingLineNumber = "22775"
+            landmarkName = "RULE_CTRL_UT_Proc_Validate_Nd_Status()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../../src/test/driver/swdrv/marvell/rule_ctrl_utest_cases.c"
+            timestampString = "436784336.395668"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22821"
+            endingLineNumber = "22821"
+            landmarkName = "RULE_CTRL_UT_IP6_Set_Nd_Rs_Packet_To_Cpu()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../../src/kernel/driver/dev_driver/marvell/dev_rm.c"
+            timestampString = "436784504.831902"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "7281"
+            endingLineNumber = "7281"
+            landmarkName = "DEVRM_RuleToIngExtIpv6L2()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

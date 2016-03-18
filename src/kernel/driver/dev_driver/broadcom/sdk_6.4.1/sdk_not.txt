@@ -1,0 +1,46 @@
+dev_rm.c
+
+
+dev_rm.c
+ +- src/bcm/dispatch.c
+
+./
+├── bcm.h                               “SDK preprocessor define”
+├── dev_rm.c                            “gateway”
+├── include
+│   ├── bcm
+│   │   ├── error.h                     “common error define”
+│   │   ├── types.h                     ""
+│   │   └── field.h                     ""
+│   ├── bcm_int
+│   │   ├── common
+│   │   │   └── field.h
+│   │   ├── control.h
+│   │   ├── dispatch.h
+│   │   ├── esw
+│   │   │   └── field.h
+│   │   └── esw_dispatch.h
+│   ├── customer
+│   │   ├── accton_bcm.h
+│   │   └── accton_field.h
+│   ├── shared
+│   │   ├── error.h
+│   │   └── util.h
+│   └── soc
+│       ├── drv.h
+│       └── field.h                     "Register/memory field descriptions"
+└── src
+    ├── bcm
+    │   ├── dispatch.c                  "dispatch bcm_field_XXX to function define in bcm_control array"
+    │   ├── error.c
+    │   ├── esw
+    │   │   ├── field.c                 “bcm_esw_XXX function for dispatch”
+    │   │   └── port.c
+    │   └── esw_dispatch.c              “bcm_esw_XXX function dispatch array define”
+    ├── customer
+    │   └── accton_field.c              "Accton-specific APIs"
+    └── shared
+        ├── error.c
+        ├── pbmp.c
+        └── util.c
+

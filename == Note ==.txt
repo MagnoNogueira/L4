@@ -1,0 +1,37 @@
+== Note ==
+
+1. For debug saving time,
+   could add these parameter to "Arguments Passed On Launch" on project schemes
+=======================
+-r skip_dev_rm
+-o skip_rule_om
+-c skip_rule_ctrl
+-m skip_rule_mgr
+
+-d turn on backdoor shell while finishing testing
+=======================
+
+
+2. How to create Xcode project on OSX
+=====================================
+cd L4/
+sh build_bcm.sh  (or sh build_mvl.sh or sh build_rtk.sh)
+=====================================
+
+3. To do:
+ - Build on windows
+ - Using gmock ?
+ - Stack unit test improve
+
+
+4. For Xcode
+  a. Q:breakpoint not work on import c file
+     A:enter following command on shell 
+      % echo "settings set target.inline-breakpoint-strategy always" >> ~/.lldbinit
+
+  b. Q: waring/error can’t redirect to import c file
+     A: Turn GCC_CW_ASM_SYNTAX to NO
+        Build Settings -> CodeWarrior/MS-Style Inline Assembly -> NO
+
+       
+

@@ -1,0 +1,49 @@
+class:
+    one class-map in policy-map
+
+class.cos:
+    flow priority, 0-7, 0 is lowest priority
+
+class.bandwidth
+    max bandwidth
+
+class.flow:
+    corresponding flow from class
+
+class.flow.input_rate
+    input rate
+
+class.flow.bandwidth
+    current bandwidth [result]
+
+bundle:
+    include many class-map
+
+bundle.bandwidth
+    max bandwidth per bundle
+
+bundle.bandwidth = sum( class[i].flow.bandwidth ), i = all class in a bundle
+
+total_input_rate[cos]
+    total input rate per cos
+
+
+for each class in a bundle, sort by class.cos, 0 to 7
+
+    result = class.flow.bandwidth
+
+    if class.bandwidth < class.flow.input_rate
+        class.flow.input_rate = class.bandwidth
+
+    if total_input_rate[flow.cos] <= bundle.bandwidth ||
+        total_input_rate[flow.cos] == 0 ||
+        class.flow.input_rate == 0
+        result = class.bandwidth
+    else
+        result = class.flow.input_rate / total_input_rate[cos] * bundle.bandwidth;
+
+    if class.bandwidth < result
+        result = class.bandwidth
+
+    class.flow.bandwidth = result
+

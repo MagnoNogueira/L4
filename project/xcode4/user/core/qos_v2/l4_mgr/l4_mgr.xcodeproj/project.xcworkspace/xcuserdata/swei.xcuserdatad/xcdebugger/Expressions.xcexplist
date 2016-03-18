@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "RULE_OM_TEST_Get_UI_Port_Entry:rule_om_utest_cases.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "ifindex">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
