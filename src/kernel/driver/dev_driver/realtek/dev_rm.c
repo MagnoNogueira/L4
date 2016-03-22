@@ -634,7 +634,7 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
                 {
                     DEVRM_TRACE("Patch code for 9x chip, remark cos by modified internal priority")
                     igr_action_p->pri_en = ENABLED;
-                    igr_action_p->pri_data.pri = dev_action_p->qos.inner_priority;
+                    igr_action_p->pri_data.pri = dev_action_p->qos.priority;
                     total_cnt++;
                     DEVRM_TRACE("[Action] modify_inner_priority %lu", igr_action_p->pri_data.pri);
                 }
@@ -653,8 +653,8 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
                 }
                 else
                 {
-                    ASSERT(0);
                     DEVRM_ERR("Not support modify_dscp) %lu", dev_action_p->qos.dscp);
+                    return FALSE;
                 }
             }
 
@@ -2653,35 +2653,32 @@ _DEVRM_SetRuleEntryFieldForTemplate6(
         }
     }
 
-    if (DEVRM_SHR_BITGET(ace_p->w, DEVRM_FIELD_QUALIFY_DstMac))
+    if (DEVRM_SHR_BITGET(ace_p->w, DEVRM_FIELD_QUALIFY_SrcIp))
     {
-        DEVRM_TRACE("DEVRM_FIELD_QUALIFY_DstMac (data:0x%02x%02x%02x%02x%02x%02x, mask:0x%02x%02x%02x%02x%02x%02x)",
-                    ace_p->dstmac_data[0], ace_p->dstmac_data[1], ace_p->dstmac_data[2],
-                    ace_p->dstmac_data[3], ace_p->dstmac_data[4], ace_p->dstmac_data[5],
-                    ace_p->dstmac_mask[0], ace_p->dstmac_mask[1], ace_p->dstmac_mask[2],
-                    ace_p->dstmac_mask[3], ace_p->dstmac_mask[4], ace_p->dstmac_mask[5]);
+        DEVRM_TRACE("DEVRM_FIELD_QUALIFY_SrcIp (data:%lu, mask:%lu)",
+                    ace_p->srcip_data, ace_p->srcip_mask);
 
         ret = rtk_acl_ruleEntryField_write(device_id, (rtk_acl_phase_t) phase,
-                                           hw_rule_idx, USER_FIELD_DMAC,
-                                           (UI8_T *)&ace_p->dstmac_data, (UI8_T *)&ace_p->dstmac_mask);
+                                           hw_rule_idx, USER_FIELD_IP4_SIP,
+                                           &ace_p->srcip_data, &ace_p->srcip_mask);
         if (ret != RT_ERR_OK)
         {
-            DEVRM_ERR("Set field DEVRM_FIELD_QUALIFY_DstMac error");
+            DEVRM_ERR("Set field DEVRM_FIELD_QUALIFY_SrcIp error");
             return ret;
         }
     }
 
-    if (DEVRM_SHR_BITGET(ace_p->w, DEVRM_FIELD_QUALIFY_InnerVlan))
+    if (DEVRM_SHR_BITGET(ace_p->w, DEVRM_FIELD_QUALIFY_DstIp))
     {
-        DEVRM_TRACE("DEVRM_FIELD_QUALIFY_InnerVlan (data:%u, mask:%u)",
-                    ace_p->invlan_data, ace_p->invlan_mask);
+        DEVRM_TRACE("DEVRM_FIELD_QUALIFY_DstIp (data:%lu, mask:%lu)",
+                    ace_p->dstip_data, ace_p->dstip_mask);
 
         ret = rtk_acl_ruleEntryField_write(device_id, (rtk_acl_phase_t) phase,
-                                           hw_rule_idx, USER_FIELD_ITAG_VID,
-                                           (UI8_T *)&ace_p->invlan_data, (UI8_T *)&ace_p->invlan_mask);
+                                           hw_rule_idx, USER_FIELD_IP4_DIP,
+                                           &ace_p->dstip_data, &ace_p->dstip_mask);
         if (ret != RT_ERR_OK)
         {
-            DEVRM_ERR("Set field DEVRM_FIELD_QUALIFY_InnerVlan error");
+            DEVRM_ERR("Set field DEVRM_FIELD_QUALIFY_DstIp error");
             return ret;
         }
     }
@@ -2815,7 +2812,22 @@ _DEVRM_SetRuleEntryFieldForTemplate6(
             return ret;
         }
     }
-    
+
+    if (DEVRM_SHR_BITGET(ace_p->w, DEVRM_FIELD_QUALIFY_TcpControl))
+    {
+        DEVRM_TRACE("DEVRM_FIELD_QUALIFY_TcpControl (data:%u, mask:%u)",
+                    ace_p->tcpcontrol_data, ace_p->tcpcontrol_mask);
+
+        ret = rtk_acl_ruleEntryField_write(device_id, (rtk_acl_phase_t) phase,
+                                           hw_rule_idx, USER_FIELD_TCP_FLAG,
+                                           &ace_p->tcpcontrol_data, &ace_p->tcpcontrol_mask);
+        if (ret != RT_ERR_OK)
+        {
+            DEVRM_ERR("Set field DEVRM_FIELD_QUALIFY_TcpControl error");
+            return ret;
+        }
+    }
+
     return RT_ERR_OK;
 }
 

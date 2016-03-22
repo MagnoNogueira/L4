@@ -23127,6 +23127,7 @@ RULE_CTRL_LocalSetQoSACL2DEV(
                                            &rule_index);
         if (FALSE == b_result)
         {
+            result = RULE_TYPE_FAIL;
             LOG("<Error> Insufficient rule");
             goto undo;
         }
@@ -23157,6 +23158,7 @@ RULE_CTRL_LocalSetQoSACL2DEV(
                                            &action_entry, sm_rid);
         if (FALSE == b_result)
         {
+            result = RULE_TYPE_FAIL;
             LOG("<Error> Set rule");
             goto undo;
         }
