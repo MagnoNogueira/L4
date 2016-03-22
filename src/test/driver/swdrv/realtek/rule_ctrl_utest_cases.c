@@ -110,6 +110,11 @@ RULE_CTRL_UT_Proc_Set_Billing_Counter(
  * Generic Generic Help Functions
  *------------------------------------------------------------------------------
  */
+BOOL_T
+RULE_CTRL_UT_Porc_ReturnFalse()
+{
+    return FALSE;
+}
 
 void
 RULE_CTRL_UT_Proc_Validate_Rule();
@@ -2304,7 +2309,9 @@ RULE_CTRL_UT_Proc_Validate_ACLs()
 
                         t_ret = (UI32_T) TIME_RANGE_PMGR_MibGetTimeRangeEntryById(acl_inst_p->time_range_index, &time_entry);
                         assert(t_ret == TIME_RANGE_ERROR_TYPE_NONE);
-                        assert(0 == strncmp(time_entry.name, time_range_name, SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH));
+                        assert(0 == strncmp((const char *)time_entry.name,
+                                            (const char *)time_range_name,
+                                            SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH));
                     }
                     else
                     {
@@ -2411,8 +2418,10 @@ RULE_CTRL_UT_Proc_Validate_ACLs()
 
 #if (SYS_CPNT_TIME_BASED_ACL == TRUE)
                         {
-                            BOOL_T _is_active = RULE_CTRL_LocalCheckRuleInActiveByTimeRange(ace_entry.time_range_index,
-                                                                                            acl_inst_p->time_range_index);
+                            BOOL_T _is_active;
+
+                            _is_active = RULE_CTRL_LocalCheckRuleInActiveByTimeRange(ace_entry.time_range_index,
+                                                                                     acl_inst_p->time_range_index);
 
                             //FIXME: think how to triger envent to rule_ctrl.
                             //assert(rule_inst_ptr->active == _is_active);
@@ -3372,12 +3381,13 @@ RULE_CTRL_UT_Proc_Validate_Leaks_ResourceInfo_ACL_QoS()
 
                 RULE_TYPE_COUNTER_ENABLE_T  counter_enable;
 
-                UI16_T                      time_range_index;
+                //UI16_T                      time_range_index;
+                UI8_T                       time_range_name[SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH+1] = {0};
 
                 result = RULE_OM_GetPortAclIndex(ifindex, acl_type,
                                                  interface.direction == RULE_TYPE_INBOUND ? TRUE : FALSE,
                                                  &acl_index,
-                                                 &time_range_index,
+                                                 time_range_name,
                                                  &counter_enable);
                 if (RULE_TYPE_OK == result)
                 {
@@ -6942,6 +6952,114 @@ int RULE_CTRL_UT_Set_QoS_With_Modifying_Action_On_Fly()
     return 0;
 }
 
+int RULE_CTRL_UT_Set_QoS_Rule_AllocateRule_Fail_Case()
+{
+    enum
+    {
+        MIN_IFINDEX         = 1,
+        MAX_IFINDEX         = 3,
+
+        MIN_DIRECTION       = RULE_TYPE_INBOUND,
+
+#if (SYS_CPNT_QOS_V2_EGRESS_PORT == TRUE)
+        MAX_DIRECTION       = RULE_TYPE_OUTBOUND,
+#else
+        MAX_DIRECTION       = RULE_TYPE_INBOUND,
+#endif
+
+        ACL_TYPE            = RULE_TYPE_MAC_ACL,
+        ACE_TYPE            = RULE_TYPE_MAC_ACL,
+    };
+
+    RULE_TYPE_RETURN_TYPE_T result;
+    RULE_TYPE_InOutDirection_T direction;
+    RULE_CTRL_OpTable_T test_optable;
+    UI32_T ifindex;
+
+    memcpy(&test_optable, &rule_ctrl_dflt_optable, sizeof(test_optable));
+
+    test_optable.fn_allocate_rule = (void *) RULE_CTRL_UT_Porc_ReturnFalse;
+    rule_ctrl_optable_ptr = &test_optable;
+
+    {
+        const char *policy_map_name = "p1";
+        UI32_T policy_map_index;
+
+        RULE_CTRL_UT_Proc_Create_Policy_Match_Any_Class_Map_With_Match_ACL_MF(policy_map_name);
+
+        result = RULE_OM_GetPolicyMapIdByName(policy_map_name, &policy_map_index);
+        assert(RULE_TYPE_OK == result);
+
+        for (ifindex = MIN_IFINDEX; ifindex <= MAX_IFINDEX; ++ ifindex)
+        {
+            for (direction = RULE_TYPE_INBOUND; direction <= MAX_DIRECTION; ++direction)
+            {
+                result = RULE_CTRL_SetPolicyMap(ifindex, direction, policy_map_index, TRUE);
+                assert(RULE_TYPE_OK != result);
+                RULE_CTRL_UT_Proc_Validate_Rule();
+            }
+        }
+    }
+
+    rule_ctrl_optable_ptr = &rule_ctrl_dflt_optable;
+    
+    return 0;
+}
+
+int RULE_CTRL_UT_Set_QoS_Rule_SetRule_Fail_Case()
+{
+    enum
+    {
+        MIN_IFINDEX         = 1,
+        MAX_IFINDEX         = 3,
+
+        MIN_DIRECTION       = RULE_TYPE_INBOUND,
+
+#if (SYS_CPNT_QOS_V2_EGRESS_PORT == TRUE)
+        MAX_DIRECTION       = RULE_TYPE_OUTBOUND,
+#else
+        MAX_DIRECTION       = RULE_TYPE_INBOUND,
+#endif
+
+        ACL_TYPE            = RULE_TYPE_MAC_ACL,
+        ACE_TYPE            = RULE_TYPE_MAC_ACL,
+    };
+
+    RULE_TYPE_RETURN_TYPE_T result;
+    RULE_TYPE_InOutDirection_T direction;
+    RULE_CTRL_OpTable_T test_optable;
+    UI32_T ifindex;
+
+    memcpy(&test_optable, &rule_ctrl_dflt_optable, sizeof(test_optable));
+
+    test_optable.fn_set_rule = (void *) RULE_CTRL_UT_Porc_ReturnFalse;
+    rule_ctrl_optable_ptr = &test_optable;
+
+    {
+        const char *policy_map_name = "p1";
+        UI32_T policy_map_index;
+
+        RULE_CTRL_UT_Proc_Create_Policy_Match_Any_Class_Map_With_Match_ACL_MF(policy_map_name);
+
+        result = RULE_OM_GetPolicyMapIdByName(policy_map_name, &policy_map_index);
+        assert(RULE_TYPE_OK == result);
+
+        for (ifindex = MIN_IFINDEX; ifindex <= MAX_IFINDEX; ++ ifindex)
+        {
+            for (direction = RULE_TYPE_INBOUND; direction <= MAX_DIRECTION; ++direction)
+            {
+                result = RULE_CTRL_SetPolicyMap(ifindex, direction, policy_map_index, TRUE);
+                assert(RULE_TYPE_OK != result);
+                RULE_CTRL_UT_Proc_Validate_Rule();
+            }
+        }
+    }
+
+    rule_ctrl_optable_ptr = &rule_ctrl_dflt_optable;
+    
+    return 0;
+}
+
 BOOL_T
 RULE_CTRL_UT_Proc_Is_Active_Rule_Instance(
     const RULE_TYPE_INSTANCE_PTR_T in,
@@ -8226,18 +8344,11 @@ RULE_CTRL_UT_Hot_Removal()
 
     UI32_T unit;
     UI32_T port;
-
     UI32_T acl_type = RULE_TYPE_IP_STD_ACL;
     UI32_T acl_index;
     UI32_T policy_map_index;
 
-    UI32_T start_lport;
-    UI32_T number_of_port;
-
-    int    retry_count = MAX_RETRY_COUNT;
-
     RULE_TYPE_InOutDirection_T  direction;
-
     RULE_TYPE_RETURN_TYPE_T result;
 
 //#if (SYS_CPNT_QOS_V2_EGRESS_PORT == TRUE)
@@ -8293,22 +8404,27 @@ retry:
     //
     //
     //bcm_esw_field_init(0);
+
 #if (1 < SYS_ADPT_MAX_NBR_OF_CHIP_PER_UNIT)
-    DEVRM_Initial();
-
-    start_lport = 1;
-    number_of_port = MAX_PORT + 1;
-
-    RULE_OM_HandleHotRemoval(start_lport, number_of_port);
-    RULE_CTRL_HandleHotRemoval(start_lport, number_of_port);
-
-    RULE_CTRL_UT_Proc_Validate_Rule();
-
-    if (0 < retry_count--)
     {
-        FP_CONFIG_Init();
-        RULE_CTRL_EnterMasterMode();
-        goto retry;
+        UI32_T start_lport, number_of_port;
+        int    retry_count = MAX_RETRY_COUNT;
+
+        DEVRM_Initial();
+        start_lport = 1;
+        number_of_port = MAX_PORT + 1;
+
+        RULE_OM_HandleHotRemoval(start_lport, number_of_port);
+        RULE_CTRL_HandleHotRemoval(start_lport, number_of_port);
+
+        RULE_CTRL_UT_Proc_Validate_Rule();
+
+        if (0 < retry_count--)
+        {
+            FP_CONFIG_Init();
+            RULE_CTRL_EnterMasterMode();
+            goto retry;
+        }
     }
 #endif /* (1 < SYS_ADPT_MAX_NBR_OF_CHIP_PER_UNIT) */
 
@@ -11706,7 +11822,7 @@ RULE_CTRL_UT_SetTcpUdpPortCosMap()
     }
 
     //RULE_OM_SetDebugFlag(0);
-#endif (SYS_CPNT_COS_ING_IP_PORT_TO_INTER_DSCP == TRUE)
+#endif /* SYS_CPNT_COS_ING_IP_PORT_TO_INTER_DSCP */
     return 0;
 }
 
@@ -11797,7 +11913,8 @@ RULE_CTRL_UT_MacVlanAndProtocolVlan()
      * * Check resource info shall correctly in each step.
      */
     UI32_T i, unit, port;
-    UI32_T vlan_group_id, rule_pri;
+    UI32_T vlan_group_id;
+    int    rule_pri;
     BOOL_T ret;
     RULE_CTRL_ResourceInfo_T *res_p;
 
@@ -15432,6 +15549,10 @@ RULE_CTRL_UT_Container_Get_First_Child_And_Sibling_If()
             {
                 id = ((RULE_TYPE_RULE_INSTANCE_PTR_T) in)->id;
             }
+            else
+            {
+                assert(0);
+            }
 
             assert(list[i].id == id);
 
@@ -15717,6 +15838,9 @@ RULE_CTRL_UT_RunTestCaese()
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_With_Modifying_ACE_On_Fly);
         //RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_With_Modifying_Meter_On_Fly);
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_With_Modifying_Action_On_Fly);
+
+        RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_Rule_AllocateRule_Fail_Case);
+        RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_Rule_SetRule_Fail_Case);
 
 #if 0 // FIXME: Add time range test case
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Time_Based_ACL_Apply_ACE);
