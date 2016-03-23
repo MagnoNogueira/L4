@@ -97,6 +97,11 @@ RULE_CTRL_UT_Proc_Set_Billing_Counter(
  * Generic Generic Help Functions
  *------------------------------------------------------------------------------
  */
+BOOL_T
+RULE_CTRL_UT_Porc_ReturnFalse()
+{
+    return FALSE;
+}
 
 void
 RULE_CTRL_UT_Proc_Validate_Rule();
@@ -6853,6 +6858,115 @@ int RULE_CTRL_UT_Set_QoS_With_Modifying_Action_On_Fly()
         }
     }
 
+    return 0;
+}
+
+
+int RULE_CTRL_UT_Set_QoS_Rule_AllocateRule_Fail_Case()
+{
+    enum
+    {
+        MIN_IFINDEX         = 1,
+        MAX_IFINDEX         = 3,
+
+        MIN_DIRECTION       = RULE_TYPE_INBOUND,
+
+#if (SYS_CPNT_QOS_V2_EGRESS_PORT == TRUE)
+        MAX_DIRECTION       = RULE_TYPE_OUTBOUND,
+#else
+        MAX_DIRECTION       = RULE_TYPE_INBOUND,
+#endif
+
+        ACL_TYPE            = RULE_TYPE_MAC_ACL,
+        ACE_TYPE            = RULE_TYPE_MAC_ACL,
+    };
+
+    RULE_TYPE_RETURN_TYPE_T result;
+    RULE_TYPE_InOutDirection_T direction;
+    RULE_CTRL_OpTable_T test_optable;
+    UI32_T ifindex;
+
+    memcpy(&test_optable, &rule_ctrl_dflt_optable, sizeof(test_optable));
+
+    test_optable.fn_allocate_rule = (void *) RULE_CTRL_UT_Porc_ReturnFalse;
+    rule_ctrl_optable_ptr = &test_optable;
+
+    {
+        const char *policy_map_name = "p1";
+        UI32_T policy_map_index;
+
+        RULE_CTRL_UT_Proc_Create_Policy_Match_Any_Class_Map_With_Match_ACL_MF(policy_map_name);
+
+        result = RULE_OM_GetPolicyMapIdByName(policy_map_name, &policy_map_index);
+        assert(RULE_TYPE_OK == result);
+
+        for (ifindex = MIN_IFINDEX; ifindex <= MAX_IFINDEX; ++ ifindex)
+        {
+            for (direction = RULE_TYPE_INBOUND; direction <= MAX_DIRECTION; ++direction)
+            {
+                result = RULE_CTRL_SetPolicyMap(ifindex, direction, policy_map_index, TRUE);
+                assert(RULE_TYPE_OK != result);
+                RULE_CTRL_UT_Proc_Validate_Rule();
+            }
+        }
+    }
+
+    rule_ctrl_optable_ptr = &rule_ctrl_dflt_optable;
+
+    return 0;
+}
+
+int RULE_CTRL_UT_Set_QoS_Rule_SetRule_Fail_Case()
+{
+    enum
+    {
+        MIN_IFINDEX         = 1,
+        MAX_IFINDEX         = 3,
+
+        MIN_DIRECTION       = RULE_TYPE_INBOUND,
+
+#if (SYS_CPNT_QOS_V2_EGRESS_PORT == TRUE)
+        MAX_DIRECTION       = RULE_TYPE_OUTBOUND,
+#else
+        MAX_DIRECTION       = RULE_TYPE_INBOUND,
+#endif
+
+        ACL_TYPE            = RULE_TYPE_MAC_ACL,
+        ACE_TYPE            = RULE_TYPE_MAC_ACL,
+    };
+
+    RULE_TYPE_RETURN_TYPE_T result;
+    RULE_TYPE_InOutDirection_T direction;
+    RULE_CTRL_OpTable_T test_optable;
+    UI32_T ifindex;
+
+    memcpy(&test_optable, &rule_ctrl_dflt_optable, sizeof(test_optable));
+
+    test_optable.fn_set_rule = (void *) RULE_CTRL_UT_Porc_ReturnFalse;
+    rule_ctrl_optable_ptr = &test_optable;
+
+    {
+        const char *policy_map_name = "p1";
+        UI32_T policy_map_index;
+
+        RULE_CTRL_UT_Proc_Create_Policy_Match_Any_Class_Map_With_Match_ACL_MF(policy_map_name);
+
+        result = RULE_OM_GetPolicyMapIdByName(policy_map_name, &policy_map_index);
+        assert(RULE_TYPE_OK == result);
+
+        for (ifindex = MIN_IFINDEX; ifindex <= MAX_IFINDEX; ++ ifindex)
+        {
+            for (direction = RULE_TYPE_INBOUND; direction <= MAX_DIRECTION; ++direction)
+            {
+                result = RULE_CTRL_SetPolicyMap(ifindex, direction, policy_map_index, TRUE);
+                assert(RULE_TYPE_OK != result);
+                RULE_CTRL_UT_Proc_Validate_Rule();
+            }
+        }
+    }
+    
+    rule_ctrl_optable_ptr = &rule_ctrl_dflt_optable;
+    
     return 0;
 }
 
@@ -15220,6 +15334,9 @@ RULE_CTRL_UT_RunTestCaese()
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_With_Modifying_ACE_On_Fly);
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_With_Modifying_Meter_On_Fly);
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_With_Modifying_Action_On_Fly);
+
+        RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_Rule_AllocateRule_Fail_Case);
+        RULE_CTRL_UT_TEST(RULE_CTRL_UT_Set_QoS_Rule_SetRule_Fail_Case);
 
 #if 0 // FIXME: Add time range test case
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Time_Based_ACL_Apply_ACE);

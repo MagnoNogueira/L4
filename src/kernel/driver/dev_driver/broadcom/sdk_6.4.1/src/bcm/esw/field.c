@@ -1326,13 +1326,7 @@ bcm_esw_field_entry_remove(int unit,
 {
     _field_entry_t *ent = _field_entry_get(unit, entry);
 
-//    if (NULL == ent)
-//    {
-//        return BCM_E_PARAM;
-//    }
-
     assert(NULL != ent);
-    assert(0 != ent->installed);
 
     ent->installed = 0;
 
