@@ -29550,7 +29550,6 @@ RULE_CTRL_UT_Proc_ValidatePclLookupStatus(
     return;
 }
 
-
 int
 RULE_CTRL_UT_DynamicBindingPclToGlobal()
 {

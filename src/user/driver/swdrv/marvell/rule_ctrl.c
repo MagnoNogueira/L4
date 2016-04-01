@@ -10937,8 +10937,6 @@ RULE_CTRL_LocalCreatePcl()
         }
     }
 
-    /* Create PCL except global rule
-     */
     for (i = 0; i < _countof(remapped_pkt_type_tbl); ++ i)
     {
         PACKET_TYPE_ENTRY_T *ent = &remapped_pkt_type_tbl[i];
@@ -10962,6 +10960,11 @@ RULE_CTRL_LocalCreatePcl()
         }
         else if (RULE_TYPE_INTERFACE_UPORT == ent->if_type)
         {
+            RULE_CTRL_LocalConfigUserPortRulePcl(ent->remapped_pkt_type);
+        }
+        else if (RULE_TYPE_INTERFACE_ALL_UNIT == ent->if_type)
+        {
+            RULE_CTRL_LocalConfigTrunkPortRulePcl(ent->remapped_pkt_type);
             RULE_CTRL_LocalConfigUserPortRulePcl(ent->remapped_pkt_type);
         }
     }
