@@ -702,8 +702,6 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
             else if (HAL_IS_RTL8390_FAMILY_ID(device_id))
             {
                 igr_action_p->fwd_data.fwd_info = CPU_PORT(device_id);
-                igr_action_p->bypass_en = ENABLED;
-                igr_action_p->bypass_data.all = 1;
             }
             total_cnt++;
 
