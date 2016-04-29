@@ -5822,32 +5822,41 @@ UI32_T RULE_MGR_SetAceFieldByIndex(UI32_T ace_index, RULE_TYPE_Ace_Entry_T *ace_
     if (ace_entry->ace_type != org_ace.ace_type)
         return RULE_TYPE_FAIL; /* do not allow to change ace type */
 
+    if (is_modified_time_range &&
+        TRUE != RULE_MGR_RequestTimeRangeReference(TRUE,
+                                                   ace_entry->time_range_name,
+                                                   &ace_entry->time_range_index))
+    {
+        return RULE_TYPE_TIME_RANGE_NONEXISTED;
+    }
+
     if (RULE_TYPE_OK == RULE_OM_GetAclIndexByAce(ace_index, &acl_index)) /* this ace is own by ACL */
     {
+#if (SYS_CPNT_ACL_AUTO_COMPRESS_ACE == TRUE)
+        result = RULE_OM_SetAceFieldByIndex(ace_index, ace_entry, field_index, RULE_TYPE_ACE_OWNED_BY_ACL);
+        if (RULE_TYPE_OK != result)
+        {
+            RULE_OM_SetAceFieldByIndex(ace_index, &org_ace, field_index, RULE_TYPE_ACE_OWNED_BY_ACL);
+            goto set_fail;
+        }
+
+        if (RULE_TYPE_OK != RULE_MGR_LocalUpdateChipCompressAclConfig(acl_index))
+        {
+            RULE_OM_SetAceFieldByIndex(ace_index, &org_ace, field_index, RULE_TYPE_ACE_OWNED_BY_ACL);
+            RULE_MGR_LocalUpdateChipCompressAclConfig(acl_index);
+            goto set_fail;
+        }
+#else
         result = RULE_CTRL_SetAce(acl_index, &org_ace, FALSE); /* delete original rule */
         if (RULE_TYPE_OK != result)
-            return result;
-
-        if (is_modified_time_range &&
-            TRUE != RULE_MGR_RequestTimeRangeReference(TRUE,
-                                                       ace_entry->time_range_name,
-                                                       &(ace_entry->time_range_index)))
-                {
-                    return RULE_TYPE_FAIL;
-                }
+            goto set_fail;
 
         result = RULE_OM_SetAceFieldByIndex(ace_index, ace_entry, field_index, RULE_TYPE_ACE_OWNED_BY_ACL);
         if (RULE_TYPE_OK != result)
         {
             /* restore chip config */
             RULE_CTRL_SetAce(acl_index, &org_ace, TRUE);
-
-            if (is_modified_time_range)
-                {
-                RULE_MGR_RequestTimeRangeReference(FALSE, ace_entry->time_range_name, &(ace_entry->time_range_index));
-            }
-
-            return result;
+            goto set_fail;
         }
 
         result = RULE_CTRL_SetAce(acl_index, (RULE_TYPE_Ace_Entry_T *)ace_entry, TRUE);
@@ -5855,32 +5864,23 @@ UI32_T RULE_MGR_SetAceFieldByIndex(UI32_T ace_index, RULE_TYPE_Ace_Entry_T *ace_
         {
             /* undo om setting */
             RULE_OM_SetAceFieldByIndex(ace_index, &org_ace, field_index, RULE_TYPE_ACE_OWNED_BY_ACL);
-
-            if (is_modified_time_range)
-                {
-                RULE_MGR_RequestTimeRangeReference(FALSE, ace_entry->time_range_name, &(ace_entry->time_range_index));
-            }
-            return result;
+            goto set_fail;
         }
-
-        if (is_modified_time_range)
-                {
-            RULE_MGR_RequestTimeRangeReference(FALSE, org_ace.time_range_name, &(org_ace.time_range_index));
-            }
-        }
+#endif /* SYS_CPNT_ACL_AUTO_COMPRESS_ACE */
+    }
     else if (RULE_TYPE_OK == RULE_OM_GetClassMapIndexByMf(ace_index, &class_map_index)) /* this ace is own by ACL */
     {
         /* delete original rule */
         result = RULE_CTRL_RemoveClassMapElementConfig(class_map_index, RULE_TYPE_CLASS_MF, ace_index);
         if (RULE_TYPE_OK != result)
-            return result;
+            goto set_fail;
 
         result = RULE_OM_SetAceFieldByIndex(ace_index, ace_entry, field_index, RULE_TYPE_ACE_OWNED_BY_CLASS_MAP);
         if (RULE_TYPE_OK != result)
         {
             /* restore chip config */
             RULE_CTRL_AddClassMapElementConfig(class_map_index, RULE_TYPE_CLASS_MF, ace_index);
-            return result;
+            goto set_fail;
         }
 
         result = RULE_CTRL_AddClassMapElementConfig(class_map_index, RULE_TYPE_CLASS_MF, ace_index);
@@ -5888,37 +5888,34 @@ UI32_T RULE_MGR_SetAceFieldByIndex(UI32_T ace_index, RULE_TYPE_Ace_Entry_T *ace_
         {
             /* undo om setting */
             RULE_OM_SetAceFieldByIndex(ace_index, &org_ace, field_index, RULE_TYPE_ACE_OWNED_BY_CLASS_MAP);
-            return result;
+            goto set_fail;
         }
     }
     else
     {
-        if (is_modified_time_range &&
-            TRUE != RULE_MGR_RequestTimeRangeReference(TRUE,
-                                                       ace_entry->time_range_name,
-                                                       &(ace_entry->time_range_index)))
-                {
-                    return RULE_TYPE_FAIL;
-                }
-
         result = RULE_OM_SetAceFieldByIndex(ace_index, ace_entry, field_index, RULE_TYPE_ACE_OWNED_BY_ACL);
         if (RULE_TYPE_OK != result)
         {
-            if (is_modified_time_range)
-                {
-                RULE_MGR_RequestTimeRangeReference(FALSE, ace_entry->time_range_name, &(ace_entry->time_range_index));
-            }
-
-            return result;
-    }
-
-        if (is_modified_time_range)
-            {
-            RULE_MGR_RequestTimeRangeReference(FALSE, org_ace.time_range_name, &(org_ace.time_range_index));
+            goto set_fail;
         }
     }
 
+    if (is_modified_time_range)
+    {
+        /* Free old time-range reference
+         */
+        RULE_MGR_RequestTimeRangeReference(FALSE, org_ace.time_range_name, &(org_ace.time_range_index));
+    }
+
     return RULE_TYPE_OK;
+
+set_fail:
+    if (is_modified_time_range)
+    {
+        RULE_MGR_RequestTimeRangeReference(FALSE, ace_entry->time_range_name, &(ace_entry->time_range_index));
+    }
+
+    return result;
 }
 
 /*------------------------------------------------------------------------------

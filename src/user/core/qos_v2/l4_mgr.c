@@ -5814,18 +5814,14 @@ BOOL_T L4_MGR_QoS_SetDiffServIpAceSourceIpAddr(UI32_T ip_ace_index, UI32_T src_i
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
+    memcpy(ace.ipv4.sip.addr,
+           &src_ip,
+           sizeof(ace.ipv4.sip.addr));
+
+    if (0 == ace.ipv4.sip.mask[0] && 0 == ace.ipv4.sip.mask[1] &&
+        0 == ace.ipv4.sip.mask[2] && 0 == ace.ipv4.sip.mask[3])
     {
-        UI32_T temp_addr = L_STDLIB_Hton32(src_ip);
-
-        memcpy(ace.ipv4.sip.addr,
-               (UI8_T *)&temp_addr,
-               sizeof(ace.ipv4.sip.addr));
-
-        if (0 == ace.ipv4.sip.mask[0] && 0 == ace.ipv4.sip.mask[1] &&
-            0 == ace.ipv4.sip.mask[2] && 0 == ace.ipv4.sip.mask[3])
-        {
-            ace.ipv4.sip.mask[0] = ace.ipv4.sip.mask[1] = ace.ipv4.sip.mask[2] = ace.ipv4.sip.mask[3] = 255;
-        }
+        ace.ipv4.sip.mask[0] = ace.ipv4.sip.mask[1] = ace.ipv4.sip.mask[2] = ace.ipv4.sip.mask[3] = 255;
     }
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(ip_ace_index,
@@ -5861,13 +5857,9 @@ BOOL_T L4_MGR_QoS_SetDiffServIpAceSourceIpAddrBitmask(UI32_T ip_ace_index, UI32_
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
-    {
-        UI32_T temp_mask = L_STDLIB_Hton32(src_ip_mask);
-
-        memcpy(ace.ipv4.sip.mask,
-               (UI8_T *)&temp_mask,
-               sizeof(ace.ipv4.sip.mask));
-    }
+    memcpy(ace.ipv4.sip.mask,
+           &src_ip_mask,
+           sizeof(ace.ipv4.sip.mask));
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(ip_ace_index,
                                                          &ace,
@@ -5902,18 +5894,14 @@ BOOL_T L4_MGR_QoS_SetDiffServIpAceDestIpAddr(UI32_T ip_ace_index, UI32_T dst_ip)
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
+    memcpy(ace.ipv4.dip.addr,
+           &dst_ip,
+           sizeof(ace.ipv4.dip.addr));
+
+    if (0 == ace.ipv4.dip.mask[0] && 0 == ace.ipv4.dip.mask[1] &&
+        0 == ace.ipv4.dip.mask[2] && 0 == ace.ipv4.dip.mask[3])
     {
-        UI32_T temp_addr = L_STDLIB_Hton32(dst_ip);
-
-        memcpy(ace.ipv4.dip.addr,
-               (UI8_T *)&temp_addr,
-               sizeof(ace.ipv4.dip.addr));
-
-        if (0 == ace.ipv4.dip.mask[0] && 0 == ace.ipv4.dip.mask[1] &&
-            0 == ace.ipv4.dip.mask[2] && 0 == ace.ipv4.dip.mask[3])
-        {
-            ace.ipv4.dip.mask[0] = ace.ipv4.dip.mask[1] = ace.ipv4.dip.mask[2] = ace.ipv4.dip.mask[3] = 255;
-        }
+        ace.ipv4.dip.mask[0] = ace.ipv4.dip.mask[1] = ace.ipv4.dip.mask[2] = ace.ipv4.dip.mask[3] = 255;
     }
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(ip_ace_index,
@@ -5949,13 +5937,9 @@ BOOL_T L4_MGR_QoS_SetDiffServIpAceDestIpAddrBitmask(UI32_T ip_ace_index, UI32_T 
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
-    {
-        UI32_T temp_mask = L_STDLIB_Hton32(dst_ip_mask);
-
-        memcpy(ace.ipv4.dip.mask,
-               (UI8_T *)&temp_mask,
-               sizeof(ace.ipv4.dip.mask));
-    }
+    memcpy(ace.ipv4.dip.mask,
+           &dst_ip_mask,
+           sizeof(ace.ipv4.dip.mask));
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(ip_ace_index,
                                                          &ace,
@@ -7225,21 +7209,16 @@ L4_MGR_QoS_SetDiffServMacAceSourceIpAddr(
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
+    memcpy(ace_entry.ipv4.sip.addr,
+           &addr,
+           sizeof(ace_entry.ipv4.sip.addr));
+
+    if (0 == (ace_entry.ipv4.sip.mask[0] & ace_entry.ipv4.sip.mask[1] &
+              ace_entry.ipv4.sip.mask[2] & ace_entry.ipv4.sip.mask[3]))
     {
-        UI32_T ip = L_STDLIB_Hton32(addr);
-        UI8_T *ip_addr;
-
-        ip_addr = (UI8_T *)&ip;
-
-        memcpy(ace_entry.ipv4.sip.addr, ip_addr,
-               sizeof(ace_entry.ipv4.sip.addr));
-
-        if ( 0 == (ace_entry.ipv4.sip.mask[0] & ace_entry.ipv4.sip.mask[1] &
-            ace_entry.ipv4.sip.mask[2] & ace_entry.ipv4.sip.mask[3]))
-        {
-            memset(ace_entry.ipv4.sip.mask, 0xff, sizeof(ace_entry.ipv4.sip.mask));
-        }
+        memset(ace_entry.ipv4.sip.mask, 0xff, sizeof(ace_entry.ipv4.sip.mask));
     }
+
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(mac_ace_index, &ace_entry,
         LEAF_diffServMacAceSourceIpAddr));
@@ -7276,15 +7255,9 @@ L4_MGR_QoS_SetDiffServMacAceSourceIpAddrBitmask(
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
-    {
-        UI32_T mask = L_STDLIB_Hton32(addr);
-        UI8_T *ip_addr;
-
-        ip_addr = (UI8_T *)&mask;
-
-        memcpy(ace_entry.ipv4.sip.mask, ip_addr,
-               sizeof(ace_entry.ipv4.sip.mask));
-    }
+    memcpy(ace_entry.ipv4.sip.mask,
+           &addr,
+           sizeof(ace_entry.ipv4.sip.mask));
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(mac_ace_index, &ace_entry,
         LEAF_diffServMacAceSourceIpAddrBitmask));
@@ -7321,20 +7294,14 @@ L4_MGR_QoS_SetDiffServMacAceDestIpAddr(
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
+    memcpy(ace_entry.ipv4.dip.addr,
+           &addr,
+           sizeof(ace_entry.ipv4.dip.addr));
+
+    if (0 == (ace_entry.ipv4.dip.mask[0] & ace_entry.ipv4.dip.mask[1] &
+              ace_entry.ipv4.dip.mask[2] & ace_entry.ipv4.dip.mask[3]))
     {
-        UI32_T ip = L_STDLIB_Hton32(addr);
-        UI8_T *ip_addr;
-
-        ip_addr = (UI8_T *)&ip;
-
-        memcpy(ace_entry.ipv4.dip.addr, ip_addr,
-               sizeof(ace_entry.ipv4.dip.addr));
-
-        if ( 0 == (ace_entry.ipv4.dip.mask[0] & ace_entry.ipv4.dip.mask[1] &
-            ace_entry.ipv4.dip.mask[2] & ace_entry.ipv4.dip.mask[3]))
-        {
-            memset(ace_entry.ipv4.dip.mask, 0xff, sizeof(ace_entry.ipv4.dip.mask));
-        }
+        memset(ace_entry.ipv4.dip.mask, 0xff, sizeof(ace_entry.ipv4.dip.mask));
     }
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(mac_ace_index, &ace_entry,
@@ -7372,15 +7339,9 @@ L4_MGR_QoS_SetDiffServMacAceDestIpAddrBitmask(
         L4_MGR_RETURN_AND_RELEASE_CSC(FALSE);
     }
 
-    {
-        UI32_T mask = L_STDLIB_Hton32(addr);
-        UI8_T *ip_addr;
-
-        ip_addr = (UI8_T *)&mask;
-
-        memcpy(ace_entry.ipv4.dip.mask, ip_addr,
-               sizeof(ace_entry.ipv4.dip.mask));
-    }
+    memcpy(ace_entry.ipv4.dip.mask,
+           &addr,
+           sizeof(ace_entry.ipv4.dip.mask));
 
     ret = (RULE_TYPE_OK == RULE_MGR_SetUIAceFieldByIndex(mac_ace_index, &ace_entry,
         LEAF_diffServMacAceDestIpAddrBitmask));

@@ -6598,6 +6598,98 @@ RULE_MGR_UT_Get_Class_Map_Entry_With_Multi_Element_Type()
     return 0;
 }
 
+#if (SYS_CPNT_ACL_AUTO_COMPRESS_ACE == TRUE)
+int
+RULE_MGR_UT_SetAceFieldbyIndexNotWorkOnCompressAce()
+{
+    UI32_T                          ifindex = 1;
+    RULE_TYPE_InOutDirection_T      direction = RULE_TYPE_INBOUND;
+    const char                      *acl_name = "Test";
+    RULE_TYPE_COUNTER_ENABLE_T      counter_enable = FALSE;
+    RULE_CTRL_UT_COMPRESS_OPTION_T  compress = RULE_CTRL_UT_COMPRESS_DEFAULT;
+    RULE_TYPE_AclType_T             acl_type = RULE_TYPE_IP_EXT_ACL;
+    UI32_T                          number_of_ace = 1;
+
+    UI32_T acl_index;
+    UI32_T ace_index;
+    RULE_TYPE_Ace_Entry_T ace_entry;
+    UI32_T hw_acl_index;
+    UI32_T hw_ace_index;
+    RULE_TYPE_Ace_Entry_T hw_ace;
+    RULE_TYPE_AclType_T   hw_acl_type;
+    RULE_TYPE_RETURN_TYPE_T ret;
+
+    RULE_MGR_UT_Proc_Create_ACL(acl_name, acl_type, number_of_ace, compress);
+    RULE_MGR_UT_Proc_Bind_ACL(ifindex, direction, acl_name, NULL, counter_enable);
+
+    ret = RULE_MGR_GetAclIdByName(acl_name, &acl_index);
+    assert(ret == RULE_TYPE_OK);
+
+    {
+        RULE_TYPE_UI_AclEntry_T ui_acl_entry;
+        UI32_T precedence;
+
+        hw_acl_index = 0;
+        precedence = 0;
+        ret = RULE_OM_GetNextUIAclByPort(ifindex, direction, &hw_acl_index, &ui_acl_entry, &precedence, NULL, &counter_enable);
+        assert(ret == RULE_TYPE_OK);
+        assert(precedence == INGRESS_IP_ACL_PRECEDENCE);
+        assert(counter_enable == FALSE);
+
+        hw_ace_index = 0;
+        ret = RULE_MGR_GetNextHardwareAceByAcl(ifindex, direction, hw_acl_index, &acl_type, &hw_ace_index, &hw_ace);
+        assert(ret == RULE_TYPE_OK);
+        assert(acl_type == RULE_TYPE_IP_EXT_ACL);
+    }
+
+    ace_index = 0;
+    while (RULE_TYPE_OK == RULE_MGR_GetNextAceByAcl(acl_index, &acl_type, &ace_index, &ace_entry))
+    {
+        RULE_TYPE_Ace_Entry_T mod_hw_ace;
+
+        if (acl_type != RULE_TYPE_IP_EXT_ACL)
+            continue;
+
+        /* Get original rule
+         */
+        ret = RULE_MGR_GetHardwareAceByAcl(ifindex, direction, hw_acl_index, hw_ace_index, &hw_ace);
+        assert(ret == RULE_TYPE_OK);
+
+        /* Modified SIP/SIP_MASK/DIP/DIP_MASK
+         */
+        {
+            ace_entry.u.ip.aceSourceIpAddrBitmask++;
+            ret = RULE_MGR_SetAceFieldByIndex(ace_index, &ace_entry, LEAF_diffServIpAceSourceIpAddrBitmask);
+            assert(ret == RULE_TYPE_OK);
+
+            ace_entry.u.ip.aceSourceIpAddr++;
+            ret = RULE_MGR_SetAceFieldByIndex(ace_index, &ace_entry, LEAF_diffServIpAceSourceIpAddr);
+            assert(ret == RULE_TYPE_OK);
+
+            ace_entry.u.ip.aceDestIpAddrBitmask++;
+            ret = RULE_MGR_SetAceFieldByIndex(ace_index, &ace_entry, LEAF_diffServIpAceDestIpAddrBitmask);
+            assert(ret == RULE_TYPE_OK);
+
+            ace_entry.u.ip.aceDestIpAddr++;
+            ret = RULE_MGR_SetAceFieldByIndex(ace_index, &ace_entry, LEAF_diffServIpAceDestIpAddr);
+            assert(ret == RULE_TYPE_OK);
+        }
+
+        /* Get running rule
+         */
+        ret = RULE_MGR_GetHardwareAceByAcl(ifindex, direction, hw_acl_index, hw_ace_index, &mod_hw_ace);
+        assert(ret == RULE_TYPE_OK);
+
+        hw_ace.u.ip.aceSourceIpAddrBitmask++;
+        hw_ace.u.ip.aceSourceIpAddr++;
+        hw_ace.u.ip.aceDestIpAddrBitmask++;
+        hw_ace.u.ip.aceDestIpAddr++;
+        assert(0 == memcmp(&hw_ace, &mod_hw_ace, sizeof(hw_ace)));
+    }
+
+    return 0;
+}
+#endif /* SYS_CPNT_ACL_AUTO_COMPRESS_ACE */
 
 int RULE_MGR_UT_Set_Default_Rule()
 {
@@ -6678,7 +6770,6 @@ RULE_MGR_UT_RunTestCases()
      */
     if (1)
     {
-
     }
 
     if (l4_options.run_rule_mgr)
@@ -6774,6 +6865,11 @@ RULE_MGR_UT_RunTestCases()
         RULE_MGR_UT_TEST(RULE_MGR_UT_MIB_AttachAceToACL);
         // ECS4210-52P-00540
         RULE_MGR_UT_TEST(RULE_MGR_UT_Get_Class_Map_Entry_With_Multi_Element_Type);
+
+#if (SYS_CPNT_ACL_AUTO_COMPRESS_ACE == TRUE)
+        RULE_MGR_UT_TEST(RULE_MGR_UT_SetAceFieldbyIndexNotWorkOnCompressAce);
+#endif /* SYS_CPNT_ACL_AUTO_COMPRESS_ACE */
+
     }
     else
     {
