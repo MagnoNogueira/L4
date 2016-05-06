@@ -663,6 +663,7 @@ typedef enum
     RULE_TYPE_Pkt2CpuRule_IP_OPTION,
     RULE_TYPE_Pkt2CpuRule_SLF,
     RULE_TYPE_Pkt2CpuRule_IGMP,
+    RULE_TYPE_Pkt2CpuRule_DHCP_CLIENT_BC,
     RULE_TYPE_Pkt2CpuRule_DHCP_CLIENT,
     RULE_TYPE_Pkt2CpuRule_DHCP_SERVER,
     RULE_TYPE_Pkt2CpuRule_HBT,

@@ -1776,6 +1776,7 @@ typedef BOOL_T (*RULE_CTRL_ServiceFunc_t)(ISC_Key_T *key, RULE_CTRL_IscBuf_T *pt
 /* service function table
  */
 
+static BOOL_T RULE_CTRL_TrapDhcpClientBcPacketToCPU(BOOL_T enable, BOOL_T to_cpu, BOOL_T flood);
 static BOOL_T RULE_CTRL_TrapDhcpClientPacketToCPU(BOOL_T enable, BOOL_T to_cpu, BOOL_T flood);
 static BOOL_T RULE_CTRL_TrapDhcpServerPacketToCPU(BOOL_T enable, BOOL_T to_cpu, BOOL_T flood);
 
@@ -9755,6 +9756,9 @@ void RULE_CTRL_DumpCpuInterfaceStatus()
         {RULE_TYPE_Pkt2CpuRule_IP_OPTION,           "IP_OPTION"},
         {RULE_TYPE_Pkt2CpuRule_SLF,                 "SLF"},
         {RULE_TYPE_Pkt2CpuRule_IGMP,                "IGMP"},
+#if (SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE == TRUE)
+        {RULE_TYPE_Pkt2CpuRule_DHCP_CLIENT_BC,      "DHCP_CLIENT_BC"},
+#endif /* SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE */
         {RULE_TYPE_Pkt2CpuRule_DHCP_CLIENT,         "DHCP_CLIENT"},
         {RULE_TYPE_Pkt2CpuRule_DHCP_SERVER,         "DHCP_SERVER"},
         {RULE_TYPE_Pkt2CpuRule_HBT,                 "HBT"},
@@ -10271,6 +10275,9 @@ RULE_CTRL_LocalIsNeedToConfigCpuRule(
     {
         /* always let driver update these rules.
          */
+#if (SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE == TRUE)
+        case RULE_TYPE_PacketType_DHCP_CLIENT_BC:
+#endif /* SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE */
         case RULE_TYPE_PacketType_DHCP_CLIENT:
         case RULE_TYPE_PacketType_DHCP_SERVER:
         case RULE_TYPE_PacketType_SLF:
@@ -10518,6 +10525,20 @@ RULE_CTRL_LocalTrapPacket2Cpu(
                 ret = RULE_CTRL_TrapSlfToCPU(enable_flag, rule_info->slf.slf_vid, rule_info->slf.action);
             }
             break;
+
+#if (SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE == TRUE)
+        case RULE_TYPE_PacketType_DHCP_CLIENT_BC:
+            if(NULL == rule_info)
+            {
+                RULE_CTRL_LeaveCriticalSection();
+                return ret;
+            }
+            else
+            {
+                ret = RULE_CTRL_TrapDhcpClientBcPacketToCPU(enable_flag, rule_info->common.to_cpu, rule_info->common.flood);
+            }
+            break;
+#endif /* SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE */
 
         case RULE_TYPE_PacketType_DHCP_CLIENT:
             if(NULL == rule_info)
@@ -12357,6 +12378,136 @@ static BOOL_T RULE_CTRL_TrapDhcpSnoopingToCPU(BOOL_T enable/*, UI32_T vid*/)
 }
 #endif /* 0 */
 
+#if (SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE == TRUE)
+/*------------------------------------------------------------------------------
+ * ROUTINE NAME  - RULE_CTRL_TrapDhcpClientBcPacketToCPU
+ *------------------------------------------------------------------------------
+ * PURPOSE  : trap DHCP client broadcast packet to CPU
+ * INPUT    : enable
+ *            to_cpu
+ *            flood
+ * OUTPUT   : None
+ * RETURN   : TRUE/FALSE
+ * NOTES    : None
+ *------------------------------------------------------------------------------
+ */
+static BOOL_T RULE_CTRL_TrapDhcpClientBcPacketToCPU(BOOL_T enable, BOOL_T to_cpu, BOOL_T flood)
+{
+    UI32_T                              device_id;
+    BOOL_T                              ret = TRUE;
+    UI32_T                              group_id, rule_index;
+    int                                 rule_pri;
+    DEVRM_AceEntry_T                    ace_entry;
+    DEVRM_ActionEntry_T                 action_entry[3];
+    UI32_T                              soc_ndev = DEVRM_PMGR_GetNumberOfChips();
+    UI8_T                               action = RULE_CTRL_ACTION_DROP;
+    BOOL_T                              is_enabled = FALSE;
+    RULE_TYPE_FunctionType_T            fun_type = RULE_TYPE_PACKET_TO_CPU_PRIO_3;
+    UI8_T                               broadcast_mac[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+
+    LOG("%s rule, to_cpu=%u, flood=%u", enable ? "Add" : "Delete", to_cpu, flood);
+
+    if(FALSE == RULE_CTRL_GetFunctionInfoByFunctionType(fun_type, &group_id, &rule_pri))
+        return FALSE;
+
+    if ((FALSE == to_cpu) && (FALSE == flood))
+      action = RULE_CTRL_ACTION_DROP;
+    else if ((FALSE == to_cpu) && flood)
+      action = RULE_CTRL_ACTION_FLOOD;
+    else if (to_cpu && (FALSE == flood))
+      action = RULE_CTRL_ACTION_TRAP_TO_CPU;
+    else
+      action = RULE_CTRL_ACTION_TRAP_AND_FLOOD;
+
+    /* setup rule/filter */
+    memset(&ace_entry, 0, sizeof(ace_entry));
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_InPorts);
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_EtherType);
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_DstMac);
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_IpProtocol);
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_L4SrcPort);
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_L4DstPort);
+    DEVRM_SHR_BITSET(ace_entry.w, DEVRM_FIELD_QUALIFY_HiGig);
+
+    RULE_CTRL_SET_FILTER_HIG_PACKET(ace_entry, 0, 0xff);
+    RULE_CTRL_SET_FILTER_IPBM_WITH_ALL_PORTS(ace_entry);
+    RULE_CTRL_SET_FILTER_ETHER_TYPE(ace_entry, RULE_CTRL_ETHER_TYPE_IPV4);
+    RULE_CTRL_SET_FILTER_IPPROTOCOL(ace_entry, RULE_CTRL_PROT_UDP);
+    RULE_CTRL_SET_FILTER_DA(ace_entry, broadcast_mac);
+
+    RULE_CTRL_SET_FILTER_SPORT(ace_entry, DHCP_CLIENT_PORT);
+
+    /* setup action */
+    switch(action)
+    {
+        case RULE_CTRL_ACTION_DROP:
+            RULE_CTRL_SET_ACTION_DROP(action_entry[0]);
+            action_entry[0].next_action = NULL;
+            break;
+        case RULE_CTRL_ACTION_TRAP_TO_CPU:
+            RULE_CTRL_SET_ACTION_MODIFY_CPU_QUEUE(action_entry[0], SYS_ADPT_CPU_QUEUE_DHCP);
+			RULE_CTRL_SET_ACTION_COPY_TO_CPU(action_entry[1]);
+            action_entry[0].next_action = &action_entry[1];
+			RULE_CTRL_SET_ACTION_DROP(action_entry[2]);
+			action_entry[1].next_action = &action_entry[2];
+            break;
+        case RULE_CTRL_ACTION_TRAP_AND_FLOOD:
+            RULE_CTRL_SET_ACTION_MODIFY_CPU_QUEUE(action_entry[0], SYS_ADPT_CPU_QUEUE_DHCP);
+            RULE_CTRL_SET_ACTION_COPY_TO_CPU(action_entry[1]);
+            action_entry[0].next_action = &action_entry[1];
+            break;
+        case RULE_CTRL_ACTION_FLOOD:
+            RULE_CTRL_SET_ACTION_EGRESS_MASK(action_entry[0], RULE_CTRL_PORT_BITMAP_TO_CPU_ONLY);/*not work*/
+            RULE_CTRL_SET_ACTION_COPY_TO_CPU_CANCEL(action_entry[1]);
+            action_entry[0].next_action = &action_entry[1];
+            break;
+        default:
+            return FALSE;
+    }
+
+    /* remove existed rule first. */
+    for (device_id = 0; device_id < soc_ndev; device_id++)
+    {
+        if (!DEVRM_PMGR_CheckSoc(device_id))
+            return FALSE;
+
+        if(FALSE == RULE_CTRL_GetCpuRule(device_id, RULE_TYPE_Pkt2CpuRule_DHCP_CLIENT_BC, &is_enabled, &rule_index))
+            return FALSE;
+
+        if(enable)
+        {
+            /* add & update rule
+             */
+            if(is_enabled)
+            {
+                ret &= RULE_CTRL_temp_Destroy_Rule(device_id, group_id, fun_type,rule_index);
+            }
+
+            ret &= RULE_CTRL_temp_Allocate_Rule(device_id, group_id, fun_type,rule_pri, &rule_index);
+            ret &= DEVRM_PMGR_SetRule(device_id, group_id, rule_index,
+                                      &ace_entry, NULL, &action_entry[0], FALSE);
+            RULE_CTRL_LOG("Device ID=%lu Rule Index=%lu", device_id, rule_index);
+        }
+        else
+        {
+            if (!is_enabled)
+            {
+                return TRUE;
+            }
+
+            /* delete rule
+             */
+            ret &= RULE_CTRL_temp_Destroy_Rule(device_id, group_id, fun_type, rule_index);
+        }
+
+        if(FALSE == RULE_CTRL_SetCpuRule(device_id, RULE_TYPE_Pkt2CpuRule_DHCP_CLIENT_BC, enable, rule_index))
+            return FALSE;
+    }
+
+    return ret;
+}
+#endif /* SYS_CPNT_DHCP_RELAY_WORKAROUND_BY_RULE */
+
 /*------------------------------------------------------------------------------
  * ROUTINE NAME  - RULE_CTRL_TrapDhcpClientPacketToCPU
  *------------------------------------------------------------------------------
@@ -12382,7 +12533,9 @@ static BOOL_T RULE_CTRL_TrapDhcpClientPacketToCPU(BOOL_T enable, BOOL_T to_cpu, 
     BOOL_T                              is_enabled = FALSE;
     RULE_TYPE_FunctionType_T            fun_type = RULE_TYPE_PACKET_TO_CPU_DEFAULT;
 
-    if(FALSE == RULE_CTRL_GetFunctionInfoByFunctionType(RULE_TYPE_PACKET_TO_CPU_PRIO_4, &group_id, &rule_pri))
+    LOG("%s rule, to_cpu=%u, flood=%u", enable ? "Add" : "Delete", to_cpu, flood);
+
+    if(FALSE == RULE_CTRL_GetFunctionInfoByFunctionType(fun_type, &group_id, &rule_pri))
         return FALSE;
 
     if ((FALSE == to_cpu) && (FALSE == flood))
@@ -12408,8 +12561,7 @@ static BOOL_T RULE_CTRL_TrapDhcpClientPacketToCPU(BOOL_T enable, BOOL_T to_cpu, 
     RULE_CTRL_SET_FILTER_ETHER_TYPE(ace_entry, RULE_CTRL_ETHER_TYPE_IPV4);
     RULE_CTRL_SET_FILTER_IPPROTOCOL(ace_entry, RULE_CTRL_PROT_UDP);
 
-    RULE_CTRL_SET_FILTER_DPORT(ace_entry, DHCP_SERVER_PORT);
-
+    RULE_CTRL_SET_FILTER_SPORT(ace_entry, DHCP_CLIENT_PORT);
 
     /* setup action */
     switch(action)
@@ -12506,7 +12658,9 @@ static BOOL_T RULE_CTRL_TrapDhcpServerPacketToCPU(BOOL_T enable,BOOL_T to_cpu, B
     BOOL_T                              is_enabled = FALSE;
     RULE_TYPE_FunctionType_T            fun_type = RULE_TYPE_PACKET_TO_CPU_DEFAULT;
 
-    if(FALSE == RULE_CTRL_GetFunctionInfoByFunctionType(RULE_TYPE_PACKET_TO_CPU_PRIO_4, &group_id, &rule_pri))
+    LOG("%s rule, to_cpu=%u, flood=%u", enable ? "Add" : "Delete", to_cpu, flood);
+
+    if(FALSE == RULE_CTRL_GetFunctionInfoByFunctionType(fun_type, &group_id, &rule_pri))
         return FALSE;
 
     if ((FALSE == to_cpu) && (FALSE == flood))
@@ -12532,8 +12686,7 @@ static BOOL_T RULE_CTRL_TrapDhcpServerPacketToCPU(BOOL_T enable,BOOL_T to_cpu, B
     RULE_CTRL_SET_FILTER_ETHER_TYPE(ace_entry, RULE_CTRL_ETHER_TYPE_IPV4);
     RULE_CTRL_SET_FILTER_IPPROTOCOL(ace_entry, RULE_CTRL_PROT_UDP);
 
-    RULE_CTRL_SET_FILTER_DPORT(ace_entry, DHCP_CLIENT_PORT);
-
+    RULE_CTRL_SET_FILTER_SPORT(ace_entry, DHCP_SERVER_PORT);
 
     /* setup action */
     switch(action)
@@ -13667,7 +13820,7 @@ static BOOL_T RULE_CTRL_TrapHbtWorkAroundToCPU(BOOL_T enable)
 static BOOL_T RULE_CTRL_ModifyCpuQueueForBpdu(BOOL_T enable)
 {
     const UI8_T                         bpdu_mac[SYS_ADPT_MAC_ADDR_LEN] = {0x01, 0x80, 0xc2, 0x00, 0x00, 0x00};
-    const UI8_T                         bpdu_mask[SYS_ADPT_MAC_ADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xf0};
+    const UI8_T                         bpdu_mask[SYS_ADPT_MAC_ADDR_LEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
     UI32_T                              device_id;
     BOOL_T                              ret = TRUE, is_enabled = FALSE;
     UI32_T                              group_id, rule_index;
