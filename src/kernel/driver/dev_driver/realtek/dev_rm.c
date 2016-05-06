@@ -443,65 +443,68 @@ static UI32_T _DEVRM_GetNumberOfChips()
  */
 static void _DEVRM_InitCustomerTemplate()
 {
-    /* Configure customer template for egress rule
-     *  Template
-     *         5: Same with template 0, only change the SPM to DPM
-     *         6: Same with template 1, only change the SPM to DPM
-     *         7: Same with template 4, only change the SPM to DPM
-     */
-    int ret;
-    UI32_T device_id, template_id;
-    rtk_acl_template_t template[3];
-
-    template_id = 5;
-    memset(&template, 0, sizeof(template));
-    template[0].field[0]  = TMPLTE_FIELD_DPM0;
-    template[0].field[1]  = TMPLTE_FIELD_DPM1;
-    template[0].field[2]  = TMPLTE_FIELD_OTAG;
-    template[0].field[3]  = TMPLTE_FIELD_SMAC0;
-    template[0].field[4]  = TMPLTE_FIELD_SMAC1;
-    template[0].field[5]  = TMPLTE_FIELD_SMAC2;
-    template[0].field[6]  = TMPLTE_FIELD_DMAC0;
-    template[0].field[7]  = TMPLTE_FIELD_DMAC1;
-    template[0].field[8]  = TMPLTE_FIELD_DMAC2;
-    template[0].field[9]  = TMPLTE_FIELD_ETHERTYPE;
-    template[0].field[10] = TMPLTE_FIELD_DPM2;
-    template[0].field[11] = TMPLTE_FIELD_DPM3;
-
-    template[1].field[0]  = TMPLTE_FIELD_SIP0;
-    template[1].field[1]  = TMPLTE_FIELD_SIP1;
-    template[1].field[2]  = TMPLTE_FIELD_DIP0;
-    template[1].field[3]  = TMPLTE_FIELD_DIP1;
-    template[1].field[4]  = TMPLTE_FIELD_IP_TOS_PROTO;
-    template[1].field[5]  = TMPLTE_FIELD_L4_SPORT;
-    template[1].field[6]  = TMPLTE_FIELD_L4_DPORT;
-    template[1].field[7]  = TMPLTE_FIELD_ICMP_IGMP;
-    template[1].field[8]  = TMPLTE_FIELD_DPM0;
-    template[1].field[9]  = TMPLTE_FIELD_DPM1;
-    template[1].field[10] = TMPLTE_FIELD_DPM2;
-    template[1].field[11] = TMPLTE_FIELD_DPM3;
-
-    template[2].field[0]  = TMPLTE_FIELD_SIP0;
-    template[2].field[1]  = TMPLTE_FIELD_SIP1;
-    template[2].field[2]  = TMPLTE_FIELD_SIP2;
-    template[2].field[3]  = TMPLTE_FIELD_SIP3;
-    template[2].field[4]  = TMPLTE_FIELD_SIP4;
-    template[2].field[5]  = TMPLTE_FIELD_SIP5;
-    template[2].field[6]  = TMPLTE_FIELD_SIP6;
-    template[2].field[7]  = TMPLTE_FIELD_SIP7;
-    template[2].field[8]  = TMPLTE_FIELD_DPM0;
-    template[2].field[9]  = TMPLTE_FIELD_DPM1;
-    template[2].field[10] = TMPLTE_FIELD_DPM2;
-    template[2].field[11] = TMPLTE_FIELD_DPM3;
-
-    for (template_id = 5; template_id < 8; ++template_id)
+    if (HAL_IS_RTL8390_FAMILY_ID(0))
     {
-        for (device_id = 0; device_id < soc_ndev; ++device_id)
+        /* Configure customer template for egress rule
+         *  Template
+         *         5: Same with template 0, only change the SPM to DPM
+         *         6: Same with template 1, only change the SPM to DPM
+         *         7: Same with template 4, only change the SPM to DPM
+         */
+        int ret;
+        UI32_T device_id, template_id;
+        rtk_acl_template_t template[3];
+
+        template_id = 5;
+        memset(&template, 0, sizeof(template));
+        template[0].field[0]  = TMPLTE_FIELD_DPM0;
+        template[0].field[1]  = TMPLTE_FIELD_DPM1;
+        template[0].field[2]  = TMPLTE_FIELD_OTAG;
+        template[0].field[3]  = TMPLTE_FIELD_SMAC0;
+        template[0].field[4]  = TMPLTE_FIELD_SMAC1;
+        template[0].field[5]  = TMPLTE_FIELD_SMAC2;
+        template[0].field[6]  = TMPLTE_FIELD_DMAC0;
+        template[0].field[7]  = TMPLTE_FIELD_DMAC1;
+        template[0].field[8]  = TMPLTE_FIELD_DMAC2;
+        template[0].field[9]  = TMPLTE_FIELD_ETHERTYPE;
+        template[0].field[10] = TMPLTE_FIELD_DPM2;
+        template[0].field[11] = TMPLTE_FIELD_DPM3;
+
+        template[1].field[0]  = TMPLTE_FIELD_SIP0;
+        template[1].field[1]  = TMPLTE_FIELD_SIP1;
+        template[1].field[2]  = TMPLTE_FIELD_DIP0;
+        template[1].field[3]  = TMPLTE_FIELD_DIP1;
+        template[1].field[4]  = TMPLTE_FIELD_IP_TOS_PROTO;
+        template[1].field[5]  = TMPLTE_FIELD_L4_SPORT;
+        template[1].field[6]  = TMPLTE_FIELD_L4_DPORT;
+        template[1].field[7]  = TMPLTE_FIELD_ICMP_IGMP;
+        template[1].field[8]  = TMPLTE_FIELD_DPM0;
+        template[1].field[9]  = TMPLTE_FIELD_DPM1;
+        template[1].field[10] = TMPLTE_FIELD_DPM2;
+        template[1].field[11] = TMPLTE_FIELD_DPM3;
+
+        template[2].field[0]  = TMPLTE_FIELD_SIP0;
+        template[2].field[1]  = TMPLTE_FIELD_SIP1;
+        template[2].field[2]  = TMPLTE_FIELD_SIP2;
+        template[2].field[3]  = TMPLTE_FIELD_SIP3;
+        template[2].field[4]  = TMPLTE_FIELD_SIP4;
+        template[2].field[5]  = TMPLTE_FIELD_SIP5;
+        template[2].field[6]  = TMPLTE_FIELD_SIP6;
+        template[2].field[7]  = TMPLTE_FIELD_SIP7;
+        template[2].field[8]  = TMPLTE_FIELD_DPM0;
+        template[2].field[9]  = TMPLTE_FIELD_DPM1;
+        template[2].field[10] = TMPLTE_FIELD_DPM2;
+        template[2].field[11] = TMPLTE_FIELD_DPM3;
+
+        for (template_id = 5; template_id < 8; ++template_id)
         {
-            ret = rtk_acl_template_set(device_id, template_id, &template[template_id-5]);
-            if (ret != RT_ERR_OK)
+            for (device_id = 0; device_id < soc_ndev; ++device_id)
             {
-                DEVRM_FATAL_ERR("Set template %lu fail", template_id);
+                ret = rtk_acl_template_set(device_id, template_id, &template[template_id-5]);
+                if (ret != RT_ERR_OK)
+                {
+                    DEVRM_FATAL_ERR("Set template %lu fail", template_id);
+                }
             }
         }
     }
