@@ -687,12 +687,6 @@
 
 #define RULE_CTRL_IS_DEBUG_ERROR_ON(flag)       (flag & RULE_OM_DEBUG_CTRL_ERR)
 
-#define RULE_CTRL_DEBUG_MSG(msg)                                            \
-    {                                                                       \
-        if (RULE_CTRL_IS_DEBUG_ERROR_ON(debug_flag))                        \
-            printf(msg);                                                    \
-    }
-
 #if (1400 <= _MSC_VER /* VC2005 */)
     #define RULE_CTRL_PRINT(fmt, ...)                                       \
     {                                                                       \
@@ -2054,7 +2048,7 @@ void RULE_CTRL_EnterMasterMode()
     ret &= RULE_CTRL_TrapHbtWorkAroundToCPU(TRUE);
 #endif
     if (FALSE == ret)
-        printf("\r\n[RULE_CTRL_EnterMasterMode] initialize error");
+        PRINTF("\r\n[RULE_CTRL_EnterMasterMode] initialize error");
 
     SYSFUN_ENTER_MASTER_MODE_ON_SHMEM(shmem_data_p);
 }
@@ -2079,7 +2073,7 @@ void RULE_CTRL_EnterSlaveMode()
     ret &= RULE_CTRL_TrapHbtWorkAroundToCPU(TRUE);
 #endif
     if (FALSE == ret)
-        printf("\r\n[RULE_CTRL_EnterSlaveMode] initialize error");
+        PRINTF("\r\n[RULE_CTRL_EnterSlaveMode] initialize error");
 
     SYSFUN_ENTER_SLAVE_MODE_ON_SHMEM(shmem_data_p);
 }
@@ -2144,48 +2138,48 @@ void RULE_CTRL_HandleHotInsertion(UI32_T starting_port_ifindex, UI32_T number_of
      * Always configure to chip to trap to CPU
      */
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_ARP_REQUEST, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ARP_REQUEST failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ARP_REQUEST failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_ARP_REPLY, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ARP_REPLY failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ARP_REPLY failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_RIP, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_RIP failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_RIP failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_OSPF, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_OSPF failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_OSPF failed");
 #if (SYS_CPNT_OSPF6 == TRUE)
     /* added by steven.gao for OSPFv3 */
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_OSPF6, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_OSPF6 failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_OSPF6 failed");
 #endif
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_DVMRP, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_DVMRP failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_DVMRP failed");
 
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_PIM, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_PIM failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_PIM failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_VRRP, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_VRRP failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_VRRP failed");
 
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_L2_SLF, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2_SLF failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2_SLF failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_IP_BCAST, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IP_BCAST failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IP_BCAST failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_ALL_HOST, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ALL_HOST failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ALL_HOST failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_ALL_ROUTER, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ALL_ROUTER failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ALL_ROUTER failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_MY_MAC_MY_IP, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_MY_MAC_MY_IP failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_MY_MAC_MY_IP failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_IP_OPTION, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IP_OPTION failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IP_OPTION failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_BPDU, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_BPDU failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_BPDU failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_L2CP, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2CP failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2CP failed");
 
 #if (SYS_CPNT_IPV6 == TRUE)
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_IPV6_ALL_NODES, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IPV6_ALL_NODES failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IPV6_ALL_NODES failed");
     if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_IPV6_ALL_ROUTERS, NULL))
-        printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IPV6_ALL_ROUTERS failed");
+        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IPV6_ALL_ROUTERS failed");
 #endif /* SYS_CPNT_IPV6 */
 #endif /* SYS_CPNT_QOS_V2 */
 }
@@ -8939,7 +8933,7 @@ BOOL_T RULE_CTRL_SetRateLimit(UI32_T unit, UI32_T port, UI32_T trunk_id, UI32_T 
 
     if (my_drv_unit != unit) /* set up local unit only */
     {
-        printf("\r\n[RULE_CTRL_SetRateLimit] error, suppose caller should pass local unit to rule_ctrl");
+        PRINTF("\r\n[RULE_CTRL_SetRateLimit] error, suppose caller should pass local unit to rule_ctrl");
         return FALSE;
     }
 
@@ -8965,7 +8959,7 @@ BOOL_T RULE_CTRL_DeleteRateLimit(UI32_T unit, UI32_T port, UI32_T trunk_id)
 
     if (my_drv_unit != unit) /* set up local unit only */
     {
-        printf("\r\n[RULE_CTRL_DeleteRateLimit] error, suppose caller should pass local unit to rule_ctrl");
+        PRINTF("\r\n[RULE_CTRL_DeleteRateLimit] error, suppose caller should pass local unit to rule_ctrl");
         return FALSE;
     }
 
@@ -9566,7 +9560,7 @@ RULE_CTRL_Service(
     #endif /* SYS_CPNT_IPV6_SOURCE_GUARD */
 
         default:
-            printf("%s %d: Unsupported service type(%d)\n",
+            PRINTF("%s %d: Unsupported service type(%d)\n",
                 __FUNCTION__,
                 __LINE__,
                 type);
@@ -12261,7 +12255,7 @@ static BOOL_T RULE_CTRL_TrapDhcpSnoopingToCPU(BOOL_T enable/*, UI32_T vid*/)
 
     /*if (vid <= 0 || vid > 4096)
     {
-        printf("\r\n Invalid vlan id!");
+        LOG("\r\n Invalid vlan id!");
         return FALSE;
     }*/
 
@@ -12636,11 +12630,11 @@ static BOOL_T RULE_CTRL_TrapEapsToCPU(BOOL_T enable, UI32_T vid, UI32_T mode)
 
     if (vid <= 0 || vid > 4096)
     {
-        printf("\r\n Invalid vlan id!");
+        LOG("\r\n Invalid vlan id!");
         return FALSE;
     }
     if((mode != SYS_ADPT_EAPS_TRANSITION_MODE)  && (mode != SYS_ADPT_EAPS_MASTER_MODE)){
-        printf("\r\n Only support master mode and Transition mode");
+        LOG("\r\n Only support master mode and Transition mode");
         return FALSE;
     }
 
@@ -12778,7 +12772,7 @@ static BOOL_T RULE_CTRL_TrapSlfToCPU(BOOL_T enable, UI16_T vid, UI8_T action)
 
     if (vid <= 0 || vid > 4096)
     {
-        printf("\r\n Invalid vlan id!");
+        LOG("\r\n Invalid vlan id!");
         return FALSE;
     }
 
@@ -13588,12 +13582,12 @@ static BOOL_T RULE_CTRL_TrapHbtWorkAroundToCPU(BOOL_T enable)
 
     if (STKTPLG_OM_GetStackingPortPhyDevPortId(STKTPLG_TYPE_STACKING_PORT_UP_LINK, &dev_id, &up_port) == FALSE)
     {
-        printf("Failed to get device id and phy port of uplink stacking port\n");
+        LOG("Failed to get device id and phy port of uplink stacking port\n");
         return FALSE;
     }
     if (STKTPLG_OM_GetStackingPortPhyDevPortId(STKTPLG_TYPE_STACKING_PORT_DOWN_LINK, &dev_id, &down_port) == FALSE)
     {
-        printf("Failed to get device id and phy port of downlink stacking port\n");
+        LOG("Failed to get device id and phy port of downlink stacking port\n");
         return FALSE;
     }
 
@@ -14145,8 +14139,7 @@ static BOOL_T RULE_CTRL_TrapPim6ToCPU(BOOL_T enable)
                                                         &group_id,
                                                         &rule_pri))
     {
-        printf("%s:%d\n", __FUNCTION__, __LINE__);
-
+        LOG("RULE_CTRL_GetFunctionInfoByFunctionType for RULE_TYPE_PACKET_TO_CPU_PIM6 fail");
         return FALSE;
     }
 
@@ -17611,7 +17604,6 @@ RULE_CTRL_SetQoSAce2Dev(
     UI32_T sm_rid)
 {
     UI32_T              ifindex, module_id, device_id, phy_port;
-    UI32_T              debug_flag =RULE_OM_GetDebugFlag();
 
     DEVRM_ActionEntry_T *dev_action_p;
     DEVRM_MeterEntry_T  *meter_p =NULL;
@@ -17665,14 +17657,12 @@ RULE_CTRL_SetQoSAce2Dev(
     if (FALSE == RULE_CTRL_SET_RULE(unit, port, device_id, group_id,
                     rule_id, &dev_ace_entry, meter_p, dev_action_p, FALSE))
     {
-        if (RULE_CTRL_IS_DEBUG_ERROR_ON(debug_flag))
-            printf("\r\nRULE_CTRL_SetQoSAce2Dev: RULE_CTRL_Set_Rule filed.");
-
+        LOG("RULE_CTRL_SetQoSAce2Dev: RULE_CTRL_Share_Meter filed.");
         RULE_CTRL_FreeDevActionListMemory(dev_action_p);
         return FALSE;
     }
-    else
-        RULE_CTRL_FreeDevActionListMemory(dev_action_p);
+
+    RULE_CTRL_FreeDevActionListMemory(dev_action_p);
 
     /* if we have a sm_rid, we need to call RULE_CTRL_Share_Meter
        to share the meter.
@@ -17681,9 +17671,7 @@ RULE_CTRL_SetQoSAce2Dev(
     {
         if (FALSE == RULE_CTRL_SHARE_METER(unit, port, device_id, sm_rid, rule_id))
         {
-            if (RULE_CTRL_IS_DEBUG_ERROR_ON(debug_flag))
-                printf("\r\nRULE_CTRL_SetQoSAce2Dev: RULE_CTRL_Share_Meter filed.");
-
+            LOG("RULE_CTRL_SetQoSAce2Dev: RULE_CTRL_Share_Meter filed.");
             return FALSE;
         }
     }
@@ -18597,7 +18585,7 @@ RULE_CTRL_AddIpv6Rule2DevForAclPurpose(
 
         if (FALSE == RULE_CTRL_ConvertIpv6Ace2StdDevAce(ipv6_ace, &dev_ace))
         {
-            printf("%s%d\n", __FUNCTION__, __LINE__);
+            LOG("RULE_CTRL_ConvertIpv6Ace2StdDevAce fail");
             return FALSE;
         }
         break;
@@ -18606,13 +18594,13 @@ RULE_CTRL_AddIpv6Rule2DevForAclPurpose(
 
         if (FALSE == RULE_CTRL_ConvertIpv6Ace2ExtDevAce(ipv6_ace, &dev_ace))
         {
-            printf("%s%d\n", __FUNCTION__, __LINE__);
+            LOG("RULE_CTRL_ConvertIpv6Ace2ExtDevAce fail");
             return FALSE;
         }
         break;
 
     default:
-        printf("%s%d\n", __FUNCTION__, __LINE__);
+        LOG("Unknown ace type");
         return FALSE;
     }
 
@@ -19271,7 +19259,7 @@ RULE_CTRL_LocalAddAce2DEV(
         ASSERT(RULE_TYPE_OK == result);
         if (RULE_TYPE_OK != result)
         {
-            printf("RULE_CTRL_LocalAddAce2DEV:critical error!!!\r\n");
+            LOG("Critical error!!! RULE_CTRL_LocalAddAce2DevForQosPurpose fail\r\n");
             return result;
         }
     }
@@ -26349,7 +26337,7 @@ BOOL_T RULE_CTRL_ISC_Handler(ISC_Key_T *key, L_MM_Mref_Handle_T *mref_handle_p)
      */
     if (service >= RULE_CTRL_NBR_OF_SERVICE_ID || RULE_CTRL_func_tab[service]==NULL)
     {
-        printf("\r\nRULE CTRL: Service ID is invalid!\r\n");
+        PRINTF("\r\nRULE CTRL: Service ID is invalid!\r\n");
     }
     else
     {
@@ -27751,8 +27739,11 @@ static BOOL_T RULE_CTRL_Master_Set_Allocated_Rule(ISC_Key_T *key, RULE_CTRL_IscB
 
     if (RULE_CTRL_IS_DEBUG_ERROR_ON(debug_flag))
     {
-        printf("\r\n enter RULE_CTRL_Master_Set_Allocated_Rule");
-        printf("\r\n dev_rule_id = %lu, unit = %d, tick = %lu", ptr->RULECTRLINFO.dev_rule_id, key->unit, SYSFUN_GetSysTick());
+        LOG("Enter RULE_CTRL_Master_Set_Allocated_Rule\r\n"
+            "    dev_rule_id = %lu, unit = %d, tick = %lu",
+            ptr->RULECTRLINFO.dev_rule_id,
+            key->unit,
+            SYSFUN_GetSysTick());
     }
 
     if (SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK < key->unit)
@@ -27765,10 +27756,9 @@ static BOOL_T RULE_CTRL_Master_Set_Allocated_Rule(ISC_Key_T *key, RULE_CTRL_IscB
         return FALSE;
 
     shmem_data_p->allocated_rule[key->unit][ptr->RULECTRLINFO.device_id].dev_rule_id = ptr->RULECTRLINFO.dev_rule_id;
-    if (RULE_CTRL_IS_DEBUG_ERROR_ON(debug_flag))
-    {
-        printf("\r\n leave RULE_CTRL_Master_Set_Allocated_Rule");
-    }
+
+    LOG("Leave RULE_CTRL_Master_Set_Allocated_Rule");
+
     return status;
 }
 
@@ -30470,7 +30460,7 @@ _rule_ctrl_set_rule(
                                                   RULE_CTRL_REQUEST_RESOURCE_ALLOCATE_TEST,
                                                   1))
         {
-            printf("RULE_CTRL_RequestRuleByQuota failed\n");
+            LOG("RULE_CTRL_RequestRuleByQuota failed\n");
             return FALSE;
         }
 
