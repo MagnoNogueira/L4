@@ -135,9 +135,9 @@
     (RULE_TYPE_GREEN_ACTION | RULE_TYPE_YELLOW_ACTION | RULE_TYPE_RED_ACTION)
 
 
-#define RULE_TYPE_ACTION_DEFAULT_PRI                    8
-#define RULE_TYPE_ACTION_DEFAULT_PHB                    8
-#define RULE_TYPE_ACTION_DEFAULT_PKT_NEW_DSCP           64
+#define RULE_TYPE_ACTION_DEFAULT_PRI                    0
+#define RULE_TYPE_ACTION_DEFAULT_PHB                    0
+#define RULE_TYPE_ACTION_DEFAULT_PKT_NEW_DSCP           0
 
 /* meter mode */
 #define RULE_TYPE_METER_MODE_DEFAULT                    0x0
