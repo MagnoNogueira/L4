@@ -11673,6 +11673,92 @@ RULE_CTRL_UT_Get_TCAM_Entry_AddAce()
 }
 
 int
+RULE_CTRL_UT_Get_TCAM_Entry_ForIPSG()
+{
+    RULE_TYPE_TCAM_ENTRY_T tcam_entry;
+    UI32_T ifindex = 2;
+
+    UI32_T unit = STKTPLG_OM_IFINDEX_TO_UNIT(ifindex);
+    UI32_T port = STKTPLG_OM_IFINDEX_TO_PORT(ifindex);
+
+    UI32_T pool_id;
+    UI32_T module_id, device_id, phy_port;
+
+    RULE_TYPE_RETURN_TYPE_T result;
+
+    DEV_SWDRV_PMGR_Logical2PhyDevicePortID(unit, port, &module_id, &device_id, &phy_port);
+
+    for (pool_id = 0; pool_id < FP_CONFIG_NumberOfGroup(); ++pool_id)
+    {
+        tcam_entry.unit = unit;
+        tcam_entry.device_id = device_id;
+        tcam_entry.pool_id = pool_id;
+
+        result = RULE_CTRL_GetTcamEntry(&tcam_entry);
+        assert(RULE_TYPE_OK == result);
+
+        if (RULE_TYPE_IS_BIT_ON(tcam_entry.cap_bitmap.bits, RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD))
+        {
+            int                     ipsg_i;
+            UI8_T                   src_ipv4_addr[4] = {0};
+            UI8_T                   src_mac_addr[6] = {0};
+            UI32_T                  max_ace_num;
+            BOOL_T                  b_result;
+            UI32_T                  temp_port;
+            RULE_TYPE_TCAM_ENTRY_T  expect_tcam_entry;
+
+            memcpy(&expect_tcam_entry, &tcam_entry, sizeof(expect_tcam_entry));
+            max_ace_num = tcam_entry.free;
+            assert(max_ace_num != 0);
+
+            for (ipsg_i = 0; ipsg_i < max_ace_num; ipsg_i++)
+            {
+                src_ipv4_addr[3] = ipsg_i+1;
+                src_mac_addr[5] = ipsg_i+1;
+                temp_port = port + (ipsg_i / SYS_ADPT_DHCPSNP_MAX_NBR_OF_CLIENT_PER_PORT);
+
+                b_result =  RULE_CTRL_IPSG_PermitIpPacket(TRUE, unit, temp_port, 1,
+                                                          src_ipv4_addr,
+                                                          src_mac_addr);
+                assert(b_result == TRUE);
+
+                expect_tcam_entry.free -= 1;
+                expect_tcam_entry.used += 1;
+                assert((expect_tcam_entry.free + expect_tcam_entry.used) == expect_tcam_entry.total);
+
+                result = RULE_CTRL_GetTcamEntry(&tcam_entry);
+                assert(RULE_TYPE_OK == result);
+
+                assert(0 == memcmp(&tcam_entry, &expect_tcam_entry, sizeof(tcam_entry)));
+            }
+
+            for (ipsg_i = 0; ipsg_i < max_ace_num; ipsg_i++)
+            {
+                src_ipv4_addr[3] = ipsg_i+1;
+                src_mac_addr[5] = ipsg_i+1;
+                temp_port = port + (ipsg_i / SYS_ADPT_DHCPSNP_MAX_NBR_OF_CLIENT_PER_PORT);
+
+                b_result =  RULE_CTRL_IPSG_PermitIpPacket(FALSE, unit, temp_port, 1,
+                                                          src_ipv4_addr,
+                                                          src_mac_addr);
+                assert(b_result == TRUE);
+
+                expect_tcam_entry.free += 1;
+                expect_tcam_entry.used -= 1;
+                assert((expect_tcam_entry.free + expect_tcam_entry.used) == expect_tcam_entry.total);
+
+                result = RULE_CTRL_GetTcamEntry(&tcam_entry);
+                assert(RULE_TYPE_OK == result);
+                
+                assert(0 == memcmp(&tcam_entry, &expect_tcam_entry, sizeof(tcam_entry)));
+            }
+        }
+    }
+    
+    return 0;
+}
+
+int
 RULE_CTRL_UT_SetTcpUdpPortCosMap()
 {
 #if (SYS_CPNT_COS_ING_IP_PORT_TO_INTER_DSCP == TRUE)
@@ -15880,6 +15966,7 @@ RULE_CTRL_UT_RunTestCaese()
 
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Get_TCAM_Entry);
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_Get_TCAM_Entry_AddAce);
+        RULE_CTRL_UT_TEST(RULE_CTRL_UT_Get_TCAM_Entry_ForIPSG);
 
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_SetTcpUdpPortCosMap);
 

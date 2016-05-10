@@ -152,7 +152,9 @@
     _(RULE_TYPE_TCAM_CAP_MAC_VLAN)              \
     _(RULE_TYPE_TCAM_CAP_PROTOCOL_VLAN)         \
     _(RULE_TYPE_TCAM_CAP_VOICE_VLAN)            \
-    _(RULE_TYPE_TCAM_CAP_IP_SUBNET_VLAN)
+    _(RULE_TYPE_TCAM_CAP_IP_SUBNET_VLAN)        \
+    _(RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD)       \
+    _(RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUSRD)
 
 #define RULE_CTRL_TIME_OUT                  1000 /* 10 sec */  /* time to wait for ISC reply */
 #define RULE_CTRL_TRY_TIMES                 3
