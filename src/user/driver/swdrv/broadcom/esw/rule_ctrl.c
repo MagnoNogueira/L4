@@ -152,8 +152,9 @@
     _(RULE_TYPE_TCAM_CAP_MAC_VLAN)              \
     _(RULE_TYPE_TCAM_CAP_PROTOCOL_VLAN)         \
     _(RULE_TYPE_TCAM_CAP_VOICE_VLAN)            \
-    _(RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD)       \
-    _(RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUSRD)
+    _(RULE_TYPE_TCAM_CAP_IP_SUBNET_VLAN)        \
+    _(RULE_TYPE_TCAM_CAP_IP_SOURCE_GUARD)       \
+    _(RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUARD)
 
 #define RULE_CTRL_TIME_OUT                  1000 /* 10 sec */  /* time to wait for ISC reply */
 #define RULE_CTRL_TRY_TIMES                 3
@@ -347,6 +348,12 @@
     { \
         memcpy(ace_entry.srcip6_data, sipv6, sizeof(ace_entry.srcip6_data)); \
         memset(ace_entry.srcip6_mask, 0xff,  sizeof(ace_entry.srcip6_mask)); \
+    }
+
+#define RULE_CTRL_SET_FILTER_SIPV6_MASK(ace_entry, sipv6, mask) \
+    { \
+        memcpy(ace_entry.srcip6_data, sipv6, sizeof(ace_entry.srcip6_data)); \
+        memcpy(ace_entry.srcip6_mask, mask,  sizeof(ace_entry.srcip6_mask)); \
     }
 
 /* Make a patch for SDK 5.7.0. In this version bcmFieldQualifyIpProtocol is the
@@ -1685,6 +1692,8 @@ typedef struct
 
     RULE_CTRL_IPV6SGDenyAnyIPRuleStorage_T  ipv6sg_deny_any_ip6[SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK]
                                                                [SYS_ADPT_MAX_NBR_OF_CHIP_PER_UNIT];
+
+    RULE_CTRL_SYS_RULE_STORAGE              ipv6sg_permit_link_local;
 #endif /* SYS_CPNT_IPV6_SOURCE_GUARD */
 
 #if (SYS_CPNT_PTP == TRUE)
@@ -6575,6 +6584,51 @@ RULE_CTRL_IPV6SG_SETRULE_DenyAnyIp6Packet(
 
     return TRUE;
 }
+
+/*------------------------------------------------------------------------------
+ * ROUTINE NAME  - RULE_CTRL_IPV6SG_DO_PermitLinkLocal
+ *------------------------------------------------------------------------------
+ * PURPOSE  : Permit link local packet for IPv6 Source Guard 
+ * INPUT    : param_p
+ * OUTPUT   : None
+ * RETURN   : TRUE/FALSE
+ * NOTES    : None
+ *------------------------------------------------------------------------------
+ */
+static BOOL_T
+RULE_CTRL_IPV6SG_DO_PermitLinkLocal(
+    RULE_CTRL_PARAM_PTR param_p)
+{
+    /* Link local address SIP = fe80::/64
+     */
+    UI8_T ip[SYS_ADPT_IPV6_ADDR_LEN] =
+    {
+        0xfe, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+    UI8_T mask[SYS_ADPT_IPV6_ADDR_LEN] =
+    {
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    param_p->func_type = RULE_TYPE_IPV6_SG_PERMIT_LINK_LOCAL;
+    param_p->sys_rule_storage_p = &shmem_data_p->ipv6sg_permit_link_local;
+
+    RULE_CTRL_MakeParamTag(param_p, "ipv6sg", "permit", "linklocal", "ipv6sg-permit-linklocal");
+
+    DEVRM_SHR_BITSET(param_p->ace_entry.w, DEVRM_FIELD_QUALIFY_InPorts);
+    RULE_CTRL_SET_FILTER_IPBM_WITH_ALL_PORTS(param_p->ace_entry);
+
+    RULE_CTRL_ADD_FILTER_IPTYPE((&param_p->ace_entry), bcmFieldIpTypeIpv6);
+
+    DEVRM_SHR_BITSET(param_p->ace_entry.w, DEVRM_FIELD_QUALIFY_SrcIp6);
+    RULE_CTRL_SET_FILTER_SIPV6_MASK(param_p->ace_entry, ip, mask);
+
+    RULE_CTRL_INITIALIZE_ACTION_ENTRY(param_p->action_entries);
+
+    return TRUE;
+}
 #endif /* #if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE) */
 
 #if (SYS_CPNT_IP_MULTICAST_DATA_DROP == TRUE) || (SYS_CPNT_MVR == TRUE)
@@ -8036,7 +8090,18 @@ RULE_TYPE_RETURN_TYPE_T
 RULE_CTRL_IPV6SG_PermitIp6LinkLocal(
     BOOL_T is_enable)
 {
-    return RULE_TYPE_FAIL;
+    RULE_CTRL_PARAM param;
+
+    RULE_CTRL_LOG("%s", is_enable ? "enable" : "disable");
+
+    RULE_CTRL_InitParam(&param);
+
+    if (is_enable)
+    {
+        param.flags    |= (RULE_CTRL_OPT_INSTALL | RULE_CTRL_OPT_FORCE_INSTALL);
+    }
+
+    return _rule_ctrl_set_rule(&param, RULE_CTRL_IPV6SG_DO_PermitLinkLocal);
 }
 #endif /* #if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE) */
 

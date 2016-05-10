@@ -11697,7 +11697,7 @@ RULE_CTRL_UT_Get_TCAM_Entry_ForIPSG()
         result = RULE_CTRL_GetTcamEntry(&tcam_entry);
         assert(RULE_TYPE_OK == result);
 
-        if (RULE_TYPE_IS_BIT_ON(tcam_entry.cap_bitmap.bits, RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD))
+        if (RULE_TYPE_IS_BIT_ON(tcam_entry.cap_bitmap.bits, RULE_TYPE_TCAM_CAP_IP_SOURCE_GUARD))
         {
             int                     ipsg_i;
             UI8_T                   src_ipv4_addr[4] = {0};

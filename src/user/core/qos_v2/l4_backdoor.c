@@ -255,6 +255,7 @@ static void L4_Backdoor_CpuIf_DHCPSnooping2Cpu(int argc, char** argv);
 static void L4_Backdoor_CpuIf_IPSrcGuard(int argc, char** argv);
 static void L4_Backdoor_CpuIf_IPSrcGuardDenyIpAny(int argc, char** argv);
 static void L4_Backdoor_CpuIf_IPv6SrcGuard(int argc, char** argv);
+static void L4_Backdoor_CpuIf_IPv6SrcGuardPermitLinkLocal(int argc, char** argv);
 static void L4_Backdoor_CpuIf_IPv6SrcGuardDenyIpv6Any(int argc, char** argv);
 static void L4_Backdoor_CpuIf_WEBAUTH_RedirectHTTPClient(int argc, char** argv);
 static void L4_Backdoor_CpuIf_WEBAUTH_RermitSrcIP(int argc, char** argv);
@@ -586,10 +587,15 @@ static L4_Backdoor_Cmd_T  cpu_if_command_items[] = {
     {"show_cpuif_status",           L4_Backdoor_CpuIf_ShowStatus},
     {"dump function info",          L4_Backdoor_CpuIf_DumpFunctionInfo},
     {"dhcpsnp redirect dhcp",       L4_Backdoor_CpuIf_DHCPSnooping2Cpu},
-    {"ipscgrd permit host",         L4_Backdoor_CpuIf_IPSrcGuard},
-    {"ipscgrd deny ip",             L4_Backdoor_CpuIf_IPSrcGuardDenyIpAny},
-    {"ipv6sg permit host",          L4_Backdoor_CpuIf_IPv6SrcGuard},
-    {"ipv6sg deny ip",              L4_Backdoor_CpuIf_IPv6SrcGuardDenyIpv6Any},
+    {"[IPSG] permit host",          L4_Backdoor_CpuIf_IPSrcGuard},
+    {"[IPSG] deny ip",              L4_Backdoor_CpuIf_IPSrcGuardDenyIpAny},
+
+#if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE)
+    {"[IPv6SG] permit host",        L4_Backdoor_CpuIf_IPv6SrcGuard},
+    {"[IPv6SG] permit link local",  L4_Backdoor_CpuIf_IPv6SrcGuardPermitLinkLocal},
+    {"[IPv6SG] deny ip",            L4_Backdoor_CpuIf_IPv6SrcGuardDenyIpv6Any},
+#endif /* SYS_CPNT_IPV6_SOURCE_GUARD */
+
     {"webauth redirect http client",L4_Backdoor_CpuIf_WEBAUTH_RedirectHTTPClient},
     {"webauth permit sip",          L4_Backdoor_CpuIf_WEBAUTH_RermitSrcIP},
     {"webauth deny ip",             L4_Backdoor_CpuIf_WEBAUTH_DenyIP},
@@ -2922,6 +2928,32 @@ static void L4_Backdoor_CpuIf_IPv6SrcGuard(int argc, char** argv)
 
     if (RULE_TYPE_OK != ret)
         BACKDOOR_MGR_Printf (" failed.");
+#else
+    BACKDOOR_MGR_Printf ("\r\n SYS_CPNT_IPV6_SOURCE_GUARD != TRUE\r\n");
+#endif /* #if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE) */
+}
+
+static void L4_Backdoor_CpuIf_IPv6SrcGuardPermitLinkLocal(int argc, char** argv)
+{
+#if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE)
+    BOOL_T  en_flag;
+    UI32_T  ret;
+
+    if (argc != 1)
+    {
+        BACKDOOR_MGR_Printf("\r\n parameters: {en_flag}");
+        BACKDOOR_MGR_Printf("\r\n    en_flag: 1(true)   0(false)\r\n");
+        return;
+    }
+
+    en_flag = (atoi(argv[0]) == 0) ? FALSE : TRUE;
+    BACKDOOR_MGR_Printf("%s PermitIpv6LinkLocal ", en_flag ? "Enable" : "Disable");
+
+    ret = L4_MGR_SetPermitIpv6LinkLocal(en_flag);
+    if (RULE_TYPE_OK != ret)
+        BACKDOOR_MGR_Printf (" failed.");
+
+    BACKDOOR_MGR_Printf ("\r\n");
 #else
     BACKDOOR_MGR_Printf ("\r\n SYS_CPNT_IPV6_SOURCE_GUARD != TRUE\r\n");
 #endif /* #if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE) */

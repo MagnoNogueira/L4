@@ -194,8 +194,8 @@ _(RULE_TYPE_TCAM_CAP_EGRESS_IPV4_DS,       "DE4",      "Egress IPv4 diffServ")  
 _(RULE_TYPE_TCAM_CAP_EGRESS_IPV6_STD_DS,   "DE6S",     "Egress IPv6 standard diffServ")   \
 _(RULE_TYPE_TCAM_CAP_EGRESS_IPV6_EXT_DS,   "DE6E",     "Egress IPv6 extended diffServ")   \
 _(RULE_TYPE_TCAM_CAP_WEB_AUTH,             "W",        "Web authentication")              \
-_(RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD,      "I",        "IP source guard")                 \
-_(RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUSRD,    "I6",       "IPv6 source guard")               \
+_(RULE_TYPE_TCAM_CAP_IP_SOURCE_GUARD,      "I",        "IP source guard")                 \
+_(RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUARD,    "I6",       "IPv6 source guard")               \
 _(RULE_TYPE_TCAM_CAP_CPU_INTERFACE,        "C",        "CPU interface")                   \
 _(RULE_TYPE_TCAM_CAP_RATE_LIMITE,          "R",        "Rate limit")                      \
 _(RULE_TYPE_TCAM_CAP_LINK_LOCAL,           "L",        "Link local")                      \
@@ -854,10 +854,11 @@ typedef enum
     _(RULE_TYPE_WEBAUTH_PRIO_HIGH,             "RT_WEBAUTH_PRIO_HIGH",             RULE_TYPE_TCAM_CAP_WEB_AUTH)            \
     _(RULE_TYPE_WEBAUTH_PRIO_MED,              "RT_WEBAUTH_PRIO_MED",              RULE_TYPE_TCAM_CAP_WEB_AUTH)            \
     _(RULE_TYPE_WEBAUTH_PRIO_LOW,              "RT_WEBAUTH_PRIO_LOW",              RULE_TYPE_TCAM_CAP_WEB_AUTH)            \
-    _(RULE_TYPE_IP_SOURCE_GUARD_PRIO_HIGH,     "RT_IP_SOURCE_GUARD_PRIO_HIGH",     RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD)     \
-    _(RULE_TYPE_IP_SOURCE_GUARD_PRIO_LOW,      "RT_IP_SOURCE_GUARD_PRIO_LOW",      RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD)     \
-    _(RULE_TYPE_IPV6_SG_PERMIT_HOST,           "RT_IPV6_SG_PERMIT_HOST",           RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUSRD)   \
-    _(RULE_TYPE_IPV6_SG_DENY_ALL,              "RT_IPV6_SG_DENY_ALL",              RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUSRD)   \
+    _(RULE_TYPE_IP_SOURCE_GUARD_PRIO_HIGH,     "RT_IP_SOURCE_GUARD_PRIO_HIGH",     RULE_TYPE_TCAM_CAP_IP_SOURCE_GUARD)     \
+    _(RULE_TYPE_IP_SOURCE_GUARD_PRIO_LOW,      "RT_IP_SOURCE_GUARD_PRIO_LOW",      RULE_TYPE_TCAM_CAP_IP_SOURCE_GUARD)     \
+    _(RULE_TYPE_IPV6_SG_PERMIT_HOST,           "RT_IPV6_SG_PERMIT_HOST",           RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUARD)   \
+    _(RULE_TYPE_IPV6_SG_PERMIT_LINK_LOCAL,     "RT_IPV6_SG_PERMIT_LINK_LOCAL",     RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUARD)   \
+    _(RULE_TYPE_IPV6_SG_DENY_ALL,              "RT_IPV6_SG_DENY_ALL",              RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUARD)   \
     _(RULE_TYPE_PACKET_TO_CPU_LINK_LOCAL_ADDR, "RT_PACKET_TO_CPU_LINK_LOCAL_ADDR", RULE_TYPE_TCAM_CAP_LINK_LOCAL)          \
     _(RULE_TYPE_LINK_LOCAL_ADDR_L3_ROUTABLE,   "RT_LINK_LOCAL_ADDR_L3_ROUTABLE",   RULE_TYPE_TCAM_CAP_LINK_LOCAL)          \
     _(RULE_TYPE_PACKET_TO_CPU_PIM6,            "RT_PACKET_TO_CPU_PIM6",            RULE_TYPE_TCAM_CAP_CPU_INTERFACE)       \
