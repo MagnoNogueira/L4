@@ -34,6 +34,7 @@
 #include "sys_bld.h"
 #include "l_threadgrp.h"
 #include "l_inet.h"
+#include "l_stdlib.h"
 #include "backdoor_mgr.h"
 #include "l4_mgr.h"
 #include "rule_om.h"
