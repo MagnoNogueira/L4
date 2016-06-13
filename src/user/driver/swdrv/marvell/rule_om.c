@@ -1574,7 +1574,6 @@ RULE_OM_SetPortEntryAclIndex(
     RULE_OM_LeaveCriticalSectionReturnState(RULE_TYPE_OK);
 }
 
-#if (SYS_CPNT_TIME_BASED_ACL)
 /*------------------------------------------------------------------------------
  * ROUTINE NAME - RULE_OM_SetPortEntryAclTimeRange
  *------------------------------------------------------------------------------
@@ -1624,14 +1623,16 @@ RULE_OM_SetPortEntryAclTimeRange(
 
     ASSERT(FALSE == RULE_OM_IS_ENTRY_ACTIVE(bind_acl_p->row_status));
 
-    strncpy((char *)bind_acl_p->time_range_name, (char *)time_range_name, SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH);
-    bind_acl_p->time_range_name[SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH] = '\0';
+    if (time_range_name != NULL)
+    {
+        strncpy((char *)bind_acl_p->time_range_name, (char *)time_range_name, SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH);
+        bind_acl_p->time_range_name[SYS_ADPT_TIME_RANGE_MAX_NAME_LENGTH] = '\0';
+    }
 
     bind_acl_p->time_range_index = time_range_index;
 
     RULE_OM_LeaveCriticalSectionReturnState(RULE_TYPE_OK);
 }
-#endif
 
 /*------------------------------------------------------------------------------
  * ROUTINE NAME - RULE_OM_SetPortEntryAclCounterEnable
@@ -13326,8 +13327,7 @@ RULE_OM_LocalIsSameAceWithoutAccessField(
     switch (src_p->ace_type)
     {
         case RULE_TYPE_MAC_ACL:
-
-        compare_mac_ace:
+compare_mac_ace:
             if (0 == memcmp (&src_p->u.mac, &dst_p->u.mac, sizeof(dst_p->u.mac)))
             {
 #if (SYS_CPNT_ACL_MAC_IP_MIX == TRUE)
@@ -13382,7 +13382,8 @@ RULE_OM_LocalIsSameAceWithoutAccessField(
         case RULE_TYPE_IPV6_ACL:
         case RULE_TYPE_IPV6_STD_ACL:
         case RULE_TYPE_IPV6_EXT_ACL:
-            if (0 == memcmp (&src_p->u.ipv6, &dst_p->u.ipv6,
+            if (0 == memcmp (&src_p->u.ipv6,
+                             &dst_p->u.ipv6,
                              sizeof(dst_p->u.ipv6)))
             {
 #if (RULE_TYPE_ACE_MAC_IP_MIX == TRUE)
@@ -15108,6 +15109,16 @@ static UI32_T RULE_OM_LocalValidateIpAceFieldForACL(const RULE_TYPE_IpAce_Entry_
         if (ace_type != RULE_TYPE_IP_EXT_ACL)
             return RULE_TYPE_FAIL;
 
+        if (ace_entry->aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+        else if (ace_entry->aceProtocol != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                 ace_entry->aceProtocol != RULE_TYPE_ACL_UDP_PROTOCOL)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+
         switch (ace_entry->aceSourcePortOp)
         {
         case VAL_diffServIpAceSourcePortOp_noOperator:
@@ -15167,6 +15178,19 @@ static UI32_T RULE_OM_LocalValidateIpAceFieldForACL(const RULE_TYPE_IpAce_Entry_
 
         if (ace_type != RULE_TYPE_IP_EXT_ACL)
             return RULE_TYPE_FAIL;
+
+        if (ace_type != RULE_TYPE_IP_EXT_ACL)
+            return RULE_TYPE_FAIL;
+
+        if (ace_entry->aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+        else if (ace_entry->aceProtocol != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                 ace_entry->aceProtocol != RULE_TYPE_ACL_UDP_PROTOCOL)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
 
         switch (ace_entry->aceDestPortOp)
         {
@@ -15243,6 +15267,9 @@ static UI32_T RULE_OM_LocalValidateIpAceFieldForACL(const RULE_TYPE_IpAce_Entry_
 
         if (ace_entry->aceControlCodeBitmask > MAX_diffServIpAceControlCodeBitmask)
             return RULE_TYPE_FAIL;
+        break;
+
+    case LEAF_diffServIpAceTimeRange:
         break;
 
     default:
@@ -15462,6 +15489,9 @@ static UI32_T RULE_OM_LocalValidateMacAceFieldForACL(const RULE_TYPE_MacAce_Entr
     case LEAF_diffServMacAceStatus:
         break;
 
+    case LEAF_diffServMacAceTimeRange:
+        break;
+
     default:
         return RULE_TYPE_FAIL;
         break;
@@ -15520,6 +15550,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         {
                             return RULE_TYPE_FAIL;
                         }
+
+                        if (ace_entry_p->u.ip.aceSourcePortOp == VAL_diffServMacAceSourcePortOp_equal)
+                        {
+                            if (ace_entry_p->u.ip.aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                        }
                         break;
 
                     case LEAF_diffServMacAceL4SourcePort:
@@ -15538,6 +15581,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         if (ace_entry_p->u.ip.aceDestPortOp > VAL_diffServMacAceDestPortOp_equal)
                         {
                             return RULE_TYPE_FAIL;
+                        }
+
+                        if (ace_entry_p->u.ip.aceDestPortOp == VAL_diffServMacAceDestPortOp_equal)
+                        {
+                            if (ace_entry_p->u.ip.aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
                         }
                         break;
 
@@ -15615,6 +15671,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         {
                             return RULE_TYPE_FAIL;
                         }
+
+                        if (ace_entry_p->u.ipv6.aceSourcePortOp == VAL_diffServMacAceSourcePortOp_equal)
+                        {
+                            if (ace_entry_p->u.ipv6.aceNextHeader == RULE_TYPE_UNDEF_IPV6_NEXT_HEADER)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                        }
                         break;
 
                     case LEAF_diffServMacAceL4SourcePort:
@@ -15633,6 +15702,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         if (ace_entry_p->u.ipv6.aceDestPortOp > VAL_diffServMacAceSourcePortOp_equal)
                         {
                             return RULE_TYPE_FAIL;
+                        }
+
+                        if (ace_entry_p->u.ipv6.aceDestPortOp == VAL_diffServMacAceSourcePortOp_equal)
+                        {
+                            if (ace_entry_p->u.ipv6.aceNextHeader == RULE_TYPE_UNDEF_IPV6_NEXT_HEADER)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
                         }
                         break;
 
@@ -15874,7 +15956,7 @@ static UI32_T RULE_OM_LocalValidateIpv6AceFieldForACL(const RULE_TYPE_Ipv6Ace_En
             return RULE_TYPE_FAIL;
 #else
         return RULE_TYPE_FAIL;
-#endif /* SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER */
+#endif /* SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER || SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER_NEW_FORMAT */
 
         break;
 
@@ -15927,6 +16009,16 @@ static UI32_T RULE_OM_LocalValidateIpv6AceFieldForACL(const RULE_TYPE_Ipv6Ace_En
         if (ace_type != RULE_TYPE_IPV6_EXT_ACL)
             return RULE_TYPE_FAIL;
 
+        if (ace_entry->aceNextHeader == RULE_TYPE_UNDEF_IPV6_NEXT_HEADER)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+        else if (ace_entry->aceNextHeader != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                 ace_entry->aceNextHeader != RULE_TYPE_ACL_UDP_PROTOCOL)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+
         switch (ace_entry->aceSourcePortOp)
         {
             case VAL_diffServIpv6AceSourcePortOp_noOperator:
@@ -15972,6 +16064,16 @@ static UI32_T RULE_OM_LocalValidateIpv6AceFieldForACL(const RULE_TYPE_Ipv6Ace_En
         if (ace_type != RULE_TYPE_IPV6_EXT_ACL)
             return RULE_TYPE_FAIL;
 
+        if (ace_entry->aceNextHeader == RULE_TYPE_UNDEF_IPV6_NEXT_HEADER)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+        else if (ace_entry->aceNextHeader != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                 ace_entry->aceNextHeader != RULE_TYPE_ACL_UDP_PROTOCOL)
+        {
+            return RULE_TYPE_E_ACE_IP_PROTOCOL;
+        }
+
         switch (ace_entry->aceDestPortOp)
         {
             case VAL_diffServIpv6AceDestPortOp_noOperator:
@@ -16008,13 +16110,15 @@ static UI32_T RULE_OM_LocalValidateIpv6AceFieldForACL(const RULE_TYPE_Ipv6Ace_En
             return RULE_TYPE_FAIL;
         break;
 
+    case LEAF_diffServIpv6AceTimeRange:
+        break;
+
     default:
             return RULE_TYPE_FAIL;
     }
 
     return RULE_TYPE_OK;
 }
-
 
 /*------------------------------------------------------------------------------
  * ROUTINE NAME  - RULE_OM_LocalValidateIpAceFieldForMF

@@ -3525,7 +3525,7 @@ RULE_OM_TEST_Validate_Mac_Plus_Ipv6_Ace()
         {
             MIN_diffServIpv6AceSourceIpAddrPrefixLen,
             MIN_diffServIpv6AceDestIpAddrPrefixLen,
-            MIN_diffServIpv6AceNextHeader,
+            RULE_TYPE_ACL_TCP_PROTOCOL,
             MIN_diffServMacAceL4SourcePort,
             MIN_diffServMacAceL4SourcePortBitmask,
             MIN_diffServMacAceL4DestPort,
@@ -3534,7 +3534,7 @@ RULE_OM_TEST_Validate_Mac_Plus_Ipv6_Ace()
         {
             MAX_diffServIpv6AceSourceIpAddrPrefixLen,
             SYS_ADPT_ACL_MAX_DST_IPV6_PREFIX_LEN,
-            (MAX_diffServIpv6AceNextHeader - 1),
+            RULE_TYPE_ACL_UDP_PROTOCOL,
             MAX_diffServMacAceL4SourcePort,
             MAX_diffServMacAceL4SourcePortBitmask,
             MAX_diffServMacAceL4DestPort,
@@ -5217,6 +5217,8 @@ RULE_OM_TEST_MergerMacAce_BMT()
             ace.u.ip.aceMinDestPort = i;
             ace.u.ip.aceDestPortBitmask = 0xffff;
 
+            ace.u.ip.aceProtocol = RULE_TYPE_ACL_TCP_PROTOCOL;
+
             result = RULE_OM_AddAce2Acl(acl_index, acl_type, &ace);
             assert(RULE_TYPE_OK == result);
         }
@@ -5274,6 +5276,8 @@ RULE_OM_TEST_MergerMacAce_BMT()
             ace.u.ip.aceSourcePortOp = VAL_diffServIpAceDestPortOp_equal;
             ace.u.ip.aceMinSourcePort = i;
             ace.u.ip.aceSourcePortBitmask = 0xffff;
+
+            ace.u.ip.aceProtocol = RULE_TYPE_ACL_TCP_PROTOCOL;
 
             result = RULE_OM_AddAce2Acl(acl_index, acl_type, &ace);
             assert(RULE_TYPE_OK == result);
@@ -8585,6 +8589,8 @@ RULE_OM_UT_BuildMatchAllClassMapRule_ACL_plus_MF()
         ace_entry.u.ip.aceMinDestPort = 80;
         ace_entry.u.ip.aceDestPortBitmask = 0xffff;
         ace_entry.u.ip.aceDestPortOp = VAL_diffServIpAceDestPortOp_equal;
+
+        ace_entry.u.ip.aceProtocol = RULE_TYPE_ACL_TCP_PROTOCOL;
 
         result = RULE_OM_AddAce2Acl(acl_index, acl_type, &ace_entry);
         assert(RULE_TYPE_OK == result);
