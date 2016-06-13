@@ -5061,47 +5061,72 @@ UI32_T RULE_OM_SetPolicyMapElementRowStatus(UI32_T policy_element_index, BOOL_T 
 
     if (TRUE == is_active)
     {
-        if(TRUE == RULE_OM_GetActionEntryByIndex(policy_element_p->action_index, &action_entry))
+        UI32_T set_action_bitmap;
+
+        if(FALSE == RULE_OM_GetActionEntryByIndex(policy_element_p->action_index, &action_entry))
         {
-            if((action_entry.action_bitmap == RULE_TYPE_ACTION_PKT_NEW_PRI) || (action_entry.action_bitmap == RULE_TYPE_ACTION_PKT_NEW_PHB))
+            LOG("Error action_index=%lu", policy_element_p->action_index);
+            return RULE_TYPE_FAIL;
+        }
+
+        set_action_bitmap = action_entry.action_bitmap & RULE_TYPE_IN_PROFILE_ACTION;
+        if (set_action_bitmap != 0
+            && set_action_bitmap != RULE_TYPE_ACTION_PKT_NEW_PRI
+            && set_action_bitmap != RULE_TYPE_ACTION_PKT_NEW_TOS
+            && set_action_bitmap != RULE_TYPE_ACTION_PKT_NEW_DSCP
+            && set_action_bitmap != RULE_TYPE_ACTION_PKT_NEW_PHB)
+        {
+            LOG("'set {cos | ip dscp | phb | ...}' action shall only has one");
+            return RULE_TYPE_FAIL;
+        }
+
+        if (policy_element_p->meter_index != 0)
+        {
+            if(FALSE == RULE_OM_GetMeterEntryByIndex(policy_element_p->meter_index, &meter_entry))
             {
-                if(policy_element_p->meter_index == 0)
-                {
-                    RULE_OM_SET_ENTRY_ACTIVE(policy_element_p->row_status);
-                }
-                else
-                    return RULE_TYPE_FAIL;
+                LOG("Error meter_index=%lu", policy_element_p->meter_index);
+                return RULE_TYPE_FAIL;
             }
-            else
+
+            switch (meter_entry.meter_model)
             {
-                if (policy_element_p->meter_index != 0)
-                {
-                    if(TRUE == RULE_OM_GetMeterEntryByIndex(policy_element_p->meter_index, &meter_entry))
+                case RULE_TYPE_METER_MODE_DEFAULT:
+                case RULE_TYPE_METER_MODE_FLOW:
+                    if (action_entry.action_bitmap & RULE_TYPE_YELLOW_ACTION)
                     {
-                        if (meter_entry.meter_model == RULE_TYPE_METER_MODE_FLOW)
-                        {
-                            if(!(action_entry.action_bitmap&(RULE_TYPE_ACTION_YELLOW_PKT_NEW_DSCP|RULE_TYPE_ACTION_YELLOW_DROP))){
-                                RULE_OM_SET_ENTRY_ACTIVE(policy_element_p->row_status);
-                            }
-                            else
-                                return RULE_TYPE_FAIL;
-                        }
-                        else
-                        {
-                            if(action_entry.action_bitmap&(RULE_TYPE_ACTION_YELLOW_PKT_NEW_DSCP|RULE_TYPE_ACTION_YELLOW_DROP)){
-                                RULE_OM_SET_ENTRY_ACTIVE(policy_element_p->row_status);
-                            }
-                            else
-                                return RULE_TYPE_FAIL;
-                        }
+                        LOG("Shall not set yellow action");
+                        return RULE_TYPE_FAIL;
                     }
-                }
-                else
+                    break;
+
+#if (SYS_CPNT_QOS_DIFFSERV_POLICE_MODE & SYS_CPNT_QOS_DIFFSERV_POLICE_RATE)
+                case RULE_TYPE_METER_MODE_RATE:
+                    if (action_entry.action_bitmap & RULE_TYPE_OUT_OF_PROFILE_ACTION)
+                    {
+                        LOG("Shall not set out_of_profile action");
+                        return RULE_TYPE_FAIL;
+                    }
+                    break;
+#endif /* SYS_CPNT_QOS_DIFFSERV_POLICE_RATE */
+
+                case RULE_TYPE_METER_MODE_TRTCM_COLOR_BLIND:
+                case RULE_TYPE_METER_MODE_TRTCM_COLOR_AWARE:
+                case RULE_TYPE_METER_MODE_SRTCM_COLOR_BLIND:
+                case RULE_TYPE_METER_MODE_SRTCM_COLOR_AWARE:
+                    if (!(action_entry.action_bitmap & RULE_TYPE_YELLOW_ACTION))
+                    {
+                        LOG("Shall set yellow action");
+                        return RULE_TYPE_FAIL;
+                    }
+                    break;
+
+                default:
+                    LOG("Undefined meter_mode");
                     return RULE_TYPE_FAIL;
             }
         }
-        else
-            return RULE_TYPE_FAIL;
+
+        RULE_OM_SET_ENTRY_ACTIVE(policy_element_p->row_status);
     }
     else
     {
@@ -15649,6 +15674,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         {
                             return RULE_TYPE_FAIL;
                         }
+
+                        if (ace_entry_p->u.ip.aceSourcePortOp == VAL_diffServMacAceSourcePortOp_equal)
+                        {
+                            if (ace_entry_p->u.ip.aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                        }
                         break;
 
                     case LEAF_diffServMacAceL4SourcePort:
@@ -15667,6 +15705,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         if (ace_entry_p->u.ip.aceDestPortOp > VAL_diffServMacAceDestPortOp_equal)
                         {
                             return RULE_TYPE_FAIL;
+                        }
+
+                        if (ace_entry_p->u.ip.aceDestPortOp == VAL_diffServMacAceDestPortOp_equal)
+                        {
+                            if (ace_entry_p->u.ip.aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ip.aceProtocol != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
                         }
                         break;
 
@@ -15744,6 +15795,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         {
                             return RULE_TYPE_FAIL;
                         }
+
+                        if (ace_entry_p->u.ipv6.aceSourcePortOp == VAL_diffServMacAceSourcePortOp_equal)
+                        {
+                            if (ace_entry_p->u.ipv6.aceNextHeader == RULE_TYPE_UNDEF_IPV6_NEXT_HEADER)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                        }
                         break;
 
                     case LEAF_diffServMacAceL4SourcePort:
@@ -15762,6 +15826,19 @@ RULE_OM_LocalValidateMacAceMixedFieldForACL(
                         if (ace_entry_p->u.ipv6.aceDestPortOp > VAL_diffServMacAceSourcePortOp_equal)
                         {
                             return RULE_TYPE_FAIL;
+                        }
+
+                        if (ace_entry_p->u.ipv6.aceDestPortOp == VAL_diffServMacAceSourcePortOp_equal)
+                        {
+                            if (ace_entry_p->u.ipv6.aceNextHeader == RULE_TYPE_UNDEF_IPV6_NEXT_HEADER)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
+                            else if (ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_TCP_PROTOCOL &&
+                                     ace_entry_p->u.ipv6.aceNextHeader != RULE_TYPE_ACL_UDP_PROTOCOL)
+                            {
+                                return RULE_TYPE_E_ACE_IP_PROTOCOL;
+                            }
                         }
                         break;
 
@@ -15995,10 +16072,10 @@ static UI32_T RULE_OM_LocalValidateIpv6AceFieldForACL(const RULE_TYPE_Ipv6Ace_En
             break;
         }
 
+#if (SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER == TRUE) || (SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER_NEW_FORMAT == TRUE)
         if (ace_type != RULE_TYPE_IPV6_EXT_ACL)
             return RULE_TYPE_FAIL;
 
-#if (SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER == TRUE) || (SYS_CPNT_ACL_IPV6_EXT_NEXT_HEADER_NEW_FORMAT == TRUE)
         if (ace_entry->aceNextHeader > MAX_diffServIpv6AceNextHeader)
             return RULE_TYPE_FAIL;
 #else

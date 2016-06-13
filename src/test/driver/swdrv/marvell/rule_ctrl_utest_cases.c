@@ -2500,6 +2500,8 @@ RULE_CTRL_UT_Proc_Validate_State_Of_Rule_If_Instance_ACL_ACE_Rule_Pattern(
     result = RULE_OM_GetAceByIndex(ace_inst_p->id, &om_ace_entry);
     assert(RULE_TYPE_OK == result);
 
+    RULE_CTRL_Priv_MaskAceEntry(&om_ace_entry);
+
     switch (om_ace_entry.ace_type)
     {
         case RULE_TYPE_MAC_ACL:
@@ -2671,11 +2673,7 @@ RULE_CTRL_UT_Proc_Validate_State_Of_Rule_If_Instance_ACL_ACE_Rule_Pattern(
         case RULE_TYPE_IPV6_STD_ACL:
         case RULE_TYPE_IPV6_EXT_ACL:
         {
-#define IS_NOT_ZERO_IP6_ADDR(addr) \
-(!(addr[0]==0 && addr[1]==0 && addr[2]==0 && addr[3]==0 &&      \
-addr[4]==0 && addr[5]==0 && addr[6]==0 && addr[7]==0 &&      \
-addr[8]==0 && addr[9]==0 && addr[10]==0 && addr[11]==0 &&    \
-addr[12]==0 && addr[13]==0 && addr[14]==0 && addr[15]==0))
+#define IS_NOT_ZERO_IP6_ADDR(addr) !RULE_OM_IS_ZERO_IPV6_ADDR(addr)
 
             const RULE_TYPE_Ipv6Ace_Entry_T *ipv6_ace_p = &om_ace_entry.u.ipv6;
             UI8_T mask[SYS_ADPT_IPV6_ADDR_LEN];

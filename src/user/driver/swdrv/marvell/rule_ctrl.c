@@ -2937,13 +2937,18 @@ RULE_CTRL_Priv_MaskAceEntry(
     RULE_TYPE_Ace_Entry_T *ace_entry)
 {
     UI32_T i = 0;
+    BOOL_T need_convert_for_mixed_type = FALSE;
+
+#if (SYS_CPNT_ACL_MAC_IP_MIX == TRUE)
+    need_convert_for_mixed_type = TRUE;
+#endif /* SYS_CPNT_ACL_MAC_IP_MIX */
 
     switch(ace_entry->ace_type)
     {
         case RULE_TYPE_IP_ACL:
         case RULE_TYPE_IP_STD_ACL:
         case RULE_TYPE_IP_EXT_ACL:
-        mask_ip:
+mask_ip:
             ace_entry->u.ip.aceSourceIpAddr = ace_entry->u.ip.aceSourceIpAddr & ace_entry->u.ip.aceSourceIpAddrBitmask;
             ace_entry->u.ip.aceDestIpAddr = ace_entry->u.ip.aceDestIpAddr & ace_entry->u.ip.aceDestIpAddrBitmask;
             ace_entry->u.ip.aceMinSourcePort = ace_entry->u.ip.aceMinSourcePort & ace_entry->u.ip.aceSourcePortBitmask;
@@ -2951,15 +2956,16 @@ RULE_CTRL_Priv_MaskAceEntry(
             ace_entry->u.ip.aceMinDestPort = ace_entry->u.ip.aceMinDestPort & ace_entry->u.ip.aceDestPortBitmask;
             ace_entry->u.ip.aceMaxDestPort = ace_entry->u.ip.aceMaxDestPort & ace_entry->u.ip.aceDestPortBitmask;
             ace_entry->u.ip.aceControlCode = ace_entry->u.ip.aceControlCode & ace_entry->u.ip.aceControlCodeBitmask;
-#if (SYS_CPNT_ACL_MAC_IP_MIX == TRUE)
-            if (ace_entry->ace_type != RULE_TYPE_MAC_ACL)
+
+            if (need_convert_for_mixed_type == TRUE)
             {
+                need_convert_for_mixed_type = FALSE;
                 goto mask_mac;
             }
-#endif /* SYS_CPNT_ACL_MAC_IP_MIX */
             break;
+
         case RULE_TYPE_MAC_ACL:
-        mask_mac:
+mask_mac:
             ace_entry->u.mac.aceMinVid = ace_entry->u.mac.aceMinVid & ace_entry->u.mac.aceVidBitmask;
             ace_entry->u.mac.aceMaxVid = ace_entry->u.mac.aceMaxVid & ace_entry->u.mac.aceVidBitmask;
             ace_entry->u.mac.aceMinEtherType = ace_entry->u.mac.aceMinEtherType & ace_entry->u.mac.aceEtherTypeBitmask;
@@ -2973,23 +2979,45 @@ RULE_CTRL_Priv_MaskAceEntry(
             ace_entry->u.mac.aceMaxCos = ace_entry->u.mac.aceMaxCos & ace_entry->u.mac.aceCosBitmask;
             ace_entry->u.mac.aceMinSourcePort = ace_entry->u.mac.aceMinSourcePort & ace_entry->u.mac.aceSourcePortBitmask;
             ace_entry->u.mac.aceMaxSourcePort = ace_entry->u.mac.aceMaxSourcePort & ace_entry->u.mac.aceSourcePortBitmask;
-#if (SYS_CPNT_ACL_MAC_IP_MIX == TRUE)
-            if (ace_entry->ace_type == RULE_TYPE_MAC_ACL &&
-                ace_entry->u.mac.aceEtherTypeOp == VAL_diffServMacAceEtherTypeOp_equal &&
-                ace_entry->u.mac.aceEtherTypeBitmask == MAX_diffServMacAceEtherTypeBitmask &&
-                ace_entry->u.mac.aceMinEtherType == RULE_TYPE_ETHERTYPE_IP)
+
+            if (need_convert_for_mixed_type == TRUE)
             {
-                goto mask_ip;
+                need_convert_for_mixed_type = FALSE;
+
+                if (ace_entry->u.mac.aceEtherTypeOp == VAL_diffServMacAceEtherTypeOp_equal &&
+                    ace_entry->u.mac.aceEtherTypeBitmask == MAX_diffServMacAceEtherTypeBitmask)
+                {
+                    if (ace_entry->u.mac.aceMinEtherType == RULE_TYPE_ETHERTYPE_IP)
+                    {
+                        goto mask_ip;
+                    }
+
+                    if (ace_entry->u.mac.aceMinEtherType == RULE_TYPE_ETHERTYPE_IPV6)
+                    {
+                        goto mask_ipv6;
+                    }
+                }
             }
-#endif /* SYS_CPNT_ACL_MAC_IP_MIX */
             break;
 
         case RULE_TYPE_IPV6_ACL:
         case RULE_TYPE_IPV6_STD_ACL:
         case RULE_TYPE_IPV6_EXT_ACL:
-#if (SYS_CPNT_ACL_MAC_IP_MIX == TRUE)
-            goto mask_mac;
-#endif /* SYS_CPNT_ACL_MAC_IP_MIX */
+mask_ipv6:
+            for (i = 0; i < SYS_ADPT_IPV6_ADDR_LEN; i++)
+            {
+                ace_entry->u.ipv6.aceSourceIpAddr[i] = ace_entry->u.ipv6.aceSourceIpAddr[i] & ace_entry->u.ipv6.aceSourceIpAddrBitmask[i];
+                ace_entry->u.ipv6.aceDestIpAddr[i] = ace_entry->u.ipv6.aceDestIpAddr[i] & ace_entry->u.ipv6.aceDestIpAddrBitmask[i];
+            }
+
+            ace_entry->u.ipv6.aceMinSourcePort = ace_entry->u.ipv6.aceMinSourcePort & ace_entry->u.ipv6.aceSourcePortBitmask;
+            ace_entry->u.ipv6.aceMinDestPort = ace_entry->u.ipv6.aceMinDestPort & ace_entry->u.ipv6.aceDestPortBitmask;
+
+            if (need_convert_for_mixed_type == TRUE)
+            {
+                need_convert_for_mixed_type = FALSE;
+                goto mask_mac;
+            }
             break;
 
 #if (SYS_CPNT_DAI == TRUE)
@@ -10058,11 +10086,11 @@ RULE_CTRL_GetSupportedTcamCapabilityBitMap(
 #endif /* SYS_CPNT_WEBAUTH */
 
 #if (SYS_CPNT_IP_SOURCE_GUARD == TRUE)
-    RULE_CTRL_SET_BIT_ON(bit_map_p->bits, RULE_TYPE_TCAM_CAP_IP_SOURCE_GUSRD);
+    RULE_CTRL_SET_BIT_ON(bit_map_p->bits, RULE_TYPE_TCAM_CAP_IP_SOURCE_GUARD);
 #endif /* SYS_CPNT_IP_SOURCE_GUARD */
 
 #if (SYS_CPNT_IPV6_SOURCE_GUARD == TRUE)
-    RULE_CTRL_SET_BIT_ON(bit_map_p->bits, RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUSRD);
+    RULE_CTRL_SET_BIT_ON(bit_map_p->bits, RULE_TYPE_TCAM_CAP_IPV6_SOURCE_GUARD);
 #endif /* SYS_CPNT_IPV6_SOURCE_GUARD */
 
 #if (SYS_CPNT_INGRESS_RATE_LIMIT_VIA_FILTER_ENGINE == TRUE)
