@@ -705,6 +705,8 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
             else if (HAL_IS_RTL8390_FAMILY_ID(device_id))
             {
                 igr_action_p->fwd_data.fwd_info = CPU_PORT(device_id);
+                igr_action_p->bypass_en = ENABLED;
+                igr_action_p->bypass_data.igr_stp = 1;
             }
             total_cnt++;
 
@@ -742,6 +744,7 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
                 igr_action_p->fwd_data.fwd_info = CPU_PORT(device_id);
                 igr_action_p->bypass_en = ENABLED;
                 igr_action_p->bypass_data.all = 1;
+                igr_action_p->bypass_data.igr_stp = 1;
             }
 
             total_cnt++;
@@ -3079,12 +3082,8 @@ _DEVRM_SetDevMeter(
         case DEVRM_POLICER_METER_MODE_RATE:
             DEVRM_TRACE("METER_MODE_RATE");
 
-            if (!HAL_IS_RTL8380_FAMILY_ID(device_id))
+            if (HAL_IS_RTL8380_FAMILY_ID(device_id))
             {
-                DEVRM_ERR("Not support this meter mode");
-                return FALSE;
-            }
-
             meter_entry.enable = ENABLED;
             meter_entry.thr_grp = 0;
 
@@ -3099,6 +3098,27 @@ _DEVRM_SetDevMeter(
             {
                 meter_entry.rate = meter_p->packet_sec;
                 DEVRM_TRACE("[Action:meter] Packet, rate = %lu", meter_entry.rate);
+            }
+            }
+            else if (HAL_IS_RTL8390_FAMILY_ID(device_id))
+            {
+                meter_entry.type = METER_TYPE_DLB;
+                meter_entry.color_aware = DISABLED;
+
+                if (meter_p->type == DEVRM_POLICER_METER_TYPE_BYTE)
+                {
+                    /* Chip use the 16 kbps as unit, rounding the configured rate.
+                     */
+                    meter_entry.lb0_rate = DEVRM_CONVERT_KBITS_RATE_TO_RTK_RATE(meter_p->kbits_sec);
+                    meter_entry.lb1_rate = DEVRM_CONVERT_KBITS_RATE_TO_RTK_RATE(meter_p->kbits_sec);
+                    DEVRM_TRACE("[Action:meter] Byte, rate = %lu", meter_entry.lb0_rate);
+                }
+                else
+                {
+                    meter_entry.lb0_rate = meter_p->packet_sec;
+                    meter_entry.lb1_rate = meter_p->packet_sec;
+                    DEVRM_TRACE("[Action:meter] Packet, rate = %lu", meter_entry.lb0_rate);
+                }
             }
             break;
 

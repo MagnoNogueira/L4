@@ -15303,9 +15303,6 @@ static UI32_T RULE_OM_LocalValidateIpAceFieldForACL(const RULE_TYPE_IpAce_Entry_
         if (ace_type != RULE_TYPE_IP_EXT_ACL)
             return RULE_TYPE_FAIL;
 
-        if (ace_type != RULE_TYPE_IP_EXT_ACL)
-            return RULE_TYPE_FAIL;
-
         if (ace_entry->aceProtocol == RULE_TYPE_UNDEF_IP_PROTOCOL)
         {
             return RULE_TYPE_E_ACE_IP_PROTOCOL;

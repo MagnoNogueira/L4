@@ -6437,7 +6437,7 @@ RULE_CTRL_IPV6SG_DO_PermitLinkLocal(
     DEVRM_SHR_BITSET(param_p->ace_entry.w, DEVRM_FIELD_QUALIFY_InPorts);
     RULE_CTRL_SET_FILTER_IPBM_WITH_ALL_PORTS(param_p->ace_entry);
 
-    RULE_CTRL_ADD_FILTER_IPTYPE((param_p->ace_entry), DEVRM_FIELD_QUALIFY_IpType_Ipv6);
+    RULE_CTRL_ADD_FILTER_IPTYPE(param_p->ace_entry, DEVRM_FIELD_QUALIFY_IpType_Ipv6);
 
     DEVRM_SHR_BITSET(param_p->ace_entry.w, DEVRM_FIELD_QUALIFY_SrcIp6);
     RULE_CTRL_SET_FILTER_SIPV6_MASK(param_p->ace_entry, ip, mask);
