@@ -237,6 +237,11 @@ void L4_MGR_EnterMasterMode()
         if (RULE_TYPE_FAIL == RULE_MGR_TrapPacket2Cpu(TRUE, RULE_TYPE_PacketType_L2CP, NULL))
             printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2CP failed");
 
+#if (SYS_CPNT_MDNS == TRUE)
+        if (RULE_TYPE_FAIL == RULE_MGR_TrapPacket2Cpu(TRUE, RULE_TYPE_PacketType_MDNS, NULL))
+            printf("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_MDNS failed");
+#endif /* SYS_CPNT_MDNS */
+
 #if (SYS_CPNT_ROUTING == TRUE)
         if (RULE_TYPE_OK != RULE_MGR_TrapPacket2Cpu(TRUE, RULE_TYPE_PacketType_MY_MAC_ARP, NULL))
         {
@@ -483,6 +488,10 @@ void L4_MGR_HandleHotInsertion(UI32_T starting_port_ifindex, UI32_T number_of_po
     L4_MGR_TRAP_PACKET_TO_CPU(RULE_TYPE_PacketType_IP_OPTION);
     L4_MGR_TRAP_PACKET_TO_CPU(RULE_TYPE_PacketType_BPDU);
     L4_MGR_TRAP_PACKET_TO_CPU(RULE_TYPE_PacketType_L2CP);
+
+#if (SYS_CPNT_MDNS == TRUE)
+    L4_MGR_TRAP_PACKET_TO_CPU(RULE_TYPE_PacketType_MDNS);
+#endif /* SYS_CPNT_MDNS */
 
 #if (SYS_CPNT_ROUTING == TRUE)
     L4_MGR_TRAP_PACKET_TO_CPU(RULE_TYPE_PacketType_MY_MAC_ARP);
@@ -9879,7 +9888,7 @@ BOOL_T L4_MGR_SetArpPktActionByDai()
 {
     BOOL_T  ret;
 
-    L4_MGR_USE_CSC_CHECK_OPER_MODE(RULE_TYPE_FAIL);
+    L4_MGR_USE_CSC_CHECK_OPER_MODE(FALSE);
 
     L4_MGR_LOCK();
     ret = (RULE_TYPE_OK == RULE_MGR_AddTrapArp2Cpu(TRUE));
@@ -9904,7 +9913,7 @@ BOOL_T L4_MGR_RecoverArpPktActionByDai()
 {
     BOOL_T  ret;
 
-    L4_MGR_USE_CSC_CHECK_OPER_MODE(RULE_TYPE_FAIL);
+    L4_MGR_USE_CSC_CHECK_OPER_MODE(FALSE);
 
     L4_MGR_LOCK();
     ret = (RULE_TYPE_OK == RULE_MGR_AddTrapArp2Cpu(FALSE));

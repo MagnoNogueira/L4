@@ -726,6 +726,7 @@ typedef enum
     _(RULE_TYPE_PacketType_IP_OPTION),                                  \
     _(RULE_TYPE_PacketType_SLF),                                        \
     _(RULE_TYPE_PacketType_IGMP),                                       \
+    _(RULE_TYPE_PacketType_DHCP_CLIENT_BC),                             \
     _(RULE_TYPE_PacketType_DHCP_CLIENT),                                \
     _(RULE_TYPE_PacketType_DHCP_SERVER),                                \
     _(RULE_TYPE_PacketType_HBT),                                        \
@@ -742,6 +743,7 @@ typedef enum
     _(RULE_TYPE_PacketType_DOS_SMURF),                                  \
     _(RULE_TYPE_PacketType_PTP_EVENT_UDP),  /* IEEE 1588, PTP. UDP */   \
     _(RULE_TYPE_PacketType_PTP_GENERAL_UDP),  /* IEEE 1588, PTP. UDP */ \
+    _(RULE_TYPE_PacketType_MDNS),                                       \
                                                                         \
     /* IPv6 */                                                          \
     _(RULE_TYPE_PacketType_IPV6_ALL_NODES),                             \

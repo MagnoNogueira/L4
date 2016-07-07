@@ -15,4 +15,4 @@ while [ $i -lt 100 ]; do
 done
 
 #echo $FILE
-tar -cjf "$FILE" --exclude="*.git*" --exclude="*.DS_Store" --exclude="._*" ./l4
+tar -cjf "$FILE" --exclude="*.git*" --exclude="*.DS_Store" --exclude=".*" ./l4

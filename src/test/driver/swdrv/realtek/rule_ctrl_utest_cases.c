@@ -12469,6 +12469,30 @@ int RULE_CTRL_UT_IpSubnetVlan()
     return 1;
 }
 
+int RULE_CTRL_UT_MDNS()
+{
+#if (SYS_CPNT_MDNS == TRUE)
+    RULE_TYPE_PacketType_T packet_type = RULE_TYPE_PacketType_MDNS;
+    BOOL_T enable, ret;
+
+    enable = TRUE;
+    ret = RULE_CTRL_TrapPacket2Cpu(enable, packet_type, NULL);
+    assert(ret == TRUE);
+    assert(rule_ctrl_shmem_data_p->mdns.rule_storage.is_enable == TRUE);
+    assert(rule_ctrl_shmem_data_p->mdns.to_cpu == TRUE);
+    assert(rule_ctrl_shmem_data_p->mdns.flood == TRUE);
+
+    enable = FALSE;
+    ret = RULE_CTRL_TrapPacket2Cpu(enable, packet_type, NULL);
+    assert(ret == TRUE);
+    assert(rule_ctrl_shmem_data_p->mdns.rule_storage.is_enable == FALSE);
+#else
+    printf("Skip this test, SYS_CPNT_MDNS != TRUE");
+#endif /* SYS_CPNT_MDNS */
+
+    return 1;
+}
+
 #pragma mark -
 #pragma mark Test Cases for Class/Rule Instance
 int
@@ -15979,6 +16003,8 @@ RULE_CTRL_UT_RunTestCaese()
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_DAI_WithMeter);
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_DOS_RateLimit);
         RULE_CTRL_UT_TEST(RULE_CTRL_UT_IpSubnetVlan);
+
+        RULE_CTRL_UT_TEST(RULE_CTRL_UT_MDNS);
     }
     else
     {

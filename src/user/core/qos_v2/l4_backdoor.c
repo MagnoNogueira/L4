@@ -2659,6 +2659,9 @@ static void L4_Backdoor_CpuIf_TrapPacket2Cpu(int argc, char** argv)
         BACKDOOR_MGR_Printf("\r\n\t\t%2d (hbt)",         RULE_TYPE_PacketType_HBT);
         BACKDOOR_MGR_Printf("\r\n\t\t%2d (bpdu)",        RULE_TYPE_PacketType_BPDU);
         BACKDOOR_MGR_Printf("\r\n\t\t%2d (l2cp)",        RULE_TYPE_PacketType_L2CP);
+#if (SYS_CPNT_MDNS == TRUE)
+        BACKDOOR_MGR_Printf("\r\n\t\t%2d (mdns, param1[to_cpu], param2[flood]))", RULE_TYPE_PacketType_MDNS);
+#endif /* SYS_CPNT_MDNS */
         return;
     }
 
@@ -2686,8 +2689,6 @@ static void L4_Backdoor_CpuIf_TrapPacket2Cpu(int argc, char** argv)
     {
         case RULE_TYPE_PacketType_DOT1X:
         case RULE_TYPE_PacketType_SLF:
-        case RULE_TYPE_PacketType_DHCP_CLIENT:
-        case RULE_TYPE_PacketType_DHCP_SERVER:
             BACKDOOR_MGR_Printf("\r\n not support yet!");
             return;
 
@@ -2705,11 +2706,23 @@ static void L4_Backdoor_CpuIf_TrapPacket2Cpu(int argc, char** argv)
             break;
 
         case RULE_TYPE_PacketType_UNKNOWN_IPMC:
+        case RULE_TYPE_PacketType_DHCP_CLIENT:
+        case RULE_TYPE_PacketType_DHCP_SERVER:
             if(4 != argc)
                 return;
 
             rule_info.common.to_cpu = atoi(argv[2]);
             rule_info.common.flood = atoi(argv[3]);
+            break;
+
+        case RULE_TYPE_PacketType_MDNS:
+            rule_info.common.to_cpu = TRUE;
+            rule_info.common.flood = TRUE;
+            if(4 == argc)
+            {
+                rule_info.common.to_cpu = atoi(argv[2]);
+                rule_info.common.flood = atoi(argv[3]);
+            }
             break;
 
         default:

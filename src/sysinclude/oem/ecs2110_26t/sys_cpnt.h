@@ -47,6 +47,7 @@
  */
 
 #define SYS_CPNT_TIME_RANGE          TRUE
+#define SYS_CPNT_MDNS                TRUE
 
 /* define runtime openD_CACHE or not?
  * If runtime not support D_CACHE, we will disable D_CACHE after CLI provision complete.

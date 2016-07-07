@@ -30,6 +30,7 @@
 #include "l_inet.h"
 #include "l_cvrt.h"
 #include "l_pt.h"
+#include "l_stdlib.h"
 
 #include "sysfun.h"
 
@@ -532,6 +533,12 @@
         dev_ace->ip6trafficclass_data = data;                               \
         dev_ace->ip6trafficclass_mask = mask;                               \
     }
+
+#define RULE_CTRL_CPU_CTRL_TO_DEVRM_PKT_CMD(to_cpu, flood)                      \
+    (((to_cpu == TRUE) && (flood == TRUE)) ? DEVRM_PKT_CMD_COPY_TO_CPU          \
+     : ((to_cpu == TRUE) && (flood == FALSE)) ? DEVRM_PKT_CMD_REDIRECT_TO_CPU   \
+     : ((to_cpu == FALSE) && (flood == TRUE)) ? DEVRM_PKT_CMD_COPY_TO_CPU_CANCEL\
+     : DEVRM_PKT_CMD_HARD_DROP)
 
 #define RULE_CTRL_IS_DEBUG_ERROR_ON(flag)       (flag & RULE_OM_DEBUG_CTRL_ERR)
 
@@ -1264,30 +1271,12 @@ typedef struct
     RULE_CTRL_SYS_RULE_STORAGE      rule_storage;
     BOOL_T                          to_cpu;
     BOOL_T                          flood;
-}RULE_CTRL_RS_ORG_SPEC1_T;
+}RULE_CTRL_RS_CPU_T;
 
-#if (SYS_CPNT_UDLD == TRUE)
-typedef struct
-{
-    RULE_CTRL_SYS_RULE_STORAGE      rule_storage;
-    BOOL_T                          to_cpu;
-    BOOL_T                          flood;
-}RULE_CTRL_RS_UDLD_T;
-#endif /* SYS_CPNT_UDLD */
-
-typedef struct
-{
-    RULE_CTRL_SYS_RULE_STORAGE      rule_storage;
-    BOOL_T                          to_cpu;
-    BOOL_T                          flood;
-}RULE_CTRL_RS_ORG_SPEC3_T;
-
-typedef struct
-{
-    RULE_CTRL_SYS_RULE_STORAGE      rule_storage;
-    BOOL_T                          to_cpu;
-    BOOL_T                          flood;
-} RULE_CTRL_RS_DHCPV6_T;
+typedef RULE_CTRL_RS_CPU_T RULE_CTRL_RS_ORG_SPEC1_T;
+typedef RULE_CTRL_RS_CPU_T RULE_CTRL_RS_ORG_SPEC3_T;
+typedef RULE_CTRL_RS_CPU_T RULE_CTRL_RS_UDLD_T;
+typedef RULE_CTRL_RS_CPU_T RULE_CTRL_RS_DHCPV6_T;
 
 typedef struct
 {
@@ -1709,6 +1698,10 @@ typedef struct
     RULE_CTRL_SYS_RS_DOS_RATE_T             dos_win_nuk;
 #endif /* SYS_CPNT_DOS */
 
+#if (SYS_CPNT_MDNS == TRUE)
+    RULE_CTRL_RS_CPU_T                      mdns;
+#endif /* SYS_CPNT_MDNS */
+
     /*******************************************
      * Normal rule (per-port) storage
      *******************************************
@@ -2118,46 +2111,6 @@ void RULE_CTRL_HandleHotInsertion(UI32_T starting_port_ifindex, UI32_T number_of
     if(SWCTRL_LPORT_NORMAL_PORT !=
         SWCTRL_POM_LogicalPortToUserPort(starting_port_ifindex, &unit, &port, &trunk_id))
         return;
-
-#if (SYS_CPNT_QOS_V2 == TRUE)
-    /* the following packets
-     * Always configure to chip to trap to CPU
-     */
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_RIP, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_RIP failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_OSPF, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_OSPF failed");
-#if (SYS_CPNT_OSPF6 == TRUE)
-    /* added by steven.gao for OSPFv3 */
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_OSPF6, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_OSPF6 failed");
-#endif
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_DVMRP, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_DVMRP failed");
-
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_PIM, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_PIM failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_VRRP, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_VRRP failed");
-
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_L2_SLF, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2_SLF failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_IP_BCAST, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IP_BCAST failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_ALL_HOST, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ALL_HOST failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_ALL_ROUTER, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_ALL_ROUTER failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_MY_MAC_MY_IP, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_MY_MAC_MY_IP failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_IP_OPTION, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_IP_OPTION failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_BPDU, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_BPDU failed");
-    if (FALSE == RULE_CTRL_TrapPacket2CpuByUnit(unit, TRUE, RULE_TYPE_PacketType_L2CP, NULL))
-        PRINTF("\r\n[L4_MGR_EnterMasterMode] RULE_TYPE_PacketType_L2CP failed");
-
-#endif /* SYS_CPNT_QOS_V2 */
 }
 
 /*------------------------------------------------------------------------------
@@ -4143,6 +4096,22 @@ BOOL_T RULE_CTRL_TrapPacket2Cpu(
      */
     switch (packet_type)
     {
+#if (SYS_CPNT_MDNS == TRUE)
+        case RULE_TYPE_PacketType_MDNS:
+        {
+            BOOL_T to_cpu = TRUE, flood = TRUE;
+
+            if (rule_info != NULL)
+            {
+                to_cpu = rule_info->common.to_cpu;
+                flood = rule_info->common.flood;
+            }
+
+            return (RULE_TYPE_OK == RULE_CTRL_MDNS_SetMcastDnsToCpu(enable_flag, to_cpu, flood))
+                   ? TRUE : FALSE;
+        }
+#endif /* SYS_CPNT_MDNS */
+
 #if (SYS_CPNT_DOT1X == TRUE)
         case RULE_TYPE_PacketType_DOT1X:
         {
@@ -9510,6 +9479,99 @@ BOOL_T RULE_CTRL_SetDosProtectionRateLimit(UI32_T type, UI32_T rate)
 }
 #endif /* (SYS_CPNT_DOS == TRUE) */
 
+#if (SYS_CPNT_MDNS == TRUE)
+/*------------------------------------------------------------------------------
+ * ROUTINE NAME  - RULE_CTRL_MDNS_DO_SetMcastDnsToCpu
+ *------------------------------------------------------------------------------
+ * PURPOSE  : Set rule handler for multicast DNS packet
+ * INPUT    : param_p
+ * OUTPUT   : None
+ * RETURN   : TRUE/FALSE
+ * NOTES    : None
+ *------------------------------------------------------------------------------
+ */
+static BOOL_T
+RULE_CTRL_MDNS_DO_SetMcastDnsToCpu(
+    RULE_CTRL_PARAM_PTR param_p)
+{
+    /* DIP Addr = 224.0.0.251
+     * IP Protocol = UDP
+     * L4 destination port = 5353
+     */
+    UI32_T dip_data = L_STDLIB_Hton32(0xE00000FB); /* 224.0.0.251 */
+    UI32_T dip_mask = L_STDLIB_Hton32(0XFFFFFFFF); /* 255.255.255.255 */
+    UI16_T l4_dst_port = 5353;
+
+    param_p->func_type = RULE_TYPE_PACKET_TO_CPU_PRIO_3;
+    param_p->sys_rule_storage_p = &shmem_data_p->mdns.rule_storage;
+
+    if(param_p->flags & RULE_CTRL_OPT_INSTALL)
+    {
+        shmem_data_p->mdns.to_cpu = param_p->CPU_CTRL.to_cpu;
+        shmem_data_p->mdns.flood  = param_p->CPU_CTRL.flood;
+    }
+
+    RULE_CTRL_MakeParamTag(param_p, "mdns", "to-cpu", "mdns-to-cpu", NULL);
+
+    DEVRM_SHR_BITSET(param_p->ace_entry.w, DEVRM_FIELD_QUALIFY_InPorts);
+    RULE_CTRL_SET_FILTER_IPBM_WITH_ALL_PORTS(param_p->ace_entry);
+
+    RULE_CTRL_ADD_FILTER_IPTYPE(param_p->ace_entry, DEVRM_FIELD_QUALIFY_IpType_Ipv4);
+    DEVRM_LIB_RulePatternQualifyIpDestAddress(&param_p->ace_entry, dip_data, dip_mask);
+    DEVRM_LIB_RulePatternQualifyIpProtocol(&param_p->ace_entry, RULE_TYPE_ACL_UDP_PROTOCOL, 0Xff);
+    DEVRM_LIB_RulePatternQualifyL4DestPort(&param_p->ace_entry, l4_dst_port, 0xffff);
+
+    DEVRM_LIB_ActionInit(&param_p->action);
+
+    DEVRM_LIB_ActionPacketTo(&param_p->action,
+                             RULE_CTRL_CPU_CTRL_TO_DEVRM_PKT_CMD(param_p->CPU_CTRL.to_cpu,
+                                                                 param_p->CPU_CTRL.flood));
+
+    return TRUE;
+}
+/*------------------------------------------------------------------------------
+ * ROUTINE NAME  - RULE_CTRL_MDNS_SetMcastDnsToCpu
+ *------------------------------------------------------------------------------
+ * PURPOSE  : Set the rule for mDNS packet to CPU
+ * INPUT    : is_enable  - TRUE: add rule, FALSE: delete rule
+ *            to_cpu     -
+ *            flood      -
+ * OUTPUT   : None
+ * RETURN   : RULE_TYPE_OK / RULE_TYPE_FAIL
+ * NOTES    : None
+ *------------------------------------------------------------------------------
+ */
+RULE_TYPE_RETURN_TYPE_T
+RULE_CTRL_MDNS_SetMcastDnsToCpu(
+    BOOL_T is_enable,
+    BOOL_T to_cpu,
+    BOOL_T flood)
+{
+    RULE_CTRL_PARAM param;
+    BOOL_T ret;
+
+    LOG("%s rule, to_cpu=%s, flood=%s",
+        (is_enable == TRUE) ? "Add" : "Delete",
+        (to_cpu == TRUE) ? "TRUE" : "FALSE",
+        (flood == TRUE) ? "TRUE" : "FALSE");
+
+    RULE_CTRL_InitParam(&param);
+
+    if (is_enable == TRUE)
+    {
+        param.flags    |= (RULE_CTRL_OPT_INSTALL | RULE_CTRL_OPT_FORCE_INSTALL);
+    }
+    param.flags        |= RULE_CTRL_OPT_ALL_DEVICES;
+
+    param.CPU_CTRL.to_cpu = to_cpu;
+    param.CPU_CTRL.flood = flood;
+
+    ret = _rule_ctrl_set_rule(&param, RULE_CTRL_MDNS_DO_SetMcastDnsToCpu);
+    return (ret == TRUE) ? RULE_TYPE_OK : RULE_TYPE_FAIL;
+
+}
+#endif /* SYS_CPNT_MDNS */
+
 /*------------------------------------------------------------------------------
  * ROUTINE NAME - RULE_CTRL_NotifyIpDscp2CosChangeByLport
  *------------------------------------------------------------------------------
@@ -9960,6 +10022,43 @@ void RULE_CTRL_DumpCpuInterfaceStatus()
             RULE_TYPE_PRINT("%s\r\n", (has_rule) ? "" : " na");
         }
     }
+
+#if (SYS_CPNT_MDNS == TRUE)
+    {
+        BOOL_T has_rule = FALSE;
+        int unit, device_id;
+
+        RULE_TYPE_PRINT("\r\n");
+        RULE_TYPE_PRINT("type                 cpu flood %s[device_id|rule_id]\r\n",
+                        (SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK > 1) ? "(unit) " : "");
+        RULE_TYPE_PRINT("-------------------- --- ----- ---------------------------------\r\n");
+
+        RULE_TYPE_PRINT("%-20s", "MDNS");
+        RULE_TYPE_PRINT(" %3s", shmem_data_p->mdns.to_cpu ? "T" : "F");
+        RULE_TYPE_PRINT(" %5s", shmem_data_p->mdns.flood ? "T" : "F");
+
+        for (unit = 1; unit <= SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK; ++unit)
+        {
+
+            if (SYS_ADPT_MAX_NBR_OF_UNIT_PER_STACK > 1)
+            {
+                RULE_TYPE_PRINT(" (%d)", unit);
+            }
+
+            for (device_id = 0; device_id < SYS_ADPT_MAX_NBR_OF_CHIP_PER_UNIT; ++device_id)
+            {
+                if (TRUE == shmem_data_p->mdns.rule_storage.is_enable)
+                {
+                    has_rule = TRUE;
+                    RULE_TYPE_PRINT(" [%lu/%lu|%5lu]",
+                                    device_id,
+                                    shmem_data_p->mdns.rule_storage.rule_id[unit-1][device_id]);
+                }
+            }
+        }
+        RULE_TYPE_PRINT("%s\r\n", (has_rule) ? "" : " na");
+    }
+#endif /* SYS_CPNT_MDNS */
 
 #if (SYS_CPNT_DAI_RATE_LIMIT_BY_RULE == TRUE)
     RULE_TYPE_PRINT("\r\n== ARP rate limit ==\r\n");

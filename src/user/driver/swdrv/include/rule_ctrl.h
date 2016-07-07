@@ -2413,5 +2413,24 @@ RULE_CTRL_DAI_GetArpPacketCounter(
 );
 #endif /* SYS_CPNT_DAI_RATE_LIMIT_BY_RULE */
 
+/*------------------------------------------------------------------------------
+ * ROUTINE NAME  - RULE_CTRL_MDNS_SetMcastDnsToCpu
+ *------------------------------------------------------------------------------
+ * PURPOSE  : Set the rule for mDNS packet to CPU
+ * INPUT    : is_enable  - TRUE: add rule, FALSE: delete rule
+ *            to_cpu     -
+ *            flood      -
+ * OUTPUT   : None
+ * RETURN   : RULE_TYPE_OK / RULE_TYPE_FAIL
+ * NOTES    : None
+ *------------------------------------------------------------------------------
+ */
+RULE_TYPE_RETURN_TYPE_T
+RULE_CTRL_MDNS_SetMcastDnsToCpu(
+    BOOL_T is_enable,
+    BOOL_T to_cpu,
+    BOOL_T flood
+);
+
 #endif /* End of _RULE_CTRL_H */
 
