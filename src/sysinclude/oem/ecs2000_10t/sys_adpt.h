@@ -2686,7 +2686,7 @@ this is because the rules can be adjusted
 
 // Move this constant to close HW definition
 #define SYS_ADPT_IFP_MAX_NBR_OF_GROUP_PER_CHIP       12
-#define SYS_ADPT_EFP_MAX_NBR_OF_GROUP_PER_CHIP       6
+#define SYS_ADPT_EFP_MAX_NBR_OF_GROUP_PER_CHIP       0
 #define SYS_ADPT_FP_MAX_NBR_OF_GROUP_PER_CHIP        (SYS_ADPT_IFP_MAX_NBR_OF_GROUP_PER_CHIP+SYS_ADPT_EFP_MAX_NBR_OF_GROUP_PER_CHIP)
 #define SYS_ADPT_FP_MAX_NBR_OF_RULE_PER_SELECTOR     128
 

@@ -3,6 +3,20 @@ project(${PROJECT_NAME})
 
 cmake_minimum_required(VERSION 2.6)
 
+message("\r\n######### Staring build " ${PROJECT_NAME} " project #########")
+
+#########################################################################
+# Change project here
+
+if (0)
+    message("******** Build for ecs2000_10t (8x chip) ********")
+    set (OEM_NAME ecs2000_10t)
+else()
+    message("******** Build for ecs2110_26t (9X chip) ********")
+    set (OEM_NAME ecs2110_26t)
+endif()
+#########################################################################
+
 #set(GMOCK_SRC vendor/gmock-1.7.0)
 #set(GMOCK_LIB ../${PROJECT_NAME}.build/gmock)
 
@@ -10,10 +24,6 @@ cmake_minimum_required(VERSION 2.6)
 #set(LIBXML_LIB ../${PROJECT_NAME}/vendor/libxml2/lib)
 
 set (PRJ_SRC ../../src)
-
-set (OEM_NAME ecs2110_26t)
-#set (OEM_NAME ecs2000_10t)
-
 #message( ${PRJ_SRC})
 
 if(APPLE)

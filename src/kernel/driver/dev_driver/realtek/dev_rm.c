@@ -701,6 +701,8 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
             {
                 igr_action_p->fwd_data.info.copy_redirect_port.force = ENABLED;
                 igr_action_p->fwd_data.info.copy_redirect_port.fwd_port_id = CPU_PORT(device_id);
+                igr_action_p->fwd_data.info.copy_redirect_port.skip_igrStpDrop = ENABLED;
+                igr_action_p->fwd_data.info.copy_redirect_port.skip_storm_igrVlan = ENABLED;
             }
             else if (HAL_IS_RTL8390_FAMILY_ID(device_id))
             {
@@ -738,6 +740,8 @@ _DEVRM_SetupAction_ConvertToHwIngressAction(
             {
                 igr_action_p->fwd_data.info.copy_redirect_port.force = ENABLED;
                 igr_action_p->fwd_data.info.copy_redirect_port.fwd_port_id = CPU_PORT(device_id);
+                igr_action_p->fwd_data.info.copy_redirect_port.skip_igrStpDrop = ENABLED;
+                igr_action_p->fwd_data.info.copy_redirect_port.skip_storm_igrVlan = ENABLED;
             }
             else if (HAL_IS_RTL8390_FAMILY_ID(device_id))
             {

@@ -1425,7 +1425,11 @@ DEVRM_UT_SetRule_Validate_Action()
         {
             /* Setting action 
              */
-            pkt_cmd = ((i%2) == 0) ? DEVRM_PKT_CMD_FORWARD : DEVRM_PKT_CMD_SOFT_DROP;
+            pkt_cmd = ((i%4) == 0) ? DEVRM_PKT_CMD_FORWARD
+                       : ((i%4) == 1) ? DEVRM_PKT_CMD_SOFT_DROP
+                       : ((i%4) == 2) ? DEVRM_PKT_CMD_REDIRECT_TO_CPU
+                       : DEVRM_PKT_CMD_COPY_TO_CPU;
+
             DEVRM_LIB_ActionPacketTo(&dev_action, pkt_cmd);
             if (pkt_cmd == DEVRM_PKT_CMD_FORWARD)
             {
@@ -1463,35 +1467,79 @@ DEVRM_UT_SetRule_Validate_Action()
                     /* Validate hw rule action status
                      */
                     assert(hw_entry_p->action.igr_acl.fwd_en == ENABLED);
-                    if (pkt_cmd == DEVRM_PKT_CMD_FORWARD)
+                    switch (pkt_cmd)
                     {
-                        assert(hw_entry_p->action.igr_acl.fwd_data.fwd_type == ACL_IGR_ACTION_FWD_PERMIT);
+                        case DEVRM_PKT_CMD_FORWARD:
+                            assert(hw_entry_p->action.igr_acl.fwd_data.fwd_type == ACL_IGR_ACTION_FWD_PERMIT);
 
-                        assert(hw_entry_p->action.igr_acl.pri_en == ENABLED);
-                        assert(hw_entry_p->action.igr_acl.pri_data.pri == (i % 7));
-
-                        if (HAL_IS_RTL8380_FAMILY_ID(pl->device_id))
-                        {
-                            assert(hw_entry_p->action.igr_acl.remark_en == ENABLED);
-                            assert(hw_entry_p->action.igr_acl.remark_data.rmk_act == ACL_ACTION_REMARK_OUTER_USER_PRI);
-                            assert(hw_entry_p->action.igr_acl.remark_data.rmk_info == (i % 7));
-
-                        }
-                        else if (HAL_IS_RTL8390_FAMILY_ID(pl->device_id))
-                        {
                             assert(hw_entry_p->action.igr_acl.pri_en == ENABLED);
                             assert(hw_entry_p->action.igr_acl.pri_data.pri == (i % 7));
-                        }
-                    }
-                    else
-                    {
-                        assert(hw_entry_p->action.igr_acl.fwd_data.fwd_type == ACL_IGR_ACTION_FWD_DROP);
+
+                            if (HAL_IS_RTL8380_FAMILY_ID(pl->device_id))
+                            {
+                                assert(hw_entry_p->action.igr_acl.remark_en == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.remark_data.rmk_act == ACL_ACTION_REMARK_OUTER_USER_PRI);
+                                assert(hw_entry_p->action.igr_acl.remark_data.rmk_info == (i % 7));
+
+                            }
+                            else if (HAL_IS_RTL8390_FAMILY_ID(pl->device_id))
+                            {
+                                assert(hw_entry_p->action.igr_acl.pri_en == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.pri_data.pri == (i % 7));
+                            }
+                            break;
+
+                        case DEVRM_PKT_CMD_SOFT_DROP:
+                            assert(hw_entry_p->action.igr_acl.fwd_data.fwd_type == ACL_IGR_ACTION_FWD_DROP);
+                            break;
+
+                        case DEVRM_PKT_CMD_REDIRECT_TO_CPU:
+                            assert(hw_entry_p->action.igr_acl.fwd_data.fwd_type == ACL_IGR_ACTION_FWD_REDIRECT_TO_PORTID);
+
+                            if (HAL_IS_RTL8380_FAMILY_ID(pl->device_id))
+                            {
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.force == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.skip_igrStpDrop == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.skip_storm_igrVlan == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.fwd_port_id = CPU_PORT(pl->device_id));
+
+                            }
+                            else if (HAL_IS_RTL8390_FAMILY_ID(pl->device_id))
+                            {
+                                assert(hw_entry_p->action.igr_acl.fwd_data.fwd_info = CPU_PORT(pl->device_id));
+                                assert(hw_entry_p->action.igr_acl.bypass_en == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.bypass_data.all == 1);
+                                assert(hw_entry_p->action.igr_acl.bypass_data.igr_stp == 1);
+                            }
+                            break;
+
+                        case DEVRM_PKT_CMD_COPY_TO_CPU:
+                            assert(hw_entry_p->action.igr_acl.fwd_data.fwd_type == ACL_ACTION_FWD_COPY_TO_PORTID);
+
+                            if (HAL_IS_RTL8380_FAMILY_ID(pl->device_id))
+                            {
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.force == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.skip_igrStpDrop == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.skip_storm_igrVlan == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.fwd_data.info.copy_redirect_port.fwd_port_id = CPU_PORT(pl->device_id));
+
+                            }
+                            else if (HAL_IS_RTL8390_FAMILY_ID(pl->device_id))
+                            {
+                                assert(hw_entry_p->action.igr_acl.fwd_data.fwd_info = CPU_PORT(pl->device_id));
+                                assert(hw_entry_p->action.igr_acl.bypass_en == ENABLED);
+                                assert(hw_entry_p->action.igr_acl.bypass_data.all == 0);
+                                assert(hw_entry_p->action.igr_acl.bypass_data.igr_stp == 1);
+                            }
+                            break;
+
+                        default:
+                            assert(0);
                     }
                 }
             }
         }
     }
-    
     
     return 0;
 }

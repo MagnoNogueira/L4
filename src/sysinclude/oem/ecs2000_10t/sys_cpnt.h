@@ -254,7 +254,7 @@
 /* Bind rule(ACL, policy-map) on egress port (not include trunk port now).
  * If this constant is FALSE, then only support bind rule on ingress port.
  */
-#define SYS_CPNT_QOS_V2_EGRESS_PORT                   TRUE
+#define SYS_CPNT_QOS_V2_EGRESS_PORT                   FALSE
 
 #define PLATFORM_MAX_NBR_OF_ACL_PER_PORT 3
 
